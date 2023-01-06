@@ -1,7 +1,12 @@
 import React from "react";
+import { View, Text } from "react-native";
 
 const PostDetail = () => {
-  return <div></div>;
+  return (
+    <View>
+      <Text>PostDetail</Text>
+    </View>
+  );
 };
 
 export default PostDetail;
