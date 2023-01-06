@@ -6,7 +6,6 @@ import PostDetail from "../screen/Stacks/PostDetail";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { authService } from "../common/firebase";
 
 const NativeStack = createNativeStackNavigator();
 
