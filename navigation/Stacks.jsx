@@ -1,7 +1,8 @@
 import React from "react";
+import { View } from "react-native";
 
 const Stacks = () => {
-  return <div></div>;
+  return <View></View>;
 };
 
 export default Stacks;
