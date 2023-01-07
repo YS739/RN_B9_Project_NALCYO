@@ -1,12 +1,5 @@
-import React, { useCallback, useEffect } from "react";
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import React, { useEffect } from "react";
+import { TouchableOpacity, Text, Image, ScrollView } from "react-native";
 import { authService } from "../common/firebase";
 import styled from "@emotion/native";
 import { FontAwesome5 } from "@expo/vector-icons";
