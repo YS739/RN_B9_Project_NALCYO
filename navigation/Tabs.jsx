@@ -10,6 +10,9 @@ const Tab = createBottomTabNavigator();
 const Tabs = ({ navigation: { navigate } }) => {
   return (
     <Tab.Navigator
+      sceneContainerStyle={{
+        backgroundColor: "#97D2EC",
+      }}
       screenOptions={{
         tabBarLabelPosition: "beside-icon",
       }}
