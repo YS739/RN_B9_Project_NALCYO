@@ -12,15 +12,20 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
   return (
     <NativeStack.Navigator
       screenOptions={{
+        headerStyle: { backgroundColor: "#97D2EC" },
         headerTitleAlign: "center",
         headerLeft: () => (
           <TouchableOpacity onPress={() => goBack()}>
             <Ionicons name="chevron-back" size={24} color="black" />
           </TouchableOpacity>
         ),
-        headerRight: () => (
+        headerRight: ({ color }) => (
           <TouchableOpacity onPress={() => navigate("My")}>
-            <Ionicons name="ios-person-circle-outline" size={24} color="blue" />
+            <Ionicons
+              name="ios-person-circle-outline"
+              size={28}
+              color={color}
+            />
           </TouchableOpacity>
         ),
       }}

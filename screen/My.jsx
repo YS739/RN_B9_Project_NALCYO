@@ -4,8 +4,9 @@ import { authService } from "../common/firebase";
 import styled from "@emotion/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
+import { Ionicons } from "@expo/vector-icons";
 
-const My = ({ navigation: { navigate, setOptions } }) => {
+const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const logout = () => {
     signOut(authService)
       .then(() => {
@@ -18,8 +19,15 @@ const My = ({ navigation: { navigate, setOptions } }) => {
 
   useEffect(() => {
     setOptions({
+      headerLeft: () => (
+        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+      // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
+      // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
       headerRight: () => (
-        <TouchableOpacity style={{ marginRight: 10 }} onPress={logout}>
+        <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
           <Text>로그아웃</Text>
         </TouchableOpacity>
       ),
