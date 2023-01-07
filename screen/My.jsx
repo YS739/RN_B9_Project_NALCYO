@@ -45,67 +45,109 @@ const My = ({ navigation: { navigate, setOptions } }) => {
             height: 60,
           }}
         ></Image>
-        <Text>닉네임</Text>
+        <MyNameText>닉네임</MyNameText>
         <TouchableOpacity>
           <FontAwesome5 name="edit" size={24} color="black" />
         </TouchableOpacity>
       </MyNameWrapView>
-      <MyPostText>내가 쓴 글</MyPostText>
+      <MyPostTitleText>내가 쓴 글</MyPostTitleText>
       <MyPostView>
         <ScrollView contentContainerStyle={{ width: "90%" }}>
           <MyPostBoxView>
             {/* TODO: 기온을 가져오게 되면 실시간으로 변하지 않나? */}
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyPostCategoryView>
+              <Text>지역 기온</Text>
+            </MyPostCategoryView>
+            <MyPostContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                여기서 제목이 너무너무 길다면 어떻게 될까요
+              </Text>
+            </MyPostContentsView>
           </MyPostBoxView>
           <MyPostBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyPostCategoryView>
+              <Text>지역 기온</Text>
+            </MyPostCategoryView>
+            <MyPostContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                제목
+              </Text>
+            </MyPostContentsView>
           </MyPostBoxView>
           <MyPostBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyPostCategoryView>
+              <Text>지역 기온</Text>
+            </MyPostCategoryView>
+            <MyPostContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                제목
+              </Text>
+            </MyPostContentsView>
           </MyPostBoxView>
           <MyPostBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyPostCategoryView>
+              <Text>지역 기온</Text>
+            </MyPostCategoryView>
+            <MyPostContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                제목
+              </Text>
+            </MyPostContentsView>
           </MyPostBoxView>
           <MyPostBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
-          </MyPostBoxView>
-          <MyPostBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyPostCategoryView>
+              <Text>지역 기온</Text>
+            </MyPostCategoryView>
+            <MyPostContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                제목
+              </Text>
+            </MyPostContentsView>
           </MyPostBoxView>
         </ScrollView>
       </MyPostView>
-      <MyCommentsText>내가 댓글 단 글</MyCommentsText>
+      <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
       <MyCommentsView>
         <ScrollView contentContainerStyle={{ width: "90%" }}>
           <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyCommentsCategoryView>
+              <Text>지역 기온</Text>
+            </MyCommentsCategoryView>
+            <MyCommentsContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                여기서 제목이 너무너무 길다면 어떻게 될까요
+              </Text>
+            </MyCommentsContentsView>
           </MyCommentsBoxView>
           <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyCommentsCategoryView>
+              <Text>지역 기온</Text>
+            </MyCommentsCategoryView>
+            <MyCommentsContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                여기서 제목이 너무너무 길다면 어떻게 될까요
+              </Text>
+            </MyCommentsContentsView>
           </MyCommentsBoxView>
           <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyCommentsCategoryView>
+              <Text>지역 기온</Text>
+            </MyCommentsCategoryView>
+            <MyCommentsContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                여기서 제목이 너무너무 길다면 어떻게 될까요
+              </Text>
+            </MyCommentsContentsView>
           </MyCommentsBoxView>
           <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
-            <Text>지역 기온</Text>
-            <Text>제목</Text>
+            <MyCommentsCategoryView>
+              <Text>지역 기온</Text>
+            </MyCommentsCategoryView>
+            <MyCommentsContentsView>
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                여기서 제목이 너무너무 길다면 어떻게 될까요
+              </Text>
+            </MyCommentsContentsView>
           </MyCommentsBoxView>
         </ScrollView>
       </MyCommentsView>
@@ -124,6 +166,7 @@ const MyContainerView = styled.View`
   margin: auto;
 `;
 
+// 닉네임
 const MyNameWrapView = styled.View`
   width: 100%;
   height: 90px;
@@ -135,8 +178,12 @@ const MyNameWrapView = styled.View`
   margin: 10px 0;
 `;
 
+const MyNameText = styled.Text`
+  font-size: 16px;
+`;
+
 // 내가 쓴 글
-const MyPostText = styled.Text`
+const MyPostTitleText = styled.Text`
   font-size: 25px;
   font-weight: 800;
 `;
@@ -153,19 +200,36 @@ const MyPostView = styled.View`
 `;
 
 const MyPostBoxView = styled.View`
-  width: 90%;
-  border: 1px solid black;
+  width: 270px;
+  border: 1px solid #97d2ec;
   border-radius: 10px;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: row;
   margin: 5px 0;
   padding: 12px 0;
+  background-color: #fffcf1;
+`;
+
+const MyPostCategoryView = styled.View`
+  width: 30%;
+  margin-left: 10px;
+`;
+
+const MyPostContentsView = styled.View`
+  width: 70%;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
 `;
 
 // 내가 댓글 단 글
-const MyCommentsText = styled(MyPostText)``;
+const MyCommentsTitleText = styled(MyPostTitleText)``;
 
 const MyCommentsBoxView = styled(MyPostBoxView)``;
 
 const MyCommentsView = styled(MyPostView)``;
+
+const MyCommentsCategoryView = styled(MyPostCategoryView)``;
+
+const MyCommentsContentsView = styled(MyPostContentsView)``;

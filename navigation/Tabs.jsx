@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import Home from "../screen/Home";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import My from "../screen/My";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -15,6 +15,10 @@ const Tabs = ({ navigation: { navigate } }) => {
       }}
       screenOptions={{
         tabBarLabelPosition: "beside-icon",
+        headerStyle: { backgroundColor: "#97D2EC" },
+        tabBarStyle: { backgroundColor: "#97D2EC" },
+        tabBarActiveTintColor: "blue",
+        tabBarInactiveTintColor: "white",
       }}
     >
       <Tab.Screen
@@ -38,7 +42,11 @@ const Tabs = ({ navigation: { navigate } }) => {
           headerTitleAlign: "center",
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" size={size} color={color} />
+            <Ionicons
+              name="ios-person-circle-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
         name="My"

@@ -5,7 +5,6 @@ import Login from "../screen/Stacks/Login";
 import PostDetail from "../screen/Stacks/PostDetail";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -21,7 +20,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
         ),
         headerRight: () => (
           <TouchableOpacity onPress={() => navigate("My")}>
-            <FontAwesome name="user" size={24} color="black" />
+            <Ionicons name="ios-person-circle-outline" size={24} color="blue" />
           </TouchableOpacity>
         ),
       }}
