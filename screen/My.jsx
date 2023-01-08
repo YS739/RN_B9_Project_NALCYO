@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, Image, ScrollView } from "react-native";
 import { authService } from "../common/firebase";
 import styled from "@emotion/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
+import PostModal from "../components/PostModal";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   const logout = () => {
     signOut(authService)
       .then(() => {
@@ -38,6 +41,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
 
   return (
     <MyContainerView>
+      {/* TODO: Modal test */}
+      <TouchableOpacity onPress={() => setIsOpenModal(true)}>
+        <Text>모달</Text>
+      </TouchableOpacity>
+      <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
       <MyNameWrapView>
         <Image
           source={{

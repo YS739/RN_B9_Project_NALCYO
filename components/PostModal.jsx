@@ -4,11 +4,6 @@ import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 
 const PostModal = ({ isOpenModal, setIsOpenModal }) => {
-  // FIXME: My에서는 isOpenModal=false 초기값이 콘솔로 찍히는데
-  // My screen 들어가면 자동으로 모달이 뜨고 여기서 isOpenModal = undefined가 뜬다.
-  // movieId 처럼 params도 같이 넘겨줘야 하는 건가?
-  console.log(isOpenModal);
-
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState("");
   // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
