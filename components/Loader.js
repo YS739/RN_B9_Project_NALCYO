@@ -1,20 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/native";
 import { ActivityIndicator } from "react-native";
+import icon from "../assets/icon1.png";
+import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import AppLoading from "expo-app-loading";
+
+// SplashScreen.preventAutoHideAsync();
 
 const Loader = () => {
-  return (
-    <View>
-      <ActivityIndicator />
-    </View>
+  const [isReady, setIsReady] = useState(false);
+
+  const getFonts = async () => {
+    await Font.loadAsync({
+      "NanumPenScript-Regular": require("../assets/fonts/NanumPenScript-Regular.ttf"),
+    });
+  };
+
+  return isReady ? (
+    <ContainerView>
+      <WrapView>
+        <IconImage source={icon} />
+        <TittleText>오늘 날°C요</TittleText>
+        <ActivityIndicator size="large" color={"#15147a"} />
+        <LoadingText>Loading...</LoadingText>
+      </WrapView>
+    </ContainerView>
+  ) : (
+    <AppLoading
+      startAsync={getFonts}
+      onFinish={() => setIsReady(true)}
+      onError={() => {}}
+    />
   );
 };
-
 export default Loader;
 
 // styled component
-const View = styled.View`
-  flex: 1;
-  justify-content: center;
+const ContainerView = styled.View`
+  margin-top: 120;
+  width: 100%;
+  display: flex;
   align-items: center;
+  justify-content: center;
+`;
+
+const WrapView = styled.View`
+  width: 100%;
+  height: 400px;
+  margin: 0 auto;
+  position: relative;
+`;
+
+const IconImage = styled.Image`
+  width: 100%;
+  height: 90%;
+  margin-bottom: 50px;
+`;
+
+const TittleText = styled.Text`
+  position: absolute;
+  font-size: 60px;
+  top: 280;
+  left: 110;
+  font-family: "NanumPenScript-Regular";
+`;
+
+const LoadingText = styled.Text`
+  font-size: 30px;
+  margin: 0 auto;
+  margin-top: 20px;
+  font-family: "NanumPenScript-Regular";
 `;
