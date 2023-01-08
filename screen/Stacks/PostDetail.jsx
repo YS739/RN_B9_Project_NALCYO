@@ -28,12 +28,16 @@ const PostDetail = () => {
         <ContentView>
           <ContentText>내용</ContentText>
         </ContentView>
-        <View>
-          <ModifyTouchableOpacity>
+        <ModifyWrap>
+          <ModifyBtn>
             <Text>수정 하기</Text>
             <AntDesign name="edit" size={24} color="black" />
-          </ModifyTouchableOpacity>
-        </View>
+          </ModifyBtn>
+          <ModifyBtn>
+            <Text>삭제 하기</Text>
+            <FontAwesome name="trash-o" size={24} color="black" />
+          </ModifyBtn>
+        </ModifyWrap>
       </DetailContentWrapView>
       {/* 댓글 area */}
       <CommentWrapView>
@@ -110,9 +114,14 @@ const ContentText = styled.Text`
   margin: 20px;
 `;
 
-const ModifyTouchableOpacity = styled.TouchableOpacity`
-  width: 300px;
-  justify-content: flex-end;
+const ModifyWrap = styled.View`
+  margin-top: 5px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+`;
+const ModifyBtn = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
 `;
@@ -150,7 +159,6 @@ const ConmmentContentView = styled.View`
   margin-top: 10px;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
   align-items: center;
   border: 1px solid black;
   border-radius: 20px;
