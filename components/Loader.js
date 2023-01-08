@@ -18,14 +18,16 @@ const Loader = () => {
   };
 
   return isReady ? (
-    <ContainerView>
-      <WrapView>
-        <IconImage source={icon} />
-        <TittleText>오늘 날°C요</TittleText>
-        <ActivityIndicator size="large" color={"#15147a"} />
-        <LoadingText>Loading...</LoadingText>
-      </WrapView>
-    </ContainerView>
+    <ContainerViw>
+      <WrapContainerView>
+        <WrapView>
+          <IconImage source={icon} />
+          <TittleText>오늘 날°C요</TittleText>
+          <ActivityIndicator size="large" color={"#15147a"} />
+          <LoadingText>Loading...</LoadingText>
+        </WrapView>
+      </WrapContainerView>
+    </ContainerViw>
   ) : (
     <AppLoading
       startAsync={getFonts}
@@ -37,7 +39,13 @@ const Loader = () => {
 export default Loader;
 
 // styled component
-const ContainerView = styled.View`
+const ContainerViw = styled.View`
+  width: 100%;
+  height: 100%;
+  background-color: #97d2ec;
+`;
+
+const WrapContainerView = styled.View`
   margin-top: 120;
   width: 100%;
   display: flex;

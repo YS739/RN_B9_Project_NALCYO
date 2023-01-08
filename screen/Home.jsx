@@ -5,46 +5,54 @@ import koreaimg from "../assets/koreaimg.png";
 
 const Home = () => {
   return (
-    <SafeAreaView>
+    <WrapSafeAreaView>
       <ContainerView>
-        <WrapView>
-          <KoreaImage source={koreaimg} />
-          <SeoulBtn>
-            <HomeText>인천/서울/경기</HomeText>
-          </SeoulBtn>
-          <GangwonBtn>
-            <HomeText>강원도</HomeText>
-          </GangwonBtn>
-          <GyongBukBtn>
-            <HomeText>경상북도</HomeText>
-          </GyongBukBtn>
-          <GyongNamBtn>
-            <HomeText>경상남도</HomeText>
-          </GyongNamBtn>
-          <JeonBukBtn>
-            <HomeText>전라북도</HomeText>
-          </JeonBukBtn>
-          <JeonNamBtn>
-            <HomeText>전라남도</HomeText>
-          </JeonNamBtn>
-          <ChungBukBtn>
-            <HomeText>충청북도</HomeText>
-          </ChungBukBtn>
-          <ChungNamBtn>
-            <HomeText>충청남도</HomeText>
-          </ChungNamBtn>
-          <Jeju>
-            <HomeText>제주도</HomeText>
-          </Jeju>
-        </WrapView>
+        <SmallContainerView>
+          <WrapView>
+            <KoreaImage source={koreaimg} />
+            <SeoulBtn>
+              <HomeText>인천/서울/경기</HomeText>
+            </SeoulBtn>
+            <GangwonBtn>
+              <HomeText>강원도</HomeText>
+            </GangwonBtn>
+            <GyongBukBtn>
+              <HomeText>경상북도</HomeText>
+            </GyongBukBtn>
+            <GyongNamBtn>
+              <HomeText>경상남도</HomeText>
+            </GyongNamBtn>
+            <JeonBukBtn>
+              <HomeText>전라북도</HomeText>
+            </JeonBukBtn>
+            <JeonNamBtn>
+              <HomeText>전라남도</HomeText>
+            </JeonNamBtn>
+            <ChungBukBtn>
+              <HomeText>충청북도</HomeText>
+            </ChungBukBtn>
+            <ChungNamBtn>
+              <HomeText>충청남도</HomeText>
+            </ChungNamBtn>
+            <Jeju>
+              <HomeText>제주도</HomeText>
+            </Jeju>
+          </WrapView>
+        </SmallContainerView>
       </ContainerView>
-    </SafeAreaView>
+    </WrapSafeAreaView>
   );
 };
 
 export default Home;
 
 let textBackgroundColor = "rgba(210, 210, 210, 0.5)";
+
+const WrapSafeAreaView = styled.SafeAreaView`
+  width: 100%;
+  height: 100%;
+  background-color: #97d2ec;
+`;
 
 const WrapView = styled.View`
   display: flex;
@@ -55,10 +63,19 @@ const WrapView = styled.View`
 `;
 
 const ContainerView = styled.View`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+`;
+
+const SmallContainerView = styled.View`
   width: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
+  right: 20;
 `;
 
 const SeoulBtn = styled.TouchableOpacity`
