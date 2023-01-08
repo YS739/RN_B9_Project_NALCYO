@@ -51,7 +51,6 @@ let textBackgroundColor = "rgba(210, 210, 210, 0.5)";
 const WrapSafeAreaView = styled.SafeAreaView`
   width: 100%;
   height: 100%;
-  background-color: #97d2ec;
 `;
 
 const WrapView = styled.View`
