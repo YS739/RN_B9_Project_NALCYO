@@ -1,5 +1,6 @@
 import styled from "@emotion/native";
 import React from "react";
+
 import {
   View,
   Text,
@@ -55,6 +56,7 @@ const PostDetail = () => {
         </ConmmentContentView>
       </CommentWrapView>
     </DetailSafeAreaView>
+
   );
 };
 
