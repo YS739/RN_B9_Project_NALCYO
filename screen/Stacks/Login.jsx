@@ -2,7 +2,7 @@ import React from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
     <View>
       <SafeAreaView style={styles.container}>
