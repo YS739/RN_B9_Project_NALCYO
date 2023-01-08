@@ -1,5 +1,5 @@
 import styled from "@emotion/native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   View,
@@ -11,8 +11,25 @@ import {
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
+import { getDoc, doc } from "firebase/firestore";
+import { dbService } from "../../common/firebase";
 
 const PostDetail = () => {
+  // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
+  const [nickName, setNickName] = useState("");
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    const getComment = async () => {
+      const snapshot = await getDoc(
+        doc(dbService, "Comment", "9009q42XRMaUPCT1eO60")
+      );
+      setComment(snapshot.data().comment);
+      setNickName(snapshot.data().nickName);
+    };
+    getComment();
+  }, []);
+
   return (
     <DetailSafeAreaView>
       {/* Detail content */}
@@ -49,14 +66,13 @@ const PostDetail = () => {
           </CommentAddBtn>
         </CommentAddView>
         <ConmmentContentView>
-          <Text>배성완</Text>
-          <Text>서울은 날씨가 너무 좋아요</Text>
+          <Text>{nickName}</Text>
+          <Text>{comment}</Text>
           <AntDesign name="edit" size={24} color="black" />
           <FontAwesome name="trash-o" size={24} color="black" />
         </ConmmentContentView>
       </CommentWrapView>
     </DetailSafeAreaView>
-
   );
 };
 
