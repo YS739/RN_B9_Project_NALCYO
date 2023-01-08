@@ -1,4 +1,6 @@
 import React from "react";
+import Home from "../screen/Home";
+import Loader from "../components/Loader";
 
 import Tabs from "./Tabs";
 import Stacks from "./Stacks";
@@ -17,6 +19,7 @@ const Root = () => {
       <Stack.Screen name="Stacks" component={Stacks} />
     </Stack.Navigator>
   );
+
 };
 
 export default Root;
