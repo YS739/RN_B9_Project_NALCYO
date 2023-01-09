@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const Login = ({ navigation }) => {
+  const [values, setValues] = useState({
+    email: "",
+    pwd: "",
+  });
+
+  function handleChange(text, eventName) {
+    setValues((prev) => {
+      return {
+        ...prev,
+        [eventName]: text,
+      };
+    });
+  }
+
+  function Login() {
+    const { email, pwd } = values;
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, pwd)
+      .then(() => {})
+      .catch((error) => {
+        alert(error.message);
+        // ..
+      });
+  }
+
   return (
     <View>
       <SafeAreaView style={styles.container}>
@@ -10,10 +39,10 @@ const Login = ({ navigation }) => {
         <Image style={styles.Logo} source={require("../../assets/adaptive-icon.png")} />
         <View>
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" value={email} style={styles.login_input} />
+          <TextInput placeholder="Email" onChangeText={(text) => handleChange(text, "email")} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" value={password} style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onPress={() => onSubmit(form)} style={styles.login_button}>
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={setPassword} style={styles.login_input} />
+          <TouchableOpacity color="#f194ff" onClick={() => Login()} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
           </TouchableOpacity>
 

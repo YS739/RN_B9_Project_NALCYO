@@ -2,8 +2,8 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import City from "../screen/Stacks/City";
 import Login from "../screen/Stacks/Login";
-import PostDetail from "../screen/Stacks/PostDetail";
 import SignUp from "../screen/Stacks/SignUp";
+import PostDetail from "../screen/Stacks/PostDetail";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
