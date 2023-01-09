@@ -41,7 +41,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.email_form_title}>이메일</Text>
           <TextInput placeholder="Email" onChangeText={(text) => handleChange(text, "email")} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={setPassword} style={styles.login_input} />
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd")} style={styles.login_input} />
           <TouchableOpacity color="#f194ff" onClick={() => Login()} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
           </TouchableOpacity>
