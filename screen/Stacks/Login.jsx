@@ -24,7 +24,9 @@ const Login = ({ navigation }) => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, pwd)
-      .then(() => {})
+      .then(() => {
+        navigation.replace("Home");
+      })
       .catch((error) => {
         alert(error.message);
         // ..
