@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import firebase from "@firebase/app";
-import "firebase/auth";
-
-const Login = ({ navigation }) => {
+import "@firebase/auth";
+const SignUp = () => {
   const [values, setValues] = useState({
+    nickname: "",
     email: "",
     pwd: "",
+    pwd2: "",
   });
 
   function handleChange(text, eventName) {
@@ -19,34 +20,38 @@ const Login = ({ navigation }) => {
     });
   }
 
-  function Login() {
-    const { email, pwd } = values;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, pwd)
-      .then(() => {})
-      .catch((error) => {
-        alert(error.message);
-        // ..
-      });
+  function SignUp() {
+    const { nickname, email, pwd, pwd2 } = values;
+
+    if (pwd == pwd2) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, pwd)
+        .then(() => {})
+        .catch((error) => {
+          alert(error.message);
+          // ..
+        });
+    } else {
+      alert("Passwords are different!");
+    }
   }
 
   return (
     <View>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image style={styles.Logo} source={require("../../assets/adaptive-icon.png")} />
         <View>
+          <Text style={styles.email_form_title}>닉네임</Text>
+          <TextInput placeholder="Nickname" onChangeText={(text) => handleChange(text, "nickname")} style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
           <TextInput placeholder="Email" onChangeText={(text) => handleChange(text, "email")} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
           <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd")} style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onClick={() => Login()} style={styles.login_button}>
-            <Text style={styles.text}>이메일로 로그인하기</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
-            <Text style={styles.text}>회원가입 하러가기</Text>
+          <Text style={styles.email_form_title}>비밀번호확인</Text>
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd2")} style={styles.login_input} />
+          <TouchableOpacity color="#f194ff" onClick={() => SignUp()} style={styles.login_button}>
+            <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     height: 900,
   },
   login_title: {
-    marginTop: 50,
+    marginTop: 30,
     padding: 30,
     fontSize: 36,
     fontWeight: "bold",
@@ -90,4 +95,4 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-export default Login;
+export default SignUp;
