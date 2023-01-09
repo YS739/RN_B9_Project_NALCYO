@@ -1,37 +1,70 @@
-import React, { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
-import firebase from "@firebase/app";
-import "firebase/auth";
+import { authService } from "../../common/firebase";
+import { signInWithEmailAndPassword } from "@firebase/auth";
+import { emailRegex, pwRegex } from "../../common/util";
 
-const Login = ({ navigation }) => {
-  const [values, setValues] = useState({
-    email: "",
-    pwd: "",
-  });
+export default function Login({ navigation: { goBack, setOptions } }) {
+  const emailRef = useRef(null);
+  const pwRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
 
-  function handleChange(text, eventName) {
-    setValues((prev) => {
-      return {
-        ...prev,
-        [eventName]: text,
-      };
-    });
-  }
+  const validateInputs = () => {
+    if (!email) {
+      alert("email을 입력해주세요.");
+      emailRef.current.focus();
+      return true;
+    }
+    if (!pw) {
+      alert("password를 입력해주세요.");
+      pwRef.current.focus();
+      return true;
+    }
+    const matchedEmail = email.match(emailRegex);
+    const matchedPw = pw.match(pwRegex);
 
-  function Login() {
-    const { email, pwd } = values;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, pwd)
+    if (matchedEmail === null) {
+      alert("이메일 형식에 맞게 입력해 주세요.");
+      emailRef.current.focus();
+      return true;
+    }
+    if (matchedPw === null) {
+      alert("비밀번호는 8자리 이상 영문자, 숫자, 특수문자 조합이어야 합니다.");
+      pwRef.current.focus();
+      return true;
+    }
+  };
+  const handleLogin = () => {
+    // 유효성 검사
+    if (validateInputs()) {
+      return;
+    }
+
+    // 로그인 요청
+    signInWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        navigation.replace("Home");
+        console.log("로그인성공");
+        setEmail("");
+        setPw("");
+        goBack();
+        // 로그인 화면 이전 화면으로 돌아가기
       })
-      .catch((error) => {
-        alert(error.message);
-        // ..
+      .catch((err) => {
+        console.log("err.message:", err.message);
+        if (err.message.includes("user-not-found")) {
+          alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
+        }
+        if (err.message.includes("wrong-password")) {
+          alert("비밀번호가 틀렸습니다.");
+        }
       });
-  }
+  };
+
+  useEffect(() => {
+    setOptions({ headerRight: () => null });
+  }, []);
 
   return (
     <View>
@@ -40,10 +73,10 @@ const Login = ({ navigation }) => {
         <Image style={styles.Logo} source={require("../../assets/adaptive-icon.png")} />
         <View>
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" onChangeText={(text) => handleChange(text, "email")} style={styles.login_input} />
+          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd")} style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onClick={() => Login()} style={styles.login_button}>
+          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
+          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
           </TouchableOpacity>
 
@@ -54,7 +87,7 @@ const Login = ({ navigation }) => {
       </SafeAreaView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   Logo: {
@@ -92,4 +125,3 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-export default Login;

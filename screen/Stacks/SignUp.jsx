@@ -1,43 +1,67 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
-import firebase from "@firebase/app";
-import "@firebase/auth";
-const SignUp = () => {
-  const [values, setValues] = useState({
-    nickname: "",
-    email: "",
-    pwd: "",
-    pwd2: "",
-  });
+import { authService } from "../../common/firebase";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { emailRegex, pwRegex } from "../../common/util";
 
-  function HandleChange(text, eventName) {
-    setValues((prev) => {
-      return {
-        ...prev,
-        [eventName]: text,
-      };
-    });
-  }
+export default function SignUp({ navigation: { goBack, setOptions } }) {
+  const emailRef = useRef(null);
+  const pwRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [nickname, setNickname] = useState("");
 
-  function SignUp() {
-    const { nickname, email, pwd, pwd2 } = values;
-
-    if (pwd == pwd2) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, pwd)
-        .then(() => {
-          navigation.replace("Home");
-        })
-        .catch((error) => {
-          alert(error.message);
-          // ..
-        });
-    } else {
-      alert("Passwords are different!");
+  const validateInputs = () => {
+    if (!email) {
+      alert("email을 입력해주세요.");
+      emailRef.current.focus();
+      return true;
     }
-  }
+    if (!pw) {
+      alert("password를 입력해주세요.");
+      pwRef.current.focus();
+      return true;
+    }
+    const matchedEmail = email.match(emailRegex);
+    const matchedPw = pw.match(pwRegex);
+
+    if (matchedEmail === null) {
+      alert("이메일 형식에 맞게 입력해 주세요.");
+      emailRef.current.focus();
+      return true;
+    }
+    if (matchedPw === null) {
+      alert("비밀번호는 8자리 이상 영문자, 숫자, 특수문자 조합이어야 합니다.");
+      pwRef.current.focus();
+      return true;
+    }
+  };
+  const handleRegister = () => {
+    // 유효성 검사
+    if (validateInputs()) {
+      return;
+    }
+
+    createUserWithEmailAndPassword(authService, email, pw)
+      .then(() => {
+        console.log("로그인성공");
+        setNickname("");
+        setEmail("");
+        setPw("");
+        goBack();
+      })
+      .catch((err) => {
+        console.log("err.message:", err.message);
+        if (err.message.includes("already-in-use")) {
+          alert("이미 사용중인 아이디입니다.");
+        }
+      });
+  };
+
+  useEffect(() => {
+    setOptions({ headerRight: () => null });
+  }, []);
 
   return (
     <View>
@@ -45,21 +69,20 @@ const SignUp = () => {
         <Text style={styles.login_title}>오늘 날°C요 </Text>
         <View>
           <Text style={styles.email_form_title}>닉네임</Text>
-          <TextInput placeholder="Nickname" onChangeText={(text) => HandleChange(text, "nickname")} style={styles.login_input} />
+          <TextInput placeholder="Nickname" value={nickname} onChangeText={(text) => setNickname(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" onChangeText={(text) => HandleChange(text, "email")} style={styles.login_input} />
+          <TextInput placeholder="Email" onChangeText={(text) => setEmail(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => HandleChange(text, "pwd")} style={styles.login_input} />
-          <Text style={styles.email_form_title}>비밀번호확인</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => HandleChange(text, "pwd2")} style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onClick={() => SignUp()} style={styles.login_button}>
+          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} returnKeyType="send" style={styles.login_input} />
+
+          <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
             <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   Logo: {
@@ -97,4 +120,3 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-export default SignUp;
