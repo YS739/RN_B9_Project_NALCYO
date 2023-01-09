@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
-import firebase from "firebase/app";
+import firebase from "@firebase/app";
 import "firebase/auth";
 
 const Login = ({ navigation }) => {
@@ -21,7 +21,6 @@ const Login = ({ navigation }) => {
 
   function Login() {
     const { email, pwd } = values;
-
     firebase
       .auth()
       .signInWithEmailAndPassword(email, pwd)

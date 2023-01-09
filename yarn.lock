@@ -1568,7 +1568,7 @@
   "resolved" "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.9.0.tgz"
   "version" "0.9.0"
 
-"@firebase/app@0.9.0", "@firebase/app@0.x":
+"@firebase/app@^0.9.0", "@firebase/app@0.9.0", "@firebase/app@0.x":
   "integrity" "sha512-sa15stSK6FoGW4mCeAVDt0TvBFxPjvNcG2rhacGudOzMaW3g2TS326zXTFG+p5jnTCPZ2SO5TTSiGHn1NNcD9Q=="
   "resolved" "https://registry.npmjs.org/@firebase/app/-/app-0.9.0.tgz"
   "version" "0.9.0"
