@@ -1,24 +1,22 @@
 import React from "react";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 
-const Login = ({ navigation }) => {
+const SignUp = () => {
   return (
     <View>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image style={styles.Logo} source={require("../../assets/adaptive-icon.png")} />
         <View>
+          <Text style={styles.email_form_title}>닉네임</Text>
+          <TextInput placeholder="Nickname" style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" value={email} style={styles.login_input} />
+          <TextInput placeholder="Email" style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" value={password} style={styles.login_input} />
+          <TextInput secureTextEntry={true} placeholder="Password" style={styles.login_input} />
           <TouchableOpacity color="#f194ff" onPress={() => onSubmit(form)} style={styles.login_button}>
-            <Text style={styles.text}>이메일로 로그인하기</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
-            <Text style={styles.text}>회원가입 하러가기</Text>
+            <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -62,4 +60,4 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-export default Login;
+export default SignUp;
