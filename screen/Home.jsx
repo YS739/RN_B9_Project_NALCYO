@@ -1,15 +1,7 @@
 import styled from "@emotion/native";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  AppRegistry,
-} from "react-native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
-import { useFocusEffect } from "@react-navigation/native";
 
 const Home = ({ navigation: { navigate } }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,17 +9,8 @@ const Home = ({ navigation: { navigate } }) => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 4000);
   }, []);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log("Focuse");
-  //     return () => {
-  //       console.log("Unfocuse");
-  //     };
-  //   }, [])
-  // );
 
   return isLoading ? (
     <Loader />
@@ -85,6 +68,7 @@ const WrapView = styled.View`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-left: 20px;
   position: relative;
 `;
 
@@ -97,7 +81,7 @@ const ContainerView = styled.View`
 `;
 
 const SmallContainerView = styled.View`
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,7 +94,7 @@ const SeoulBtn = styled.TouchableOpacity`
   background-color: ${textBackgroundColor};
   border-radius: 10px;
   top: 150px;
-  right: 160px;
+  right: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,7 +103,7 @@ const SeoulBtn = styled.TouchableOpacity`
 const GangwonBtn = styled.TouchableOpacity`
   position: absolute;
   top: 130px;
-  right: 50px;
+  right: 100px;
   width: 70px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -128,8 +112,8 @@ const GangwonBtn = styled.TouchableOpacity`
 `;
 const GyongBukBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 260px;
-  right: 20px;
+  top: 280px;
+  right: 50px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -138,8 +122,8 @@ const GyongBukBtn = styled.TouchableOpacity`
 `;
 const GyongNamBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 380px;
-  right: 30px;
+  top: 400px;
+  right: 80px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -148,8 +132,8 @@ const GyongNamBtn = styled.TouchableOpacity`
 `;
 const JeonBukBtn = styled.TouchableOpacity`
   position: absolute;
-  left: 120px;
-  top: 350px;
+  left: 110px;
+  top: 360px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -168,8 +152,8 @@ const JeonNamBtn = styled.TouchableOpacity`
 `;
 const ChungBukBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 220px;
-  right: 100px;
+  top: 230px;
+  right: 130px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -178,7 +162,7 @@ const ChungBukBtn = styled.TouchableOpacity`
 `;
 const ChungNamBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 280px;
+  top: 270px;
   left: 80px;
   width: 90px;
   background-color: ${textBackgroundColor};
@@ -188,8 +172,8 @@ const ChungNamBtn = styled.TouchableOpacity`
 `;
 const Jeju = styled.TouchableOpacity`
   position: absolute;
-  bottom: 70px;
-  left: 25px;
+  bottom: 80px;
+  left: 60px;
   width: 70px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -205,8 +189,8 @@ const HomeText = styled.Text`
 
 const KoreaImage = styled.Image`
   width: 100%;
-  height: 90%;
+  height: 95%;
   margin-top: 30px;
-  margin-left: 40px;
+  margin-left: 60px;
   margin-bottom: 40px;
 `;

@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "@emotion/native";
 import { ActivityIndicator } from "react-native";
 import icon from "../assets/icon1.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+import { Animated } from "react-native";
 
-const Loader = () => {
+const Loader = (props) => {
   const [isReady, setIsReady] = useState(false);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 3000,
+    }).start();
+  }, [fadeAnim]);
 
   const getFonts = async () => {
     await Font.loadAsync({
@@ -15,16 +25,23 @@ const Loader = () => {
   };
 
   return isReady ? (
-    <ContainerViw>
-      <WrapContainerView>
-        <WrapView>
-          <IconImage source={icon} />
-          <TittleText>오늘 날°C요</TittleText>
-          <ActivityIndicator size="large" color={"#15147a"} />
-          <LoadingText>Loading...</LoadingText>
-        </WrapView>
-      </WrapContainerView>
-    </ContainerViw>
+    <Animated.View
+      style={{
+        ...props.style,
+        opacity: fadeAnim,
+      }}
+    >
+      <ContainerView>
+        <WrapContainerView>
+          <WrapView>
+            <IconImage source={icon} />
+            <TittleText>오늘 날°C요</TittleText>
+            <ActivityIndicator size="large" color={"#15147a"} />
+            <LoadingText>Loading...</LoadingText>
+          </WrapView>
+        </WrapContainerView>
+      </ContainerView>
+    </Animated.View>
   ) : (
     <AppLoading
       startAsync={getFonts}
@@ -36,7 +53,7 @@ const Loader = () => {
 export default Loader;
 
 // styled component
-const ContainerViw = styled.View`
+const ContainerView = styled.View`
   width: 100%;
   height: 100%;
   background-color: #97d2ec;
