@@ -54,7 +54,6 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
                 // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                 // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
                 disabled={!postTitle || !postContent || !value}
-                // title="등록하기"
                 title={screenName === "Detail" ? "수정하기" : "등록하기"}
               ></ModalAddPostButton>
             </ModalAddPostView>

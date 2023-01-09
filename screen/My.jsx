@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import PostModal from "../components/PostModal";
 
 const My = ({ navigation }) => {
+  // TODO: City screen 완성되면 My에서 PostModal 부분 다 삭제하기
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const logout = () => {
