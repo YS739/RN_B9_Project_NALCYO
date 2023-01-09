@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,15 +7,42 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 
 const City = () => {
+  // const [nowWeather, setNoewWeather] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const BASE_URL = "http://api.openweathermap.org/data/2.5/forecast?";
+  // const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
+  // const getNowWeather = async () => {
+  //   const response = await fetch(`${BASE_URL}id=1845457&appid=${API_KEY}`)
+  //     .then((res) => res.json())
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   console.log(JSON.stringify(response));
+  //   setNoewWeather(response);
+  //   setIsLoading(false);
+  // };
+  // useEffect(() => {
+  //   getNowWeather();
+  // }, []);
+
+  // if (isLoading) {
+  //   return (
+  //     <CityLoader>
+  //       <ActivityIndicator />
+  //     </CityLoader>
+  //   );
+  // }
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
-        style={{ alignItems: "center", flex: 1, backgroundColor: "gray" }}
+        style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
       >
         <WeatherContainer>
           <WeatherWrap>
@@ -45,8 +72,9 @@ export default City;
 
 const WeatherContainer = styled.TouchableOpacity`
   width: 90%;
+  margin-top: 15px;
   height: 250px;
-  background-color: #b6b6d3;
+  background-color: white;
   border-radius: 30px;
   padding: 10px;
 
@@ -74,7 +102,7 @@ const WeatherCityText = styled.Text`
 `;
 
 const CityWriteBtn = styled.TouchableOpacity`
-  background-color: #b6b6d3;
+  background-color: white;
   margin-top: 15px;
   left: 115px;
   width: 30%;
@@ -82,6 +110,7 @@ const CityWriteBtn = styled.TouchableOpacity`
   border-radius: 15px;
   justify-content: center;
   align-items: center;
+  border: 1px solid;
 `;
 
 const CityContentsBtn = styled.TouchableOpacity`
@@ -89,12 +118,19 @@ const CityContentsBtn = styled.TouchableOpacity`
   width: 90%;
   margin: 10px;
   padding-left: 30px;
-  background-color: #b6b6d3;
+  background-color: #97d2ec;
   border-radius: 15px;
   /* justify-content: center; */
   align-items: center;
   flex-direction: row;
 `;
+
+// const CityLoader = styled.View`
+//   flex: 1;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #97d2ec;
+// `;
 
 // const styles = StyleSheet.create({
 //   container: {

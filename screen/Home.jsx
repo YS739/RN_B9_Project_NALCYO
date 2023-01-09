@@ -1,11 +1,10 @@
 import styled from "@emotion/native";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Home = ({ navigation: { navigate } }) => {
   return (
-
     <WrapSafeAreaView>
       <ContainerView>
         <SmallContainerView>
@@ -41,13 +40,11 @@ const Home = ({ navigation: { navigate } }) => {
           </WrapView>
         </SmallContainerView>
       </ContainerView>
-      
-       <TouchableOpacity onPress={() => navigate("Stacks", { screen: "City" })}>
+
+      <TouchableOpacity onPress={() => navigate("Stacks", { screen: "City" })}>
         <Text>City</Text>
       </TouchableOpacity>
-
     </WrapSafeAreaView>
-
   );
 };
 
