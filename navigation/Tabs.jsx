@@ -10,6 +10,8 @@ const Tab = createBottomTabNavigator();
 const Tabs = ({ navigation: { navigate } }) => {
   return (
     <Tab.Navigator
+      // initialRouteName={navigate("Stacks", { screen: "Login" })}
+      // Login 완성되면 주석 해제하기 = Login화면이 초기화면
       sceneContainerStyle={{
         backgroundColor: "#97D2EC",
       }}
