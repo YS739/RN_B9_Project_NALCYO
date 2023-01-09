@@ -5,12 +5,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
-import { v4 as uuidv4 } from "uuid";
-import City from "../screen/Stacks/City";
+import { useNavigation } from "@react-navigation/native";
 
-const PostModal = ({ goToCity, isOpenModal, setIsOpenModal }) => {
-  // const TitleRef = useRef();
-  // const ContentRef = useRef();
+const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
 
@@ -44,12 +41,10 @@ const PostModal = ({ goToCity, isOpenModal, setIsOpenModal }) => {
     setPostTitle("");
     setPostContent("");
     setValue("");
-    // FIXME: 등록완료 누르면 city screen으로 가야 함
-    // setTimeout(() => navigation.navigate("Stacks", { screen: "City" }));
   };
 
   return (
-    <Modal visible={isOpenModal} transparent animationType="fade">
+    <Modal visible={isOpenModal} transparent animationType="slide">
       <ModalContainerView>
         <ModalWrapView>
           <ModalAddCloseView>
@@ -59,12 +54,9 @@ const PostModal = ({ goToCity, isOpenModal, setIsOpenModal }) => {
                 // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                 // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
                 disabled={!postTitle || !postContent || !value}
-                title="등록하기"
-                // title={from === "City" ? "등록하기" : "수정하기"}
-              >
-                {/* <ModalAddText>등록하기</ModalAddText> */}
-                {/* TODO: from scree에 따라 등록하기, 수정하기로 다르게 보이게 */}
-              </ModalAddPostButton>
+                // title="등록하기"
+                title={screenName === "Detail" ? "수정하기" : "등록하기"}
+              ></ModalAddPostButton>
             </ModalAddPostView>
             <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
               <AntDesign name="close" size={24} color="black" />
@@ -74,11 +66,12 @@ const PostModal = ({ goToCity, isOpenModal, setIsOpenModal }) => {
             <DropDownPicker
               open={open}
               value={value}
+              // TODO: value={screenName === "Detail" ? city.category  : value}
               items={items}
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              placeholder={value ? "city.city" : "지역을 선택해주세요."}
+              placeholder={value ? "city.category" : "지역을 선택해주세요."}
               //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
             />
           </ModalCategoryView>

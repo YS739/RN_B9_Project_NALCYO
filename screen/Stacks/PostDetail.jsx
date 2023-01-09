@@ -1,5 +1,5 @@
 import styled from "@emotion/native";
-import React from "react";
+import React, { useState } from "react";
 
 import {
   View,
@@ -11,8 +11,14 @@ import {
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
+import PostModal from "../../components/PostModal";
 
 const PostDetail = () => {
+  //TODO: Modal Test
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  // Post Modal에 전달할 screen name
+  const NameForPostModal = "Detail";
+
   return (
     <DetailSafeAreaView>
       {/* Detail content */}
@@ -30,7 +36,13 @@ const PostDetail = () => {
           <ContentText>내용</ContentText>
         </ContentView>
         <ModifyWrap>
-          <ModifyBtn>
+          {/* TODO: PostModal */}
+          <PostModal
+            isOpenModal={isOpenModal}
+            setIsOpenModal={setIsOpenModal}
+            screenName={NameForPostModal}
+          />
+          <ModifyBtn onPress={() => setIsOpenModal(true)}>
             <Text>수정 하기</Text>
             <AntDesign name="edit" size={24} color="black" />
           </ModifyBtn>
@@ -56,7 +68,6 @@ const PostDetail = () => {
         </ConmmentContentView>
       </CommentWrapView>
     </DetailSafeAreaView>
-
   );
 };
 

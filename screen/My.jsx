@@ -7,25 +7,26 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import PostModal from "../components/PostModal";
 
-const My = ({ navigation: { navigate, setOptions, goBack } }) => {
+const My = ({ navigation }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const goToCity = navigate("Stacks", { screen: "City" });
 
   const logout = () => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
-        navigate("Login");
+        navigation.navigate("Login");
       })
       .catch((err) => alert(err));
   };
   // FIXME: 현재 로그아웃 안 됨 - can't find variable logout = 현재 유저가 없어서 그런 듯?
 
   useEffect(() => {
-    setOptions({
+    navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+        <TouchableOpacity
+          style={{ marginLeft: 15 }}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),
@@ -47,11 +48,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       <TouchableOpacity onPress={() => setIsOpenModal(true)}>
         <Text>모달</Text>
       </TouchableOpacity>
-      <PostModal
-        goToCity={goToCity}
-        isOpenModal={isOpenModal}
-        setIsOpenModal={setIsOpenModal}
-      />
+      <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
       <MyNameWrapView>
         <Image
           source={{
