@@ -1,7 +1,12 @@
 import React from "react";
+import { View, Text } from "react-native";
 
 const MyFlatList = () => {
-  return <div></div>;
+  return (
+    <View>
+      <Text>MyFlatList</Text>
+    </View>
+  );
 };
 
 export default MyFlatList;
