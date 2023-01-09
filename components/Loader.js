@@ -8,6 +8,8 @@ import AppLoading from "expo-app-loading";
 
 // SplashScreen.preventAutoHideAsync();
 
+// setTimeout
+
 const Loader = () => {
   const [isReady, setIsReady] = useState(false);
 
@@ -46,7 +48,7 @@ const ContainerViw = styled.View`
 `;
 
 const WrapContainerView = styled.View`
-  margin-top: 120;
+  margin-top: 120px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -69,8 +71,8 @@ const IconImage = styled.Image`
 const TittleText = styled.Text`
   position: absolute;
   font-size: 60px;
-  top: 280;
-  left: 110;
+  top: 280px;
+  left: 110px;
   font-family: "NanumPenScript-Regular";
 `;
 
