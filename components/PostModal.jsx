@@ -1,30 +1,28 @@
-import React, { useState, useRef } from "react";
-import { Modal, TextInput, TouchableOpacity, Text } from "react-native";
+import React, { useState } from "react";
+import { Modal, TouchableWithoutFeedback } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
-import { async } from "@firebase/util";
 import { addDoc, collection } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
+import { v4 as uuidv4 } from "uuid";
+import City from "../screen/Stacks/City";
 
-const PostModal = ({
-  isOpenModal,
-  setIsOpenModal,
-  navigation: { navigate },
-}) => {
-  const TitleRef = React.useRef();
-  const ContentRef = React.useRef();
-  // const [modalTitle, setModalTitle] = useState("");
-  // const [modalContent, setModalContent] = useState("");
+const PostModal = ({ goToCity, isOpenModal, setIsOpenModal }) => {
+  // const TitleRef = useRef();
+  // const ContentRef = useRef();
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
 
   // 지역 카테고리 선택하기
-  const [selectCity, SetSelectCity] = useState([
-    { label: 보기1, value: "서울" },
-    { label: 보기2, value: "부산" },
-    { label: 보기3, value: "청주" },
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "서울", value: "서울" },
+    { label: "부산", value: "부산" },
+    { label: "청주", value: "청주" },
+    { label: "목포", value: "목포" },
   ]);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [selectCityValue, setSelectCityValue] = useState("");
 
   // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
   // 않아서 내용을 입력하고 엔터를 눌러야함.
@@ -34,18 +32,20 @@ const PostModal = ({
   // 등록하기 버튼을 누르면 db의 "List" collection에 포스트 데이터가 들어감
   const addPost = async () => {
     await addDoc(collection(dbService, "List"), {
-      title: TitleRef.current.valueOf,
-      content: ContentRef.current.valueOf,
-      userId: authService.currentUser.uid,
-      createdAt: Date.now(),
-      category: selectCityValue,
+      title: postTitle,
+      content: postContent,
+      // userId: authService.currentUser?.uid,
+      // TODO: login 구현되면 주석 해제하기
+      createdAt: new Date(),
+      category: value,
     });
-    // 포스트가 등록되면 모달이 닫히고 input창 초기화
-    // navigation으로 이동하면 필요없을 듯..?
+    // 포스트가 등록되면 모달이 닫히고 input, 카테고리 선택 초기화
     setIsOpenModal(false);
-    TitleRef("");
-    ContentRef("");
-    // if()navigate
+    setPostTitle("");
+    setPostContent("");
+    setValue("");
+    // FIXME: 등록완료 누르면 city screen으로 가야 함
+    // setTimeout(() => navigation.navigate("Stacks", { screen: "City" }));
   };
 
   return (
@@ -53,39 +53,45 @@ const PostModal = ({
       <ModalContainerView>
         <ModalWrapView>
           <ModalAddCloseView>
-            <ModalAddPostBtn
-              onPress={addPost}
-              // 제목이나 내용이 입력되지 않으면 버튼 비활성화
-              disabled={!TitleRef || !ContentRef}
-            >
-              <ModalAddText>등록하기</ModalAddText>
-              {/* TODO: from scree에 따라 등록하기, 수정하기로 다르게 보이게 */}
-            </ModalAddPostBtn>
+            <ModalAddPostView>
+              <ModalAddPostButton
+                onPress={addPost}
+                // 제목이나 내용이 입력되지 않으면 버튼 비활성화
+                // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
+                disabled={!postTitle || !postContent || !value}
+                title="등록하기"
+                // title={from === "City" ? "등록하기" : "수정하기"}
+              >
+                {/* <ModalAddText>등록하기</ModalAddText> */}
+                {/* TODO: from scree에 따라 등록하기, 수정하기로 다르게 보이게 */}
+              </ModalAddPostButton>
+            </ModalAddPostView>
             <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
               <AntDesign name="close" size={24} color="black" />
             </ModalCloseBtn>
           </ModalAddCloseView>
-          <DropDownPicker
-            isSelectOpen={isSelectOpen}
-            selectCityValue={selectCityValue}
-            selectCity={selectCity}
-            setIsOpenModal={setIsSelectOpen}
-            SetSelectCity={SetSelectCity}
-            setSelectCityValue={setSelectCityValue}
-            placeholder="지역을 선택하세요"
-          />
-          {/* TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?*/}
-
-          <ModalCategoryBtn>
-            <ModalCategoryText>해당 지역 날씨</ModalCategoryText>
-          </ModalCategoryBtn>
+          <ModalCategoryView>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              placeholder={value ? "city.city" : "지역을 선택해주세요."}
+              //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
+            />
+          </ModalCategoryView>
 
           <ModalTitleTextInput
-            ref={TitleRef}
+            autoFocus
+            value={postTitle}
+            onChangeText={(title) => setPostTitle(title)}
             placeholder="제목을 입력해주세요."
           />
           <ModalContentTexInput
-            ref={ContentRef}
+            value={postContent}
+            onChangeText={(content) => setPostContent(content)}
             textAlignVertical="top"
             multiline
             maxLength={300}
@@ -122,7 +128,7 @@ const ModalAddCloseView = styled.View`
   justify-content: space-between;
 `;
 
-const ModalAddPostBtn = styled.TouchableOpacity`
+const ModalAddPostView = styled.View`
   width: 30%;
   height: 45px;
   background-color: #fae9e9;
@@ -132,21 +138,25 @@ const ModalAddPostBtn = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const ModalAddText = styled.Text`
-  font-weight: 800;
-  font-size: 16px;
+const ModalAddPostButton = styled.Button`
+  :active&:focus&:enabled {
+    color: black;
+  }
+  :enabled {
+    color: black;
+  }
 `;
+// TODO: enabled됐을 때 색 파란색말고 다른 색으로 바꾸기..
 
 const ModalCloseBtn = styled.TouchableOpacity`
   position: absolute;
   left: 150px;
 `;
 
-const ModalCategoryBtn = styled(ModalAddPostBtn)`
-  width: 50%;
+const ModalCategoryView = styled.View`
+  width: 60%;
+  z-index: 1000;
 `;
-
-const ModalCategoryText = styled(ModalAddText)``;
 
 const ModalTitleTextInput = styled.TextInput`
   width: 70%;

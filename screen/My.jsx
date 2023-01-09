@@ -10,6 +10,8 @@ import PostModal from "../components/PostModal";
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
+  const goToCity = navigate("Stacks", { screen: "City" });
+
   const logout = () => {
     signOut(authService)
       .then(() => {
@@ -45,7 +47,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       <TouchableOpacity onPress={() => setIsOpenModal(true)}>
         <Text>모달</Text>
       </TouchableOpacity>
-      <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
+      <PostModal
+        goToCity={goToCity}
+        isOpenModal={isOpenModal}
+        setIsOpenModal={setIsOpenModal}
+      />
       <MyNameWrapView>
         <Image
           source={{
