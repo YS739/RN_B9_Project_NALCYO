@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { TouchableOpacity, Text, Image, ScrollView } from "react-native";
 import { authService } from "../common/firebase";
 import styled from "@emotion/native";
@@ -54,7 +54,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             height: 60,
           }}
         ></Image>
-        <MyNameText>닉네임</MyNameText>
+        {/* TODO: 닉네임 데이터 가져오면 주석해제 */}
+        {/* <MyNameText>{nickName? "user.nickName" : "회원"}</MyNameText> */}
         <TouchableOpacity>
           <FontAwesome5 name="edit" size={24} color="black" />
         </TouchableOpacity>
