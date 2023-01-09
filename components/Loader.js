@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/native";
 import { ActivityIndicator } from "react-native";
 import icon from "../assets/icon1.png";
 import * as Font from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 import AppLoading from "expo-app-loading";
-
-// SplashScreen.preventAutoHideAsync();
-
-// setTimeout
 
 const Loader = () => {
   const [isReady, setIsReady] = useState(false);

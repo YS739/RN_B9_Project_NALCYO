@@ -1,13 +1,37 @@
 import styled from "@emotion/native";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  AppRegistry,
+} from "react-native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Home = ({ navigation: { navigate } }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  return (
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("Focuse");
+  //     return () => {
+  //       console.log("Unfocuse");
+  //     };
+  //   }, [])
+  // );
+
+  return isLoading ? (
+    <Loader />
+  ) : (
     <WrapSafeAreaView>
       <ContainerView>
         <SmallContainerView>
