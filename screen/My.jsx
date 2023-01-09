@@ -1,15 +1,57 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { TouchableOpacity, Text, Image, ScrollView } from "react-native";
-import { authService } from "../common/firebase";
+import React, { useCallback, useEffect, useState } from "react";
+import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
+import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
-import PostModal from "../components/PostModal";
+import { async } from "@firebase/util";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { useFocusEffect } from "@react-navigation/native";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [addName, setAddName] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
 
+  // 닉네임 등록하기
+  const addNickname = async () => {
+    await addDoc(collection(dbService, "nickName"), {
+      // userId: authService.currentUser.uid,
+      // 임시 유저 아이디 넣기
+      userId: "Yunny",
+      nickName: addName,
+    });
+    setIsEdit(false);
+  };
+
+  // 닉네임 불러오기???????????????
+  useFocusEffect(
+    useCallback(() => {
+      const q = query(collection(dbService, "nickName"));
+      console.log(q);
+      const MyName = onSnapshot(q, (snapshot) => {
+        const newMyName = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAddName(newMyName);
+      });
+      console.log(MyName);
+      return MyName;
+    }, [])
+  );
+
+  // 닉네임 수정하기
+
+  // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
     signOut(authService)
       .then(() => {
@@ -41,11 +83,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
 
   return (
     <MyContainerView>
-      {/* TODO: Modal test */}
-      <TouchableOpacity onPress={() => setIsOpenModal(true)}>
-        <Text>모달</Text>
-      </TouchableOpacity>
-      <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
       <MyNameWrapView>
         <Image
           source={{
@@ -54,9 +91,20 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             height: 60,
           }}
         ></Image>
-        {/* TODO: 닉네임 데이터 가져오면 주석해제 */}
-        {/* <MyNameText>{nickName? "user.nickName" : "회원"}</MyNameText> */}
-        <TouchableOpacity>
+        <View>
+          {isEdit ? (
+            <MyNameTextInput
+              onSubmitEditing={addNickname}
+              onChangeText={(text) => setAddName(text)}
+              defaultValue={addName}
+            />
+          ) : (
+            <MyNameText>{isEdit ? "nickName" : "회원"}</MyNameText>
+            //TODO: nickname을 불러와서 isEdit을 nickname으로 변경
+          )}
+        </View>
+
+        <TouchableOpacity onPress={() => setIsEdit(true)}>
           <FontAwesome5 name="edit" size={24} color="black" />
         </TouchableOpacity>
       </MyNameWrapView>
@@ -186,6 +234,15 @@ const MyNameWrapView = styled.View`
   justify-content: space-evenly;
   align-items: center;
   margin: 10px 0;
+`;
+
+const MyNameTextInput = styled.TextInput`
+  width: 120px;
+  height: 40px;
+  padding-left: 5px;
+  border: 1px solid #97d2ec;
+  border-radius: 20px;
+  font-size: 16px;
 `;
 
 const MyNameText = styled.Text`
