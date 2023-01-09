@@ -14,6 +14,7 @@ import {
   where,
   doc,
   getDoc,
+  getDocs,
 } from "firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -32,24 +33,47 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     setIsEdit(false);
   };
 
-  // 닉네임 불러오기???????????????
-  useFocusEffect(
-    useCallback(() => {
-      const q = query(collection(dbService, "nickName"));
-      console.log(q);
-      const MyName = onSnapshot(q, (snapshot) => {
-        const newMyName = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAddName(newMyName);
-      });
-      console.log(MyName);
-      return MyName;
-    }, [])
-  );
+  // TODO: authService 자체에 회원가입시 nickName을 넣고 나중에 수정가능
+  // 닉네임 불러오기??????
+  const getNickName = async () => {
+    const q = query(
+      collection(dbService, "nickName"),
+      where("userId", "==", "Yunny")
+    );
+
+    const array = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) =>
+      array.push({
+        id: doc.id,
+        ...doc.data(),
+      })
+    );
+    setAddName(array);
+    console.log(addName[0].nickName);
+  };
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const q = query(
+  //       collection(dbService, "nickName"),
+  //       where("userId", "==", "Yunny")
+  //     );
+  //     const MyName = onSnapshot(q, (snapshot) => {
+  //       const newMyName = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setAddName(newMyName);
+  //     });
+  //     console.log(MyName);
+  //     return MyName;
+  //   }, [])
+  // );
 
   // 닉네임 수정하기
+  // const commentRef = doc(dbService, "nickName", id);
+  // updateDoc(commentRef, { nickName: addName });
 
   // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
@@ -77,6 +101,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </TouchableOpacity>
       ),
     });
+    getNickName();
   }, []);
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
@@ -97,9 +122,10 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
               onSubmitEditing={addNickname}
               onChangeText={(text) => setAddName(text)}
               defaultValue={addName}
+              // TODO: defaultValue도 nickName 가져와서 수정하기
             />
           ) : (
-            <MyNameText>{isEdit ? "nickName" : "회원"}</MyNameText>
+            <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
             //TODO: nickname을 불러와서 isEdit을 nickname으로 변경
           )}
         </View>
