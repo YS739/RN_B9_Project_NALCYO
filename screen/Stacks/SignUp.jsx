@@ -11,7 +11,7 @@ const SignUp = () => {
     pwd2: "",
   });
 
-  function handleChange(text, eventName) {
+  function HandleChange(text, eventName) {
     setValues((prev) => {
       return {
         ...prev,
@@ -27,7 +27,9 @@ const SignUp = () => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, pwd)
-        .then(() => {})
+        .then(() => {
+          navigation.replace("Home");
+        })
         .catch((error) => {
           alert(error.message);
           // ..
@@ -43,13 +45,13 @@ const SignUp = () => {
         <Text style={styles.login_title}>오늘 날°C요 </Text>
         <View>
           <Text style={styles.email_form_title}>닉네임</Text>
-          <TextInput placeholder="Nickname" onChangeText={(text) => handleChange(text, "nickname")} style={styles.login_input} />
+          <TextInput placeholder="Nickname" onChangeText={(text) => HandleChange(text, "nickname")} style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" onChangeText={(text) => handleChange(text, "email")} style={styles.login_input} />
+          <TextInput placeholder="Email" onChangeText={(text) => HandleChange(text, "email")} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd")} style={styles.login_input} />
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => HandleChange(text, "pwd")} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호확인</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => handleChange(text, "pwd2")} style={styles.login_input} />
+          <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => HandleChange(text, "pwd2")} style={styles.login_input} />
           <TouchableOpacity color="#f194ff" onClick={() => SignUp()} style={styles.login_button}>
             <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
