@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
-const CityFlatList = async () => {
+const CityFlatList = () => {
   const navigate = useNavigation();
   const [myData, setMyData] = useState([]);
 
