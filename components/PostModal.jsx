@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Modal, Keyboard, TouchableWithoutFeedback, Text } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection } from "firebase/firestore";
@@ -52,13 +52,16 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
           <ModalWrapView>
             <ModalAddCloseView>
               <ModalAddPostView>
-                <ModalAddPostButton
+                <ModalAddPostPressable
                   onPress={addPost}
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                   // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
                   disabled={!postTitle || !postContent || !value}
-                  title={screenName === "Detail" ? "수정하기" : "등록하기"}
-                ></ModalAddPostButton>
+                >
+                  <ModalAddBtnText>
+                    {screenName === "Detail" ? "수정하기" : "등록하기"}
+                  </ModalAddBtnText>
+                </ModalAddPostPressable>
               </ModalAddPostView>
               <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
                 <AntDesign name="close" size={24} color="black" />
@@ -134,15 +137,12 @@ const ModalAddPostView = styled.View`
   align-items: center;
 `;
 
-const ModalAddPostButton = styled.Button`
-  :active&:focus&:enabled {
-    color: black;
-  }
-  :enabled {
-    color: black;
-  }
+const ModalAddPostPressable = styled.Pressable``;
+
+const ModalAddBtnText = styled.Text`
+  font-size: 16px;
+  color: black;
 `;
-// TODO: enabled됐을 때 색 파란색말고 다른 색으로 바꾸기..
 
 const ModalCloseBtn = styled.TouchableOpacity`
   position: absolute;
