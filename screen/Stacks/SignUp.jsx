@@ -5,22 +5,19 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
-import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import { getAuth, updateProfile } from "firebase/auth";
-import { useNavigation } from "@react-navigation/core";
+import { updateProfile } from "firebase/auth";
 
-export default function SignUp() {
+const SignUp = ({ navigation: { navigate } }) => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [nickName, setNickName] = useState("");
-  const auth = getAuth();
-  const navigation = useNavigation();
 
   const validateInputs = () => {
     if (!email) {
@@ -55,8 +52,7 @@ export default function SignUp() {
 
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log();
-        ("회원가입 성공!");
+        console.log("회원가입 성공!");
         updateProfile(authService.currentUser, {
           displayName: nickName,
         }).then(() => {
@@ -64,7 +60,7 @@ export default function SignUp() {
           setEmail("");
           setNickName("");
           setPw("");
-          navigation.navigate("Tabs", { screen: "Home" });
+          navigate("Home");
         });
       })
       .catch((err) => {
@@ -114,7 +110,9 @@ export default function SignUp() {
       </SafeAreaView>
     </View>
   );
-}
+};
+
+export default SignUp;
 
 const styles = StyleSheet.create({
   Logo: {
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 44,
     fontWeight: "bold",
-    fontFamily: "NanumPenScript-Regular",
+    // fontFamily: "NanumPenScript-Regular",
   },
   email_form_title: {
     fontSize: 13,

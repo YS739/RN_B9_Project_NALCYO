@@ -15,9 +15,10 @@ import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 
 const City = () => {
-
-  const [nowWeather, setNoewWeather] = useState([]);
+  const [nowWeather, setNowWeather] = useState([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
   const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
   const getNowWeather = async () => {
@@ -28,8 +29,8 @@ const City = () => {
       .catch((error) => {
         console.log(error);
       });
-    console.log(JSON.stringify(response));
-    setNoewWeather(response);
+    console.log("response", response);
+    setNowWeather(response);
     setIsLoading(false);
   };
   useEffect(() => {
@@ -43,9 +44,6 @@ const City = () => {
       </CityLoader>
     );
   }
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
 
   return (
     <View style={{ flex: 1 }}>
