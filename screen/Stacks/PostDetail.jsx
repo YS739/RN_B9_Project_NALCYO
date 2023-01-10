@@ -2,7 +2,6 @@ import styled from "@emotion/native";
 
 import React, { useEffect, useState } from "react";
 
-
 import {
   View,
   Text,
@@ -83,6 +82,7 @@ const PostDetail = () => {
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState([]);
   useEffect(() => {
+    // 특정 댓글 get
     // const getComment = async () => {
     //   const snapshot = await getDoc(
     //     doc(dbService, "Comment", "9009q42XRMaUPCT1eO60")
@@ -123,47 +123,50 @@ const PostDetail = () => {
     setText("");
   };
 
+  // delete commentList
+
   return (
-    <DetailSafeAreaView>
-      <CommentScrollView showsVerticalScrollIndicator={false}>
-        {/* Detail content */}
-        <DetailContentWrapView>
-          <WeatherView>
-            <Text>해당 지역 날씨</Text>
-          </WeatherView>
-          <TitleView>
-            <Text>제목</Text>
-          </TitleView>
-          <NickNameView>
-            <Text>닉네임</Text>
-          </NickNameView>
-          <ContentView>
-            <ContentText>내용</ContentText>
-          </ContentView>
-          <ModifyWrap>
-            <ModifyBtn>
-              <Text>수정 하기</Text>
-              <AntDesign name="edit" size={24} color="black" />
-            </ModifyBtn>
-            <ModifyBtn>
-              <Text>삭제 하기</Text>
-              <FontAwesome name="trash-o" size={24} color="black" />
-            </ModifyBtn>
-          </ModifyWrap>
-        </DetailContentWrapView>
-        {/* 댓글 area */}
-        <CommentWrapView>
-          <CommentAddView>
-            <CommentAddTextInput
-              onSubmitEditing={addCommentList}
-              onChangeText={setText}
-              value={text}
-            ></CommentAddTextInput>
-            <CommentAddBtn onPress={addCommentList}>
-              <Text>댓글 달기</Text>
-            </CommentAddBtn>
-          </CommentAddView>
-          {/* <FlatList
+    <LayoutSafeAreaView>
+      <DetailSafeAreaView>
+        <CommentScrollView showsVerticalScrollIndicator={false}>
+          {/* Detail content */}
+          <DetailContentWrapView>
+            <WeatherView>
+              <Text>해당 지역 날씨</Text>
+            </WeatherView>
+            <TitleView>
+              <Text>제목</Text>
+            </TitleView>
+            <NickNameView>
+              <Text>닉네임</Text>
+            </NickNameView>
+            <ContentView>
+              <ContentText>내용</ContentText>
+            </ContentView>
+            <ModifyWrap>
+              <ModifyBtn>
+                <Text>수정 하기</Text>
+                <AntDesign name="edit" size={24} color="black" />
+              </ModifyBtn>
+              <ModifyBtn>
+                <Text>삭제 하기</Text>
+                <FontAwesome name="trash-o" size={24} color="black" />
+              </ModifyBtn>
+            </ModifyWrap>
+          </DetailContentWrapView>
+          {/* 댓글 area */}
+          <CommentWrapView>
+            <CommentAddView>
+              <CommentAddTextInput
+                onSubmitEditing={addCommentList}
+                onChangeText={setText}
+                value={text}
+              ></CommentAddTextInput>
+              <CommentAddBtn onPress={addCommentList}>
+                <Text>댓글 달기</Text>
+              </CommentAddBtn>
+            </CommentAddView>
+            {/* <FlatList
           showsVerticalScrollIndicator={false}
           data={commentList}
           renderItem={({ item }) => {
@@ -181,26 +184,35 @@ const PostDetail = () => {
           keyExtractor={(item) => item.id}
         /> */}
 
-          {commentList.map((el) => {
-            return (
-              <ConmmentContentView>
-                <Text>{el?.nickName}</Text>
-                <Text>{el?.comment}</Text>
-                <CommentContentIconBtnView>
-                  <AntDesign name="edit" size={24} color="black" />
-                  <FontAwesome name="trash-o" size={24} color="black" />
-                </CommentContentIconBtnView>
-              </ConmmentContentView>
-            );
-          })}
-        </CommentWrapView>
-      </CommentScrollView>
-
-    </DetailSafeAreaView>
+            {commentList.map((el) => {
+              return (
+                <ConmmentContentView>
+                  <Text>{el?.nickName}</Text>
+                  <Text>{el?.comment}</Text>
+                  <CommentContentIconBtnView>
+                    <TouchableOpacity>
+                      <AntDesign name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <FontAwesome name="trash-o" size={24} color="black" />
+                    </TouchableOpacity>
+                  </CommentContentIconBtnView>
+                </ConmmentContentView>
+              );
+            })}
+          </CommentWrapView>
+        </CommentScrollView>
+      </DetailSafeAreaView>
+    </LayoutSafeAreaView>
   );
 };
 
 export default PostDetail;
+
+const LayoutSafeAreaView = styled.SafeAreaView`
+  width: 100%;
+  background-color: #97d2ec;
+`;
 
 const DetailSafeAreaView = styled.SafeAreaView`
   width: 90%;
@@ -268,7 +280,7 @@ const ModifyBtn = styled.TouchableOpacity`
 `;
 
 const CommentWrapView = styled.View`
-  height: ${SCREEN_HEIGHT + "px"};
+  height: 100%;
 `;
 
 const CommentAddView = styled.View`
