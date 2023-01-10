@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
@@ -75,13 +75,13 @@ export default function Login({ navigation: { goBack } }) {
           <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
           <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
-          <LoginBtn color="#f194ff" onPress={handleLogin} style={styles.login_button}>
+          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
-          </LoginBtn>
+          </TouchableOpacity>
 
-          <ToresisterBtn onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
             <Text style={styles.text}>회원가입 하러가기</Text>
-          </ToresisterBtn>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>

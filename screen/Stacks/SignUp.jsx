@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Text, StyleSheet, View, TextInput } from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
@@ -66,12 +66,12 @@ export default function SignUp({ navigation }) {
           <Text style={styles.email_form_title}>비밀번호</Text>
           <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} returnKeyType="send" style={styles.login_input} />
 
-          <RegisterBtn color="#f194ff" onPress={handleRegister} style={styles.login_button}>
+          <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
             <Text style={styles.text}>이메일로 회원가입하기</Text>
-          </RegisterBtn>
-          <ToLoginBtn onPress={() => navigation.navigate("Login")} style={styles.login_button}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.login_button}>
             <Text>로그인 하러가기</Text>
-          </ToLoginBtn>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>
