@@ -6,20 +6,19 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
-import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import { useNavigation } from "@react-navigation/native";
 import Loader from "../../components/Loader";
+// TODO: font - 주석처리 해제
 
-export default function Login({ navigation: { goBack } }) {
+const Login = ({ navigation: { navigate } }) => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const navigation = useNavigation();
 
   const validateInputs = () => {
     if (!email) {
@@ -46,6 +45,7 @@ export default function Login({ navigation: { goBack } }) {
       return true;
     }
   };
+
   const handleLogin = () => {
     // 유효성 검사
     if (validateInputs()) {
@@ -55,14 +55,16 @@ export default function Login({ navigation: { goBack } }) {
     // 로그인 요청
     signInWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인성공");
+        console.log("로그인 성공");
         setEmail("");
         setPw("");
+        navigate("Home");
       })
       .catch((err) => {
         console.log("err.message:", err.message);
         if (err.message.includes("user-not-found")) {
           alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
+          navigate("SignUp");
         }
         if (err.message.includes("wrong-password")) {
           alert("비밀번호가 틀렸습니다.");
@@ -116,7 +118,7 @@ export default function Login({ navigation: { goBack } }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("SignUp")}
+            onPress={() => navigate("SignUp")}
             style={styles.login_button}
           >
             <Text style={styles.text}>회원가입 하러가기</Text>
@@ -125,7 +127,8 @@ export default function Login({ navigation: { goBack } }) {
       </SafeAreaView>
     </View>
   );
-}
+};
+export default Login;
 
 const styles = StyleSheet.create({
   Logo: {
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 44,
     fontWeight: "bold",
-    fontFamily: "NanumPenScript-Regular",
+    // fontFamily: "NanumPenScript-Regular",
   },
 
   titleText: {},

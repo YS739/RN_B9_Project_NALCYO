@@ -5,22 +5,19 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
-import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import { getAuth, updateProfile } from "firebase/auth";
-import { useNavigation } from "@react-navigation/core";
+import { updateProfile } from "firebase/auth";
 
-export default function SignUp({ navigation: { goBack } }) {
+const SignUp = ({ navigation: { navigate } }) => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const [nickName, setnickName] = useState("");
-  const auth = getAuth();
-  const navigation = useNavigation();
+  const [nickName, setNickName] = useState("");
 
   const validateInputs = () => {
     if (!email) {
@@ -53,25 +50,21 @@ export default function SignUp({ navigation: { goBack } }) {
       return;
     }
 
-    updateProfile(auth.currentUser, {
-      nickName: "",
-    })
-      .then(() => {
-        // Profile updated!
-        // ...
-      })
-      .catch((error) => {
-        // An error occurred
-        // ...
-      });
-
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        alert("회원가입 성공!");
+        console.log("회원가입 성공!");
+        updateProfile(authService.currentUser, {
+          displayName: nickName,
+        }).then(() => {
+          alert("회원가입 성공!");
+          setEmail("");
+          setNickName("");
+          setPw("");
+          navigate("Home");
+        });
       })
       .catch((err) => {
         console.log(err.message);
-        alert(err.message);
       });
   };
 
@@ -84,7 +77,7 @@ export default function SignUp({ navigation: { goBack } }) {
           <TextInput
             placeholder="Nickname"
             value={nickName}
-            onChangeText={(text) => setnickName(text)}
+            onChangeText={(text) => setNickName(text)}
             style={styles.login_input}
           />
           <Text style={styles.email_form_title}>이메일</Text>
@@ -117,7 +110,9 @@ export default function SignUp({ navigation: { goBack } }) {
       </SafeAreaView>
     </View>
   );
-}
+};
+
+export default SignUp;
 
 const styles = StyleSheet.create({
   Logo: {
@@ -135,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 44,
     fontWeight: "bold",
-    fontFamily: "NanumPenScript-Regular",
+    // fontFamily: "NanumPenScript-Regular",
   },
   email_form_title: {
     fontSize: 13,

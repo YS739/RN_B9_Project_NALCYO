@@ -40,7 +40,11 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
         component={Login}
       />
 
-      <NativeStack.Screen name="SignUp" component={SignUp} />
+      <NativeStack.Screen
+        options={{ headerShown: false }}
+        name="SignUp"
+        component={SignUp}
+      />
 
       <NativeStack.Screen name="PostDetail" component={PostDetail} />
     </NativeStack.Navigator>
