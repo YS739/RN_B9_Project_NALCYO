@@ -3,6 +3,9 @@ import koreaimg from "../assets/koreaimg.png";
 import React from "react";
 
 const Home = ({ navigation: { navigate } }) => {
+  // TODO: Reset으로 분기처리하기 - useFocus로 유저가 없으면 로그인 화면으로
+  // 보내기
+
   return (
     <WrapSafeAreaView>
       <ContainerView>
