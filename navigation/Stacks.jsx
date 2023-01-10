@@ -21,8 +21,12 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
           </TouchableOpacity>
         ),
         headerRight: ({ color }) => (
-          <TouchableOpacity onPress={() => navigate("My")}>
-            <Ionicons name="ios-person-circle-outline" size={28} color={color} />
+          <TouchableOpacity onPress={() => navigate("Tabs", { screen: "My" })}>
+            <Ionicons
+              name="ios-person-circle-outline"
+              size={28}
+              color={color}
+            />
           </TouchableOpacity>
         ),
       }}
