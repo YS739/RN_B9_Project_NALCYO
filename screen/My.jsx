@@ -1,24 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Text, Image, ScrollView } from "react-native";
-import { authService } from "../common/firebase";
+import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
+import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
-import PostModal from "../components/PostModal";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [addName, setAddName] = useState("");
+  const [pressEditBtn, setPressEditBtn] = useState(false);
+  const [editName, setEditName] = useState("");
 
+  // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
-        navigate("Login");
+        navigate("Stacks", { screen: "Login" });
       })
       .catch((err) => alert(err));
   };
   // FIXME: 현재 로그아웃 안 됨 - can't find variable logout = 현재 유저가 없어서 그런 듯?
+
+  // 닉네임 등록하기
+  const addNickname = async () => {
+    await addDoc(collection(dbService, "nickName"), {
+      // TODO: userId: authService.currentUser?.uid,
+      // 임시 유저 아이디
+      userId: "Yunny",
+      nickName: addName,
+    });
+    setPressEditBtn(false);
+  };
+
+  // 닉네임 수정하기
+  const editNickName = async () => {
+    await updateDoc(doc(dbService, "nickName", addName[0].id), {
+      nickName: editName,
+    });
+    setPressEditBtn(false);
+  };
 
   useEffect(() => {
     setOptions({
@@ -35,17 +65,29 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </TouchableOpacity>
       ),
     });
+
+    // 닉네임 불러오기
+    const q = query(
+      collection(dbService, "nickName"),
+      where("userId", "==", "Yunny")
+      // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
+    );
+
+    // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
+    const userNickName = onSnapshot(q, (snapshot) => {
+      const newNickName = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAddName(newNickName);
+    });
+    return userNickName;
   }, []);
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
 
   return (
     <MyContainerView>
-      {/* TODO: Modal test */}
-      <TouchableOpacity onPress={() => setIsOpenModal(true)}>
-        <Text>모달</Text>
-      </TouchableOpacity>
-      <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
       <MyNameWrapView>
         <Image
           source={{
@@ -54,9 +96,25 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             height: 60,
           }}
         ></Image>
-        <MyNameText>닉네임</MyNameText>
-        <TouchableOpacity>
-          <FontAwesome5 name="edit" size={24} color="black" />
+        <View>
+          {pressEditBtn ? (
+            <MyNameTextInput
+              onSubmitEditing={() => {
+                addName ? editNickName(addName[0].id) : addNickname();
+              }}
+              onChangeText={(text) => setEditName(text)}
+              defaultValue={addName ? addName[0].nickName : ""}
+              value={addName ? addName : editName}
+              // TODO: defaultValue도 nickName 가져와서 수정하기
+            />
+          ) : (
+            <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
+            //TODO: addName을authService.currentUser.nickName로 변경. userId가 있다면~
+          )}
+        </View>
+
+        <TouchableOpacity onPress={() => setPressEditBtn(true)}>
+          <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </MyNameWrapView>
       <MyPostTitleText>내가 쓴 글</MyPostTitleText>
@@ -185,6 +243,15 @@ const MyNameWrapView = styled.View`
   justify-content: space-evenly;
   align-items: center;
   margin: 10px 0;
+`;
+
+const MyNameTextInput = styled.TextInput`
+  width: 120px;
+  height: 40px;
+  padding-left: 5px;
+  border: 1px solid #97d2ec;
+  border-radius: 20px;
+  font-size: 16px;
 `;
 
 const MyNameText = styled.Text`
