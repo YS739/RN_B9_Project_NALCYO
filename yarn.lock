@@ -4006,6 +4006,7 @@ firebase@^9.15.0:
     "@firebase/storage-compat" "0.2.0"
     "@firebase/util" "1.8.0"
 
+
 flow-parser@0.*, flow-parser@^0.121.0:
   version "0.121.0"
   resolved "https://registry.npmjs.org/flow-parser/-/flow-parser-0.121.0.tgz"
@@ -4673,6 +4674,7 @@ jest-serializer@^27.0.6:
   version "27.5.1"
   resolved "https://registry.npmjs.org/jest-serializer/-/jest-serializer-27.5.1.tgz"
   integrity sha512-jZCyo6iIxO1aqUxpuBlwTDMkzOAJS4a3eYz3YzgxxVQFwLeSA7Jfq5cbqCY+JLvTDrWirgusI/0KwxKMgrdf7w==
+
   dependencies:
     "@types/node" "*"
     graceful-fs "^4.2.9"

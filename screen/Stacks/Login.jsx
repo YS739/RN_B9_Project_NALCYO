@@ -1,12 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Image,
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
@@ -87,44 +80,18 @@ export default function Login({ navigation: { goBack } }) {
     <View>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image
-          style={styles.Logo}
-          source={require("../../assets/adaptive-icon.png")}
-        />
+        <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
         <View>
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput
-            placeholder="Email"
-            ref={emailRef}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            textContentType="emailAddress"
-            style={styles.login_input}
-          />
+          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
 
-          <TextInput
-            secureTextEntry={true}
-            placeholder="Password"
-            ref={pwRef}
-            value={pw}
-            onChangeText={(text) => setPw(text)}
-            textContentType="password"
-            returnKeyType="send"
-            style={styles.login_input}
-          />
-          <TouchableOpacity
-            color="#f194ff"
-            onPress={handleLogin}
-            style={styles.login_button}
-          >
+          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
+          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SignUp")}
-            style={styles.login_button}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
             <Text style={styles.text}>회원가입 하러가기</Text>
           </TouchableOpacity>
         </View>
@@ -147,9 +114,12 @@ const styles = StyleSheet.create({
   login_title: {
     marginTop: 50,
     padding: 30,
-    fontSize: 36,
+    fontSize: 44,
     fontWeight: "bold",
+    fontFamily: "NanumPenScript-Regular",
   },
+
+  titleText: {},
   email_form_title: {
     fontSize: 13,
     padding: 10,

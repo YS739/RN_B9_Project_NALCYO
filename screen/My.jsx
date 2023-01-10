@@ -5,6 +5,7 @@ import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+
 import {
   addDoc,
   collection,
@@ -14,6 +15,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [addName, setAddName] = useState("");
@@ -51,7 +53,9 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   useEffect(() => {
     setOptions({
       headerLeft: () => (
+
         <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),
