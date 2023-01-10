@@ -15,17 +15,21 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [addName, setAddName] = useState("");
   const [pressEditBtn, setPressEditBtn] = useState(false);
   const [editName, setEditName] = useState("");
+
 
   // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
+
         navigate("Stacks", { screen: "Login" });
+
       })
       .catch((err) => alert(err));
   };
@@ -51,9 +55,12 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   };
 
   useEffect(() => {
-    setOptions({
+    navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+        <TouchableOpacity
+          style={{ marginLeft: 15 }}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),

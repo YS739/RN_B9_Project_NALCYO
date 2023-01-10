@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 
 const Home = ({ navigation: { navigate } }) => {
+
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const Home = ({ navigation: { navigate } }) => {
   return isLoading ? (
     <Loader />
   ) : (
+
     <WrapSafeAreaView>
       <ContainerView>
         <SmallContainerView>

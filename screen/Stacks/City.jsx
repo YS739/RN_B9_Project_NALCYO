@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,13 +10,17 @@ import {
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
+import PostModal from "../../components/PostModal";
 
 const City = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={{ alignItems: "center", flex: 1, backgroundColor: "gray" }}
       >
+        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
             <Image
@@ -31,7 +35,7 @@ const City = () => {
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
-        <CityWriteBtn>
+        <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
         {/* 글목록 */}

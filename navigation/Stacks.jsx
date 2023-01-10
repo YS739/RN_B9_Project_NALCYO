@@ -28,8 +28,16 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
       }}
     >
       <NativeStack.Screen name="City" component={City} />
+
+      <NativeStack.Screen
+        // 로그인 화면에서 헤더 안 보이게 하기
+        options={{ headerShown: false }}
+        name="Login"
+        component={Login}
+      />
+
       <NativeStack.Screen name="SignUp" component={SignUp} />
-      <NativeStack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+
       <NativeStack.Screen name="PostDetail" component={PostDetail} />
     </NativeStack.Navigator>
   );
