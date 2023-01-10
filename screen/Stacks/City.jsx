@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   View,
   Text,
@@ -11,8 +12,10 @@ import {
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
+import PostModal from "../../components/PostModal";
 
 const City = () => {
+
   const [nowWeather, setNoewWeather] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
@@ -41,11 +44,15 @@ const City = () => {
     );
   }
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
       >
+        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
@@ -63,7 +70,7 @@ const City = () => {
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
-        <CityWriteBtn>
+        <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
         {/* 글목록 */}

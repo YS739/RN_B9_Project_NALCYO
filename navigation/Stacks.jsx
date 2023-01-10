@@ -5,6 +5,7 @@ import Login from "../screen/Stacks/Login";
 import PostDetail from "../screen/Stacks/PostDetail";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import SignUp from "../screen/Stacks/SignUp";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
           </TouchableOpacity>
         ),
         headerRight: ({ color }) => (
-          <TouchableOpacity onPress={() => navigate("My")}>
+          <TouchableOpacity onPress={() => navigate("Tabs", { screen: "My" })}>
             <Ionicons
               name="ios-person-circle-outline"
               size={28}
@@ -31,7 +32,16 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
       }}
     >
       <NativeStack.Screen name="City" component={City} />
-      <NativeStack.Screen name="Login" component={Login} />
+
+      <NativeStack.Screen
+        // 로그인 화면에서 헤더 안 보이게 하기
+        options={{ headerShown: false }}
+        name="Login"
+        component={Login}
+      />
+
+      <NativeStack.Screen name="SignUp" component={SignUp} />
+
       <NativeStack.Screen name="PostDetail" component={PostDetail} />
     </NativeStack.Navigator>
   );
