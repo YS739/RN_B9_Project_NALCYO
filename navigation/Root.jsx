@@ -11,15 +11,14 @@ const Stack = createNativeStackNavigator();
 
 const Root = () => {
   return (
-    // <Stack.Navigator
-    //   screenOptions={{
-    //     headerShown: false,
-    //   }}
-    // >
-    //   <Stack.Screen name="Tabs" component={Tabs} />
-    //   <Stack.Screen name="Stacks" component={Stacks} />
-    // </Stack.Navigator>
-    <PostDetail></PostDetail>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Screen name="Stacks" component={Stacks} />
+    </Stack.Navigator>
   );
 };
 

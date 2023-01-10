@@ -264,7 +264,7 @@ const ModifyBtn = styled.TouchableOpacity`
 `;
 
 const CommentWrapView = styled.View`
-  height: 10000px;
+  height: ${SCREEN_HEIGHT + "px"};
 `;
 
 const CommentAddView = styled.View`
