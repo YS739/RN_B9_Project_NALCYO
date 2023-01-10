@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
@@ -69,7 +71,7 @@ const SignUp = ({ navigation: { navigate } }) => {
   };
 
   return (
-    <View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>회원가입 </Text>
         <View>
@@ -108,7 +110,7 @@ const SignUp = ({ navigation: { navigate } }) => {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  Image,
+  ScrollView,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { authService } from "../common/firebase";
 import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
@@ -60,140 +68,142 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기(MyFlatList)
 
   return (
-    <MyContainerView>
-      <MyNameWrapView>
-        <Image
-          source={{
-            uri: "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png",
-            width: 60,
-            height: 60,
-          }}
-        ></Image>
-        <View>
-          {pressEditBtn ? (
-            <MyNameTextInput
-              onSubmitEditing={() => editNickName(editName)}
-              onChangeText={(text) => setEditName(text)}
-              defaultValue={userNickName}
-            />
-          ) : (
-            <MyNameText>{userNickName}</MyNameText>
-          )}
-        </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <MySafeAreaView>
+        <MyNameWrapView>
+          <Image
+            source={{
+              uri: "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png",
+              width: 60,
+              height: 60,
+            }}
+          ></Image>
+          <View>
+            {pressEditBtn ? (
+              <MyNameTextInput
+                onSubmitEditing={() => editNickName(editName)}
+                onChangeText={(text) => setEditName(text)}
+                defaultValue={userNickName}
+              />
+            ) : (
+              <MyNameText>{userNickName}</MyNameText>
+            )}
+          </View>
 
-        <TouchableOpacity onPress={() => setPressEditBtn(true)}>
-          <AntDesign name="edit" size={24} color="black" />
-        </TouchableOpacity>
-      </MyNameWrapView>
-      <MyPostTitleText>내가 쓴 글</MyPostTitleText>
-      <MyPostView>
-        {/* TODO: FlatList 변경하기 */}
-        <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyPostBoxBtn>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxBtn>
-          <MyPostBoxBtn>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxBtn>
-          <MyPostBoxBtn>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxBtn>
-          <MyPostBoxBtn>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxBtn>
-          <MyPostBoxBtn>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxBtn>
-        </ScrollView>
-      </MyPostView>
-      <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
-      <MyCommentsView>
-        <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyCommentsBoxBtn>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxBtn>
-          <MyCommentsBoxBtn>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxBtn>
-          <MyCommentsBoxBtn>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxBtn>
-          <MyCommentsBoxBtn>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxBtn>
-        </ScrollView>
-      </MyCommentsView>
-    </MyContainerView>
+          <TouchableOpacity onPress={() => setPressEditBtn(true)}>
+            <AntDesign name="edit" size={24} color="black" />
+          </TouchableOpacity>
+        </MyNameWrapView>
+        <MyPostTitleText>내가 쓴 글</MyPostTitleText>
+        <MyPostView>
+          {/* TODO: FlatList 변경하기 */}
+          <ScrollView contentContainerStyle={{ width: "90%" }}>
+            <MyPostBoxBtn>
+              <MyPostCategoryView>
+                <Text>지역 기온</Text>
+              </MyPostCategoryView>
+              <MyPostContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyPostContentsView>
+            </MyPostBoxBtn>
+            <MyPostBoxBtn>
+              <MyPostCategoryView>
+                <Text>지역 기온</Text>
+              </MyPostCategoryView>
+              <MyPostContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  제목
+                </Text>
+              </MyPostContentsView>
+            </MyPostBoxBtn>
+            <MyPostBoxBtn>
+              <MyPostCategoryView>
+                <Text>지역 기온</Text>
+              </MyPostCategoryView>
+              <MyPostContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  제목
+                </Text>
+              </MyPostContentsView>
+            </MyPostBoxBtn>
+            <MyPostBoxBtn>
+              <MyPostCategoryView>
+                <Text>지역 기온</Text>
+              </MyPostCategoryView>
+              <MyPostContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  제목
+                </Text>
+              </MyPostContentsView>
+            </MyPostBoxBtn>
+            <MyPostBoxBtn>
+              <MyPostCategoryView>
+                <Text>지역 기온</Text>
+              </MyPostCategoryView>
+              <MyPostContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  제목
+                </Text>
+              </MyPostContentsView>
+            </MyPostBoxBtn>
+          </ScrollView>
+        </MyPostView>
+        <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
+        <MyCommentsView>
+          <ScrollView contentContainerStyle={{ width: "90%" }}>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+          </ScrollView>
+        </MyCommentsView>
+      </MySafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
 export default My;
 
 // Styled Component
-const MyContainerView = styled.View`
+const MySafeAreaView = styled.SafeAreaView`
   flex: 1;
   width: 90%;
   justify-content: center;

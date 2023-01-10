@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Modal, TouchableWithoutFeedback } from "react-native";
+import { Modal, Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useNavigation } from "@react-navigation/native";
 
 const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
   const [postTitle, setPostTitle] = useState("");
@@ -48,52 +47,54 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
 
   return (
     <Modal visible={isOpenModal} transparent animationType="slide">
-      <ModalContainerView>
-        <ModalWrapView>
-          <ModalAddCloseView>
-            <ModalAddPostView>
-              <ModalAddPostButton
-                onPress={addPost}
-                // 제목이나 내용이 입력되지 않으면 버튼 비활성화
-                // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
-                disabled={!postTitle || !postContent || !value}
-                title={screenName === "Detail" ? "수정하기" : "등록하기"}
-              ></ModalAddPostButton>
-            </ModalAddPostView>
-            <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
-              <AntDesign name="close" size={24} color="black" />
-            </ModalCloseBtn>
-          </ModalAddCloseView>
-          <ModalCategoryView>
-            <DropDownPicker
-              open={open}
-              value={value}
-              // TODO: value={screenName === "Detail" ? city.category  : value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder={value ? "city.category" : "지역을 선택해주세요."}
-              //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
-            />
-          </ModalCategoryView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ModalContainerView>
+          <ModalWrapView>
+            <ModalAddCloseView>
+              <ModalAddPostView>
+                <ModalAddPostButton
+                  onPress={addPost}
+                  // 제목이나 내용이 입력되지 않으면 버튼 비활성화
+                  // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
+                  disabled={!postTitle || !postContent || !value}
+                  title={screenName === "Detail" ? "수정하기" : "등록하기"}
+                ></ModalAddPostButton>
+              </ModalAddPostView>
+              <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
+                <AntDesign name="close" size={24} color="black" />
+              </ModalCloseBtn>
+            </ModalAddCloseView>
+            <ModalCategoryView>
+              <DropDownPicker
+                open={open}
+                value={value}
+                // TODO: value={screenName === "Detail" ? city.category  : value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                placeholder={value ? "city.category" : "지역을 선택해주세요."}
+                //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
+              />
+            </ModalCategoryView>
 
-          <ModalTitleTextInput
-            autoFocus
-            value={postTitle}
-            onChangeText={(title) => setPostTitle(title)}
-            placeholder="제목을 입력해주세요."
-          />
-          <ModalContentTexInput
-            value={postContent}
-            onChangeText={(content) => setPostContent(content)}
-            textAlignVertical="top"
-            multiline
-            maxLength={300}
-            placeholder="내용을 입력해주세요."
-          />
-        </ModalWrapView>
-      </ModalContainerView>
+            <ModalTitleTextInput
+              autoFocus
+              value={postTitle}
+              onChangeText={(title) => setPostTitle(title)}
+              placeholder="제목을 입력해주세요."
+            />
+            <ModalContentTexInput
+              value={postContent}
+              onChangeText={(content) => setPostContent(content)}
+              textAlignVertical="top"
+              multiline
+              maxLength={300}
+              placeholder="내용을 입력해주세요."
+            />
+          </ModalWrapView>
+        </ModalContainerView>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
