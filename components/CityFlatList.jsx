@@ -72,20 +72,20 @@ const CityFlatList = () => {
 export default CityFlatList;
 
 const CityContentsBtn = styled.TouchableOpacity`
-  height: 40px;
+  height: 50px;
   width: 325px;
-  margin: 5px;
+  margin: 10px;
   padding-left: 30px;
   background-color: white;
-  border-radius: 30px;
+  border-radius: 15px;
   align-items: center;
   flex-direction: row;
   border: 1px solid;
 `;
 
-// const CityLoader = styled.View`
-//   flex: 1;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: #97d2ec;
-// `;
+const CityLoader = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #97d2ec;
+`;
