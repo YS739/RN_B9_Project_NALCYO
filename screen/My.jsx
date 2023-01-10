@@ -1,61 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
-import { authService, dbService } from "../common/firebase";
+import { authService } from "../common/firebase";
 import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  query,
-  where,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
 import { getAuth, updateProfile } from "firebase/auth";
 import { signOut } from "firebase/auth";
 
-// 1. 닉네임 등록하기 부분 삭제
-// 2. 닉네임 불러오기
-// 3. 닉네임 수정하기
-
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  // const [addName, setAddName] = useState("");
   const [pressEditBtn, setPressEditBtn] = useState(false);
   const [editName, setEditName] = useState("");
-
-  // 로그아웃 성공 시 Login Screen으로 이동
-  const logout = () => {
-    signOut(authService)
-      .then(() => {
-        console.log("로그아웃 성공");
-        navigate("Stacks", { screen: "Login" });
-      })
-      .catch((err) => alert(err));
-  };
 
   // 닉네임 불러오기
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
-  const uid = user.uid;
-  console.log(userNickName, uid);
-
-  // 닉네임 수정하기 - TODO: 공식문서 참고해서 수정하기
-  const editNickName = async () => {
-    updateProfile(user, {
-      displayName: editName,
-    })
-      .then(() => {
-        alert("닉네임 변경 완료!");
-        setPressEditBtn(false);
-      })
-      .catch((error) => {
-        console.log("error:", error);
-      });
-  };
 
   useEffect(() => {
     setOptions({
@@ -74,7 +34,31 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     });
   }, []);
 
-  // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
+  // 닉네임 수정하기
+  const editNickName = async () => {
+    updateProfile(user, {
+      displayName: editName,
+    })
+      .then(() => {
+        alert("닉네임 변경 완료!");
+        setPressEditBtn(false);
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      });
+  };
+
+  // 로그아웃 성공 시 Login Screen으로 이동
+  const logout = () => {
+    signOut(authService)
+      .then(() => {
+        console.log("로그아웃 성공");
+        navigate("Stacks", { screen: "Login" });
+      })
+      .catch((err) => alert(err));
+  };
+
+  // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기(MyFlatList)
 
   return (
     <MyContainerView>
@@ -94,7 +78,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
               defaultValue={userNickName}
             />
           ) : (
-            <MyNameText>{userNickName ? userNickName : "회원"}</MyNameText>
+            <MyNameText>{userNickName}</MyNameText>
           )}
         </View>
 
@@ -107,7 +91,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         {/* TODO: FlatList 변경하기 */}
         <ScrollView contentContainerStyle={{ width: "90%" }}>
           <MyPostBoxBtn>
-            {/* TODO: 기온을 가져오게 되면 실시간으로 변하지 않나? */}
             <MyPostCategoryView>
               <Text>지역 기온</Text>
             </MyPostCategoryView>
