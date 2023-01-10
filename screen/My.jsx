@@ -25,7 +25,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
-        navigate("Login");
+        navigate("Stacks", { screen: "Login" });
       })
       .catch((err) => alert(err));
   };
