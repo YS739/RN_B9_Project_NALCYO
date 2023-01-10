@@ -1,17 +1,17 @@
 import { useState, useRef } from "react";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Login({ navigation: { goBack } }) {
+export default function SignUp({ navigation }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const navigation = useNavigation();
+  const [nickname, setNickname] = useState("");
 
   const validateInputs = () => {
     if (!email) {
@@ -38,30 +38,19 @@ export default function Login({ navigation: { goBack } }) {
       return true;
     }
   };
-  const handleLogin = () => {
+  const handleRegister = () => {
     // 유효성 검사
     if (validateInputs()) {
       return;
     }
 
-    // 로그인 요청
-    signInWithEmailAndPassword(authService, email, pw)
+    createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인성공");
-        setEmail("");
-        setPw("");
-        goBack();
-
-        // 로그인 화면 이전 화면으로 돌아가기
+        alert("회원가입 성공!");
       })
       .catch((err) => {
-        console.log("err.message:", err.message);
-        if (err.message.includes("user-not-found")) {
-          alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
-        }
-        if (err.message.includes("wrong-password")) {
-          alert("비밀번호가 틀렸습니다.");
-        }
+        console.log(err.message);
+        alert(err.message);
       });
   };
 
@@ -69,18 +58,19 @@ export default function Login({ navigation: { goBack } }) {
     <View>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image style={styles.Logo} source={require("../../assets/adaptive-icon.png")} />
         <View>
+          <Text style={styles.email_form_title}>닉네임</Text>
+          <TextInput placeholder="Nickname" value={nickname} onChangeText={(text) => setNickname(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
+          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
-            <Text style={styles.text}>이메일로 로그인하기</Text>
-          </TouchableOpacity>
+          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} returnKeyType="send" style={styles.login_input} />
 
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
-            <Text style={styles.text}>회원가입 하러가기</Text>
+          <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
+            <Text style={styles.text}>이메일로 회원가입하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.login_button}>
+            <Text>로그인 하러가기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -100,7 +90,7 @@ const styles = StyleSheet.create({
     height: 900,
   },
   login_title: {
-    marginTop: 50,
+    marginTop: 30,
     padding: 30,
     fontSize: 36,
     fontWeight: "bold",
