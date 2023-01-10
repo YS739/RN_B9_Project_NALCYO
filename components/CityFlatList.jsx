@@ -3,6 +3,7 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
+import { dbService } from "../common/firebase";
 
 const CityFlatList = () => {
   const navigate = useNavigation();
