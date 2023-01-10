@@ -20,10 +20,12 @@ const CityFlatList = () => {
       <FlatList
         data={myData}
         renderItem={({ item }) => {
-          <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <Text>{item.nickname}</Text>
-            <Text style={{ left: 100 }}> {item.title}</Text>
-          </CityContentsBtn>;
+          return (
+            <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <Text>{item.nickname}</Text>
+              <Text style={{ left: 100 }}> {item.title}</Text>
+            </CityContentsBtn>
+          );
         }}
       />
     </ScrollView>
