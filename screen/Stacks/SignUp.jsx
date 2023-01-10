@@ -53,8 +53,10 @@ export default function SignUp({ navigation: { navigate, goBack } }) {
       return;
     }
 
+    // FIXME: nickName에 nickname input값을 받아와서 넣기
+    // 코드 위치 수정 - 회원가입 안으로
     updateProfile(auth.currentUser, {
-      nickName: "",
+      nickName: nickName,
     })
       .then(() => {
         // Profile updated!
@@ -68,9 +70,8 @@ export default function SignUp({ navigation: { navigate, goBack } }) {
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
         alert("회원가입 성공!");
-        navigate("Tabs", { screen: "My" });
+        navigate("Tabs", { screen: "Home" });
         // FIXME: Home이나 다른 스크린으로 가면 로딩 화면 후에 다시 로그인 화면..
-        // goBack();
       })
       .catch((err) => {
         console.log(err.message);

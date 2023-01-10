@@ -1,5 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  Image,
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
@@ -7,7 +14,7 @@ import { emailRegex, pwRegex } from "../../common/util";
 import { useNavigation } from "@react-navigation/native";
 import Loader from "../../components/Loader";
 
-export default function Login({ navigation: { goBack } }) {
+export default function Login({ navigation: { navigate } }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -51,14 +58,14 @@ export default function Login({ navigation: { goBack } }) {
         console.log("로그인성공");
         setEmail("");
         setPw("");
-        goBack();
-
-        // 로그인 화면 이전 화면으로 돌아가기
+        navigate("Tabs", { screen: "Home" });
+        // FIXME:
       })
       .catch((err) => {
         console.log("err.message:", err.message);
         if (err.message.includes("user-not-found")) {
           alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
+          // FIXME: 회원가입 스크린으로 바로 넘어가기
         }
         if (err.message.includes("wrong-password")) {
           alert("비밀번호가 틀렸습니다.");
@@ -66,38 +73,61 @@ export default function Login({ navigation: { goBack } }) {
       });
   };
 
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 4000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 4000);
+  // }, []);
 
-  return isLoading ? (
-    <Loader />
-  ) : (
-    <View>
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
-        <View>
-          <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
-          <Text style={styles.email_form_title}>비밀번호</Text>
+  // return isLoading ? (
+  //   <Loader />
+  // ) : (
+  <View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.login_title}>오늘 날°C요 </Text>
+      <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
+      <View>
+        <Text style={styles.email_form_title}>이메일</Text>
+        <TextInput
+          placeholder="Email"
+          ref={emailRef}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          textContentType="emailAddress"
+          style={styles.login_input}
+        />
+        <Text style={styles.email_form_title}>비밀번호</Text>
 
-          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
-            <Text style={styles.text}>이메일로 로그인하기</Text>
-          </TouchableOpacity>
+        <TextInput
+          secureTextEntry={true}
+          placeholder="Password"
+          ref={pwRef}
+          value={pw}
+          onChangeText={(text) => setPw(text)}
+          textContentType="password"
+          returnKeyType="send"
+          style={styles.login_input}
+        />
+        <TouchableOpacity
+          color="#f194ff"
+          onPress={handleLogin}
+          style={styles.login_button}
+        >
+          <Text style={styles.text}>이메일로 로그인하기</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
-            <Text style={styles.text}>회원가입 하러가기</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </View>
-  );
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SignUp")}
+          style={styles.login_button}
+        >
+          <Text style={styles.text}>회원가입 하러가기</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  </View>;
+  // );
 }
 
 const styles = StyleSheet.create({
