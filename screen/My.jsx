@@ -34,7 +34,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   // 닉네임 등록하기
   const addNickname = async () => {
     await addDoc(collection(dbService, "nickName"), {
-      // TODO: userId: authService.currentUser.uid,
+      // TODO: userId: authService.currentUser?.uid,
       // 임시 유저 아이디
       userId: "Yunny",
       nickName: addName,
@@ -109,7 +109,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             />
           ) : (
             <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
-            //TODO: addName을 currentuser.uid~로 변경. userId가 있다면~
+            //TODO: addName을authService.currentUser.nickName로 변경. userId가 있다면~
           )}
         </View>
 
