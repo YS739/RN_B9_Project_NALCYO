@@ -1,15 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Login({ navigation: { goBack, setOptions } }) {
+export default function Login({ navigation: { goBack } }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const navigation = useNavigation();
 
   const validateInputs = () => {
     if (!email) {
@@ -49,6 +51,7 @@ export default function Login({ navigation: { goBack, setOptions } }) {
         setEmail("");
         setPw("");
         goBack();
+
         // 로그인 화면 이전 화면으로 돌아가기
       })
       .catch((err) => {
@@ -62,10 +65,6 @@ export default function Login({ navigation: { goBack, setOptions } }) {
       });
   };
 
-  useEffect(() => {
-    setOptions({ headerRight: () => null });
-  }, []);
-
   return (
     <View>
       <SafeAreaView style={styles.container}>
@@ -76,13 +75,13 @@ export default function Login({ navigation: { goBack, setOptions } }) {
           <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
           <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
+          <LoginBtn color="#f194ff" onPress={handleLogin} style={styles.login_button}>
             <Text style={styles.text}>이메일로 로그인하기</Text>
-          </TouchableOpacity>
+          </LoginBtn>
 
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
+          <ToresisterBtn onPress={() => navigation.navigate("SignUp")} style={styles.login_button}>
             <Text style={styles.text}>회원가입 하러가기</Text>
-          </TouchableOpacity>
+          </ToresisterBtn>
         </View>
       </SafeAreaView>
     </View>
