@@ -1,8 +1,6 @@
 import styled from "@emotion/native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useEffect, useState } from "react";
-
-import Loader from "../components/Loader";
+import React from "react";
 
 const Home = ({ navigation: { navigate } }) => {
   <WrapSafeAreaView>
