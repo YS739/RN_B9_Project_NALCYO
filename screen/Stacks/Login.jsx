@@ -58,8 +58,11 @@ export default function Login({ navigation: { navigate } }) {
         console.log("로그인성공");
         setEmail("");
         setPw("");
+<<<<<<< HEAD
         navigate("Tabs", { screen: "Home" });
         // FIXME:
+=======
+>>>>>>> 30068fb39f9b2359ce8e6fc6e96995f65c68b1e6
       })
       .catch((err) => {
         console.log("err.message:", err.message);
@@ -81,6 +84,7 @@ export default function Login({ navigation: { navigate } }) {
   //   }, 4000);
   // }, []);
 
+<<<<<<< HEAD
   // return isLoading ? (
   //   <Loader />
   // ) : (
@@ -128,6 +132,55 @@ export default function Login({ navigation: { navigate } }) {
     </SafeAreaView>
   </View>;
   // );
+=======
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <View>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.login_title}>오늘 날°C요 </Text>
+        <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
+        <View>
+          <Text style={styles.email_form_title}>이메일</Text>
+          <TextInput
+            placeholder="Email"
+            ref={emailRef}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            textContentType="emailAddress"
+            style={styles.login_input}
+          />
+          <Text style={styles.email_form_title}>비밀번호</Text>
+
+          <TextInput
+            secureTextEntry={true}
+            placeholder="Password"
+            ref={pwRef}
+            value={pw}
+            onChangeText={(text) => setPw(text)}
+            textContentType="password"
+            returnKeyType="send"
+            style={styles.login_input}
+          />
+          <TouchableOpacity
+            color="#f194ff"
+            onPress={handleLogin}
+            style={styles.login_button}
+          >
+            <Text style={styles.text}>이메일로 로그인하기</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SignUp")}
+            style={styles.login_button}
+          >
+            <Text style={styles.text}>회원가입 하러가기</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
+  );
+>>>>>>> 30068fb39f9b2359ce8e6fc6e96995f65c68b1e6
 }
 
 const styles = StyleSheet.create({

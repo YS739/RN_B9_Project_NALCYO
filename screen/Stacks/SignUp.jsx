@@ -70,8 +70,11 @@ export default function SignUp({ navigation: { navigate, goBack } }) {
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
         alert("회원가입 성공!");
+<<<<<<< HEAD
         navigate("Tabs", { screen: "Home" });
         // FIXME: Home이나 다른 스크린으로 가면 로딩 화면 후에 다시 로그인 화면..
+=======
+>>>>>>> 30068fb39f9b2359ce8e6fc6e96995f65c68b1e6
       })
       .catch((err) => {
         console.log(err.message);
