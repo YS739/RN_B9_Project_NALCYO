@@ -1,11 +1,18 @@
-
-import { useState, useRef } from "react";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import { useState, useRef, useEffect } from "react";
+import {
+  Image,
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
 import { useNavigation } from "@react-navigation/native";
+import Loader from "../../components/Loader";
 
 export default function Login({ navigation: { goBack } }) {
   const emailRef = useRef(null);
@@ -66,7 +73,17 @@ export default function Login({ navigation: { goBack } }) {
       });
   };
 
-  return (
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+  }, []);
+
+  return isLoading ? (
+    <Loader />
+  ) : (
     <View>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
@@ -76,12 +93,31 @@ export default function Login({ navigation: { goBack } }) {
         />
         <View>
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} textContentType="emailAddress" style={styles.login_input} />
+          <TextInput
+            placeholder="Email"
+            ref={emailRef}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            textContentType="emailAddress"
+            style={styles.login_input}
+          />
           <Text style={styles.email_form_title}>비밀번호</Text>
 
-          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} textContentType="password" returnKeyType="send" style={styles.login_input} />
-          <TouchableOpacity color="#f194ff" onPress={handleLogin} style={styles.login_button}>
-
+          <TextInput
+            secureTextEntry={true}
+            placeholder="Password"
+            ref={pwRef}
+            value={pw}
+            onChangeText={(text) => setPw(text)}
+            textContentType="password"
+            returnKeyType="send"
+            style={styles.login_input}
+          />
+          <TouchableOpacity
+            color="#f194ff"
+            onPress={handleLogin}
+            style={styles.login_button}
+          >
             <Text style={styles.text}>이메일로 로그인하기</Text>
           </TouchableOpacity>
 
