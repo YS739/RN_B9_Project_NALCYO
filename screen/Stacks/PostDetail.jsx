@@ -1,5 +1,7 @@
 import styled from "@emotion/native";
+
 import React, { useEffect, useState } from "react";
+
 
 import {
   View,
@@ -14,6 +16,7 @@ import {
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
+
 import {
   getDoc,
   doc,
@@ -192,6 +195,7 @@ const PostDetail = () => {
           })}
         </CommentWrapView>
       </CommentScrollView>
+
     </DetailSafeAreaView>
   );
 };
