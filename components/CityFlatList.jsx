@@ -1,47 +1,27 @@
 import React from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
-const CityFlatList = () => {
+const CityFlatList = async () => {
   const navigate = useNavigation();
+  const [myData, setMyData] = useState([]);
+  useEffect(() => {
+    const docSnap = await getDoc(doc(dbService, "list"));
+    setMyData(docSnap.data());
+  }, []);
+
+ 
 
   return (
     <ScrollView style={{ flex: 1, width: "90%" }}>
-      <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
+      <FlatList  data={myData} renderItem={({ item }) => {
+         <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+         <Text>{item.nickname}</Text>
+         <Text style={{ left: 100 }}> {item.title}</Text>
+       </CityContentsBtn>
+      }} />
     </ScrollView>
   );
 };
@@ -58,11 +38,4 @@ const CityContentsBtn = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
   border: 1px solid;
-`;
-
-const CityLoader = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #97d2ec;
 `;
