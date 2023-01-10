@@ -1,10 +1,28 @@
 import styled from "@emotion/native";
 import koreaimg from "../assets/koreaimg.png";
-import React from "react";
+import React, { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { authService } from "../common/firebase";
 
-const Home = ({ navigation: { navigate } }) => {
-  // TODO: Reset으로 분기처리하기 - useFocus로 유저가 없으면 로그인 화면으로
-  // 보내기
+const Home = ({ navigation: { navigate, reset } }) => {
+  useFocusEffect(
+    useCallback(() => {
+      if (!authService.currentUser) {
+        //Tab의 첫화면인 Home에서 바로 로그인화면으로 이동
+        reset({
+          routes: [
+            {
+              name: "Stacks",
+              params: {
+                screen: "Login",
+              },
+            },
+          ],
+        });
+        return;
+      }
+    })
+  );
 
   return (
     <WrapSafeAreaView>

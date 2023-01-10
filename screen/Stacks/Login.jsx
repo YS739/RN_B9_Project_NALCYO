@@ -58,7 +58,7 @@ const Login = ({ navigation: { navigate } }) => {
         console.log("로그인 성공");
         setEmail("");
         setPw("");
-        navigate("Home");
+        navigate("Tabs", { screen: "Home" });
       })
       .catch((err) => {
         console.log("err.message:", err.message);

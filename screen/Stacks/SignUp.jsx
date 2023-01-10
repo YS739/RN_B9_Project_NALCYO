@@ -60,7 +60,7 @@ const SignUp = ({ navigation: { navigate } }) => {
           setEmail("");
           setNickName("");
           setPw("");
-          navigate("Home");
+          navigate("Tabs", { screen: "Home" });
         });
       })
       .catch((err) => {

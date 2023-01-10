@@ -7,10 +7,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = ({ navigation: { navigate } }) => {
+const Tabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Login"
       sceneContainerStyle={{
         backgroundColor: "#97D2EC",
       }}
