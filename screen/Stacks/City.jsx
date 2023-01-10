@@ -13,13 +13,11 @@ import {
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
-import { useQuery } from "@tanstack/react-query";
-import getNowWeather from "../../common/api";
 
 const City = () => {
-  // const [nowWeather, setNowWeather] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [nowWeather, setNowWeather] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
     ["getWeather"],
@@ -45,17 +43,18 @@ const City = () => {
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
+            <WeatherImage
               source={{
                 uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
             <WeatherMainText>맑음</WeatherMainText>
             <WeatherTemperatureText>
-              온도
+              {Math.round(nowWeather.main.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
             </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>서울</WeatherCityText>
+          <WeatherCityText>{nowWeather.name}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
@@ -95,14 +94,14 @@ const WeatherWrap = styled.View`
 const WeatherImage = styled.Image`
   width: 300px;
   height: 320px;
-  right: 30px;
+  right: 60px;
   bottom: 80px;
 `;
 
 //온도 텍스트
 const WeatherTemperatureText = styled.Text`
   top: 65px;
-  left: 230px;
+  left: 200px;
   font-size: 45px;
   position: absolute;
 `;
@@ -115,7 +114,7 @@ const WeatherMainText = styled.Text`
   top: 15px;
   align-content: center;
 
-  width: 90%;
+  width: 80%;
   height: 40%;
   text-align: center;
 `;
