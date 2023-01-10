@@ -4,6 +4,7 @@ import Loader from "../components/Loader";
 import Tabs from "./Tabs";
 import Stacks from "./Stacks";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import PostDetail from "../screen/Stacks/PostDetail";
 
 const Stack = createNativeStackNavigator();
 
