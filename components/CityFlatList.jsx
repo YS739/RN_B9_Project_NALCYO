@@ -4,11 +4,19 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
-const CityFlatList = () => {
+const CityFlatList = ({ Weather }) => {
   const navigate = useNavigation();
+  console.log(Weather);
   return (
     <ScrollView style={{ flex: 1, width: "90%" }}>
-      <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+      <CityContentsBtn
+        onPress={() =>
+          navigate("Stacks", {
+            screen: "PostDetail",
+            route: { params: { Weather } },
+          })
+        }
+      >
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
       </CityContentsBtn>

@@ -15,7 +15,6 @@ import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 
 const City = () => {
-
   const [nowWeather, setNoewWeather] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
@@ -46,7 +45,6 @@ const City = () => {
 
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
@@ -74,7 +72,10 @@ const City = () => {
           <Text>글쓰기</Text>
         </CityWriteBtn>
         {/* 글목록 */}
-        <CityFlatList style={{ flex: 1, backgroundcolor: "red" }} />
+        <CityFlatList
+          weather={nowWeather}
+          style={{ flex: 1, backgroundcolor: "red" }}
+        />
       </SafeAreaView>
     </View>
   );
