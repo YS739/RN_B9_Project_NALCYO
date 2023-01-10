@@ -9,11 +9,9 @@ const CityFlatList = () => {
   const navigate = useNavigation();
   const [myData, setMyData] = useState([]);
 
-  useEffect(() => {
-    async function getData() {
-      const docSnap = await getDoc(doc(dbService, "list"));
-      setMyData(docSnap.data());
-    }
+  React.useEffect(async () => {
+    const docSnap = await getDoc(doc(dbService, "list"));
+    setMyData(docSnap.data());
   }, []);
 
   return (
