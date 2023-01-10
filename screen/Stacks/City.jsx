@@ -11,33 +11,40 @@ import {
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
+import { useQuery } from "react-query";
 
 const City = () => {
-  // const [nowWeather, setNoewWeather] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
-  // const BASE_URL = "http://api.openweathermap.org/data/2.5/forecast?";
-  // const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
-  // const getNowWeather = async () => {
-  //   const response = await fetch(`${BASE_URL}id=1845457&appid=${API_KEY}`)
-  //     .then((res) => res.json())
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   console.log(JSON.stringify(response));
-  //   setNoewWeather(response);
-  //   setIsLoading(false);
-  // };
-  // useEffect(() => {
-  //   getNowWeather();
-  // }, []);
+  const [nowWeather, setNoewWeather] = useState([]); // 날씨 api 받아서 저장,
+  const [isLoading, setIsLoading] = useState(true); //로딩
+  const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"; // url
+  const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9"; // api key
 
-  // if (isLoading) {
-  //   return (
-  //     <CityLoader>
-  //       <ActivityIndicator />
-  //     </CityLoader>
-  //   );
-  // }
+  const {} = useQuery("getNowWeather");
+
+  //날씨 api 받아서 nowWeather에 저장한다.
+  const getNowWeather = async () => {
+    const response = await fetch(
+      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric&lang=kr`
+    )
+      .then((res) => res.json())
+      .catch((error) => {
+        console.log(error);
+      });
+    // console.log(JSON.stringify(nowWeather.weather[0].main));
+    setNoewWeather(response);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    getNowWeather();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <CityLoader>
+        <ActivityIndicator />
+      </CityLoader>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -46,15 +53,18 @@ const City = () => {
       >
         <WeatherContainer>
           <WeatherWrap>
-            <Image
+            <WeatherImage
               source={{
-                uri: "https://ssl.gstatic.com/onebox/weather/48/sunny.png",
+                uri: `http://openweathermap.org/img/wn/${nowWeather.weather[0].icon}@2x.png`,
               }}
-              style={{ width: "100%", height: "100%" }}
             />
-            <WeatherTemperatureText> 2도</WeatherTemperatureText>
+            <WeatherMainText> {nowWeather.weather[0].main}</WeatherMainText>
+            <WeatherTemperatureText>
+              {Math.round(nowWeather.main.temp)}
+              <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
+            </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>서울</WeatherCityText>
+          <WeatherCityText>{nowWeather.name}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
@@ -78,7 +88,7 @@ const WeatherContainer = styled.TouchableOpacity`
   border-radius: 30px;
   padding: 10px;
 
-  box-shadow: 10px 5px 5px black;
+  box-shadow: 5px 5px 2px black;
 `;
 
 const WeatherWrap = styled.View`
@@ -89,51 +99,73 @@ const WeatherWrap = styled.View`
   flex-direction: row;
 `;
 
+const WeatherImage = styled.Image`
+  width: 300px;
+  height: 320px;
+  right: 60px;
+  bottom: 80px;
+`;
+
 const WeatherTemperatureText = styled.Text`
-  top: 100px;
+  top: 70px;
+  left: 200px;
   font-size: 50px;
+  position: absolute;
+`;
+
+const WeatherMainText = styled.Text`
+  position: absolute;
+  left: 170px;
+  font-size: 40px;
+  top: 25px;
+  align-content: center;
+
+  width: 80%;
+  height: 40%;
+  text-align: center;
 `;
 
 const WeatherCityText = styled.Text`
   position: absolute;
-  top: 130px;
-  left: 30px;
-  font-size: 70px;
+  top: 150px;
+  left: 65px;
+  font-size: 60px;
 `;
 
 const CityWriteBtn = styled.TouchableOpacity`
   background-color: white;
   margin-top: 15px;
-  left: 115px;
+  left: 105px;
   width: 30%;
   height: 50px;
-  border-radius: 15px;
+  border-radius: 30px;
   justify-content: center;
   align-items: center;
   border: 1px solid;
 `;
 
-const CityContentsBtn = styled.TouchableOpacity`
-  height: 50px;
-  width: 90%;
-  margin: 10px;
-  padding-left: 30px;
-  background-color: #97d2ec;
-  border-radius: 15px;
-  /* justify-content: center; */
+const CityLoader = styled.View`
+  flex: 1;
+  justify-content: center;
   align-items: center;
-  flex-direction: row;
+  background-color: #97d2ec;
 `;
-
-// const CityLoader = styled.View`
-//   flex: 1;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: #97d2ec;
-// `;
 
 // const styles = StyleSheet.create({
 //   container: {
 //     alignItems: "center",
 //   },
 // });
+
+// 글 목록 UI
+// const CityContentsBtn = styled.TouchableOpacity`
+//   height: 50px;
+//   width: 90%;
+//   margin: 10px;
+//   padding-left: 30px;
+//   background-color: #97d2ec;
+//   border-radius: 15px;
+//   /* justify-content: center; */
+//   align-items: center;
+//   flex-direction: row;
+// `;
