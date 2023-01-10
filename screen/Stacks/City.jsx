@@ -13,11 +13,11 @@ import {
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
+import { useQuery } from "@tanstack/react-query";
+import { getNowWeather } from "../../common/api";
 
 const City = () => {
-  const [nowWeather, setNowWeather] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
     ["getWeather"],
@@ -43,18 +43,19 @@ const City = () => {
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
-            <WeatherImage
               source={{
                 uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
-            <WeatherMainText>맑음</WeatherMainText>
+            <WeatherMainText>
+              {getWeatherData?.weather[0]?.main}
+            </WeatherMainText>
             <WeatherTemperatureText>
-              {Math.round(nowWeather.main.temp)}
+              {Math.round(getWeatherData?.main?.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
             </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>{nowWeather.name}</WeatherCityText>
+          <WeatherCityText>{getWeatherData?.name}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
