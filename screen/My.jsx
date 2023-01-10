@@ -15,65 +15,14 @@ import {
   doc,
   getDoc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [addName, setAddName] = useState("");
-  const [isEdit, setIsEdit] = useState(false);
-
-  // 닉네임 등록하기
-  const addNickname = async () => {
-    await addDoc(collection(dbService, "nickName"), {
-      // userId: authService.currentUser.uid,
-      // 임시 유저 아이디 넣기
-      userId: "Yunny",
-      nickName: addName,
-    });
-    setIsEdit(false);
-  };
-
-  // TODO: authService 자체에 회원가입시 nickName을 넣고 나중에 수정가능
-  // 닉네임 불러오기??????
-  const getNickName = async () => {
-    const q = query(
-      collection(dbService, "nickName"),
-      where("userId", "==", "Yunny")
-    );
-
-    const array = [];
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) =>
-      array.push({
-        id: doc.id,
-        ...doc.data(),
-      })
-    );
-    setAddName(array);
-    console.log(addName[0].nickName);
-  };
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const q = query(
-  //       collection(dbService, "nickName"),
-  //       where("userId", "==", "Yunny")
-  //     );
-  //     const MyName = onSnapshot(q, (snapshot) => {
-  //       const newMyName = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-  //       setAddName(newMyName);
-  //     });
-  //     console.log(MyName);
-  //     return MyName;
-  //   }, [])
-  // );
-
-  // 닉네임 수정하기
-  // const commentRef = doc(dbService, "nickName", id);
-  // updateDoc(commentRef, { nickName: addName });
+  const [pressEditBtn, setPressEditBtn] = useState(false);
+  const [editName, setEditName] = useState("");
 
   // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
@@ -86,23 +35,62 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   };
   // FIXME: 현재 로그아웃 안 됨 - can't find variable logout = 현재 유저가 없어서 그런 듯?
 
-  useEffect(() => {
-    setOptions({
-      headerLeft: () => (
-        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
-          <Ionicons name="chevron-back" size={24} color="black" />
-        </TouchableOpacity>
-      ),
-      // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
-      // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
-      headerRight: () => (
-        <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
-          <Text>로그아웃</Text>
-        </TouchableOpacity>
-      ),
+  // 닉네임 등록하기
+  const addNickname = async () => {
+    await addDoc(collection(dbService, "nickName"), {
+      // TODO: userId: authService.currentUser.uid,
+      // 임시 유저 아이디
+      userId: "Yunny",
+      nickName: addName,
     });
-    getNickName();
-  }, []);
+    setPressEditBtn(false);
+  };
+
+  // 닉네임 수정하기
+  const editNickName = async () => {
+    await updateDoc(doc(dbService, "nickName", addName[0].id), {
+      nickName: editName,
+    });
+    setPressEditBtn(false);
+  };
+
+  useEffect(
+    useCallback(() => {
+      setOptions({
+        headerLeft: () => (
+          <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+            <Ionicons name="chevron-back" size={24} color="black" />
+          </TouchableOpacity>
+        ),
+        // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
+        // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
+        headerRight: () => (
+          <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
+            <Text>로그아웃</Text>
+          </TouchableOpacity>
+        ),
+      });
+
+      // 닉네임 불러오기
+      // if (addName) {
+      const q = query(
+        collection(dbService, "nickName"),
+        where("userId", "==", "Yunny")
+        // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
+      );
+
+      // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
+      const userNickName = onSnapshot(q, (snapshot) => {
+        const newNickName = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAddName(newNickName);
+      });
+      return userNickName;
+      // }
+    }, [])
+  );
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
 
@@ -117,20 +105,23 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
           }}
         ></Image>
         <View>
-          {isEdit ? (
+          {pressEditBtn ? (
             <MyNameTextInput
-              onSubmitEditing={addNickname}
-              onChangeText={(text) => setAddName(text)}
-              defaultValue={addName}
+              onSubmitEditing={() => {
+                addName ? editNickName(addName[0].id) : addNickname();
+              }}
+              onChangeText={(text) => setEditName(text)}
+              defaultValue={addName ? addName[0].nickName : ""}
+              value={addName ? addName : editName}
               // TODO: defaultValue도 nickName 가져와서 수정하기
             />
           ) : (
             <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
-            //TODO: nickname을 불러와서 isEdit을 nickname으로 변경
+            //TODO: addName을 currentuser.uid~로 변경. userId가 있다면~
           )}
         </View>
 
-        <TouchableOpacity onPress={() => setIsEdit(true)}>
+        <TouchableOpacity onPress={() => setPressEditBtn(true)}>
           <FontAwesome5 name="edit" size={24} color="black" />
         </TouchableOpacity>
       </MyNameWrapView>
