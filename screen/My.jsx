@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
 import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import {
   addDoc,
   collection,
@@ -114,7 +114,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </View>
 
         <TouchableOpacity onPress={() => setPressEditBtn(true)}>
-          <FontAwesome5 name="edit" size={24} color="black" />
+          <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </MyNameWrapView>
       <MyPostTitleText>내가 쓴 글</MyPostTitleText>
