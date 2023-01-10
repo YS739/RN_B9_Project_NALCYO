@@ -1,29 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { dbService, authService } from "../../common/firebase";
 
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 
 const City = () => {
-
   const [nowWeather, setNoewWeather] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
   const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
   const getNowWeather = async () => {
-    const response = await fetch(
-      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`
-    )
+    const response = await fetch(`${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`)
       .then((res) => res.json())
       .catch((error) => {
         console.log(error);
@@ -46,12 +35,9 @@ const City = () => {
 
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-
   return (
     <View style={{ flex: 1 }}>
-      <SafeAreaView
-        style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
-      >
+      <SafeAreaView style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}>
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
@@ -90,14 +76,12 @@ const WeatherContainer = styled.TouchableOpacity`
   background-color: white;
   border-radius: 30px;
   padding: 10px;
-
   box-shadow: 5px 5px 2px black;
 `;
 
 const WeatherWrap = styled.View`
   width: 60%;
   height: 70%;
-
   border-radius: 30px;
   flex-direction: row;
 `;
@@ -125,7 +109,6 @@ const WeatherMainText = styled.Text`
   font-size: 40px;
   top: 15px;
   align-content: center;
-
   width: 80%;
   height: 40%;
   text-align: center;
