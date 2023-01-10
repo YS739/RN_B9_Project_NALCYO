@@ -1,67 +1,54 @@
 import React from "react";
-import { View, Text, ScrollView, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
-import { dbService, authService } from "../../common/firebase";
 
 const CityFlatList = () => {
   const navigate = useNavigation();
-  const ReadPost = async () => {
-    let cmtObjList = [];
-    const q = query(collection(dbService, "Lists"), orderBy("createdAt", "desc"));
-    await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      const ListObj = {
-        id: doc.id,
-        ...doc.data(),
-      };
-      cmtObjList.push(ListObj);
-    });
-  };
 
   return (
     <ScrollView style={{ flex: 1, width: "90%" }}>
-      <CityLoader onPress={() => navigate("Stacks", { screen: "City" })}>
-        <Text>{item.nickName} </Text>
-        <Text style={{ left: 100 }}>{item.title} </Text>
-      </CityLoader>
-      <FlatList>
+      <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
-      <FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
-      <FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
-      <FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
 
-      <FlatList>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
-      <FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
-      <FlatList>
+      </CityContentsBtn>
+      <CityContentsBtn>
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
-      </FlatList>
+      </CityContentsBtn>
     </ScrollView>
   );
 };
 
 export default CityFlatList;
 
-const FlatList = styled.TouchableOpacity`
+const CityContentsBtn = styled.TouchableOpacity`
   height: 40px;
   width: 325px;
   margin: 5px;

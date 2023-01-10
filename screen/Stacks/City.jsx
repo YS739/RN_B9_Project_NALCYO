@@ -1,17 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { dbService, authService } from "../../common/firebase";
 
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator, Flatlist } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
+import { FlatList } from "react-native-gesture-handler";
 
 const City = () => {
-  const [nowWeather, setNoewWeather] = useState([]);
+  const [nowWeather, setNowWeather] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
   const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
+
+  const renderItem = ({ item }) => {
+    return (
+      <View>
+        <View>
+          <Text>user id: {item.userId}</Text>
+        </View>
+        <View>
+          <Text>id: {item.id}</Text>
+        </View>
+        <View>
+          <Text>title: {item.title}</Text>
+        </View>
+        <View>
+          <Text>body: {item.body}</Text>
+        </View>
+      </View>
+    );
+  };
+
   const getNowWeather = async () => {
     const response = await fetch(`${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`)
       .then((res) => res.json())
