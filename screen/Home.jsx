@@ -1,40 +1,53 @@
 import styled from "@emotion/native";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Loader from "../components/Loader";
 
 const Home = ({ navigation: { navigate } }) => {
-  return (
+
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+  }, []);
+
+  return isLoading ? (
+    <Loader />
+  ) : (
+
     <WrapSafeAreaView>
       <ContainerView>
         <SmallContainerView>
           <WrapView>
             <KoreaImage source={koreaimg} />
-            <SeoulBtn>
+            <SeoulBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>인천/서울/경기</HomeText>
             </SeoulBtn>
-            <GangwonBtn>
+            <GangwonBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>강원도</HomeText>
             </GangwonBtn>
-            <GyongBukBtn>
+            <GyongBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>경상북도</HomeText>
             </GyongBukBtn>
-            <GyongNamBtn>
+            <GyongNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>경상남도</HomeText>
             </GyongNamBtn>
-            <JeonBukBtn>
+            <JeonBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>전라북도</HomeText>
             </JeonBukBtn>
-            <JeonNamBtn>
+            <JeonNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>전라남도</HomeText>
             </JeonNamBtn>
-            <ChungBukBtn>
+            <ChungBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>충청북도</HomeText>
             </ChungBukBtn>
-            <ChungNamBtn>
+            <ChungNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>충청남도</HomeText>
             </ChungNamBtn>
-            <Jeju>
+            <Jeju onPress={() => navigate("Stacks", { screen: "City" })}>
               <HomeText>제주도</HomeText>
             </Jeju>
           </WrapView>
@@ -58,6 +71,7 @@ const WrapView = styled.View`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-left: 20px;
   position: relative;
 `;
 
@@ -70,11 +84,11 @@ const ContainerView = styled.View`
 `;
 
 const SmallContainerView = styled.View`
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  right: 20;
+  right: 20px;
 `;
 
 const SeoulBtn = styled.TouchableOpacity`
@@ -82,8 +96,8 @@ const SeoulBtn = styled.TouchableOpacity`
   width: 140px;
   background-color: ${textBackgroundColor};
   border-radius: 10px;
-  top: 180;
-  right: 160;
+  top: 150px;
+  right: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,8 +105,8 @@ const SeoulBtn = styled.TouchableOpacity`
 
 const GangwonBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 150;
-  right: 50;
+  top: 130px;
+  right: 100px;
   width: 70px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -101,8 +115,8 @@ const GangwonBtn = styled.TouchableOpacity`
 `;
 const GyongBukBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 280;
-  right: 20;
+  top: 280px;
+  right: 50px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -111,8 +125,8 @@ const GyongBukBtn = styled.TouchableOpacity`
 `;
 const GyongNamBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 400;
-  right: 30;
+  top: 400px;
+  right: 80px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -121,8 +135,8 @@ const GyongNamBtn = styled.TouchableOpacity`
 `;
 const JeonBukBtn = styled.TouchableOpacity`
   position: absolute;
-  left: 130;
-  top: 350;
+  left: 110px;
+  top: 360px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -131,8 +145,8 @@ const JeonBukBtn = styled.TouchableOpacity`
 `;
 const JeonNamBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 450;
-  left: 90;
+  top: 440px;
+  left: 90px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -141,8 +155,8 @@ const JeonNamBtn = styled.TouchableOpacity`
 `;
 const ChungBukBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 240;
-  right: 100;
+  top: 230px;
+  right: 130px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -151,8 +165,8 @@ const ChungBukBtn = styled.TouchableOpacity`
 `;
 const ChungNamBtn = styled.TouchableOpacity`
   position: absolute;
-  top: 280;
-  left: 80;
+  top: 270px;
+  left: 80px;
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -161,8 +175,8 @@ const ChungNamBtn = styled.TouchableOpacity`
 `;
 const Jeju = styled.TouchableOpacity`
   position: absolute;
-  bottom: 40;
-  left: 25;
+  bottom: 80px;
+  left: 60px;
   width: 70px;
   background-color: ${textBackgroundColor};
   display: flex;
@@ -178,7 +192,8 @@ const HomeText = styled.Text`
 
 const KoreaImage = styled.Image`
   width: 100%;
-  height: 90%;
+  height: 95%;
   margin-top: 30px;
-  margin-left: 40px;
+  margin-left: 60px;
+  margin-bottom: 40px;
 `;
