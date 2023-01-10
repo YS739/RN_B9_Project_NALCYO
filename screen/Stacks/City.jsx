@@ -14,25 +14,6 @@ const City = () => {
   const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
   const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
 
-  const renderItem = ({ item }) => {
-    return (
-      <View>
-        <View>
-          <Text>user id: {item.userId}</Text>
-        </View>
-        <View>
-          <Text>id: {item.id}</Text>
-        </View>
-        <View>
-          <Text>title: {item.title}</Text>
-        </View>
-        <View>
-          <Text>body: {item.body}</Text>
-        </View>
-      </View>
-    );
-  };
-
   const getNowWeather = async () => {
     const response = await fetch(`${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`)
       .then((res) => res.json())
