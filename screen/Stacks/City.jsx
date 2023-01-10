@@ -13,7 +13,7 @@ import {
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import getNowWeather from "../../common/api";
 
 const City = () => {
@@ -22,7 +22,7 @@ const City = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
-    "getWeather",
+    ["getWeather"],
     getNowWeather
   );
 
@@ -46,7 +46,7 @@ const City = () => {
           <WeatherWrap>
             <WeatherImage
               source={{
-                uri: `http://openweathermap.org/img/wn/${getWeatherData?.result?.weather[0]?.icon}@2x.png`,
+                uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
             <WeatherMainText>맑음</WeatherMainText>
