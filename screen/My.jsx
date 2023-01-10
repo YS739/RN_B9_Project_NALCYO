@@ -5,6 +5,7 @@ import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+
 import {
   addDoc,
   collection,
@@ -21,7 +22,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [pressEditBtn, setPressEditBtn] = useState(false);
   const [editName, setEditName] = useState("");
 
-
   // 로그아웃 성공 시 Login Screen으로 이동
   const logout = () => {
     signOut(authService)
@@ -29,18 +29,14 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         console.log("로그아웃 성공");
 
         navigate("Stacks", { screen: "Login" });
-
       })
       .catch((err) => alert(err));
   };
-  // FIXME: 현재 로그아웃 안 됨 - can't find variable logout = 현재 유저가 없어서 그런 듯?
 
   // 닉네임 등록하기
   const addNickname = async () => {
     await addDoc(collection(dbService, "nickName"), {
-      // TODO: userId: authService.currentUser?.uid,
-      // 임시 유저 아이디
-      userId: "Yunny",
+      userId: authService.currentUser?.uid,
       nickName: addName,
     });
     setPressEditBtn(false);
@@ -55,12 +51,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   };
 
   useEffect(() => {
-    navigation.setOptions({
+    setOptions({
       headerLeft: () => (
-        <TouchableOpacity
-          style={{ marginLeft: 15 }}
-          onPress={() => navigation.goBack()}
-        >
+
+        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),
@@ -76,8 +71,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     // 닉네임 불러오기
     const q = query(
       collection(dbService, "nickName"),
-      where("userId", "==", "Yunny")
-      // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
+      where("userId", "==", authService.currentUser?.uid)
     );
 
     // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
@@ -112,11 +106,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
               onChangeText={(text) => setEditName(text)}
               defaultValue={addName ? addName[0].nickName : ""}
               value={addName ? addName : editName}
-              // TODO: defaultValue도 nickName 가져와서 수정하기
             />
           ) : (
-            <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
-            //TODO: addName을authService.currentUser.nickName로 변경. userId가 있다면~
+            <MyNameText>
+              {authService.currentUser?.nickName ? addName[0].nickName : "회원"}
+            </MyNameText>
           )}
         </View>
 
@@ -126,6 +120,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       </MyNameWrapView>
       <MyPostTitleText>내가 쓴 글</MyPostTitleText>
       <MyPostView>
+        {/* TODO: FlatList 변경하기 */}
         <ScrollView contentContainerStyle={{ width: "90%" }}>
           <MyPostBoxView>
             {/* TODO: 기온을 가져오게 되면 실시간으로 변하지 않나? */}

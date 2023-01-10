@@ -4,14 +4,17 @@ import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import { useNavigation } from "@react-navigation/native";
+import { getAuth, updateProfile } from "firebase/auth";
+import { useNavigation } from "@react-navigation/core";
 
-export default function SignUp({ navigation }) {
+export default function SignUp({ navigation: { goBack } }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [nickName, setnickName] = useState("");
+  const auth = getAuth();
+  const navigation = useNavigation();
 
   const validateInputs = () => {
     if (!email) {
@@ -44,9 +47,22 @@ export default function SignUp({ navigation }) {
       return;
     }
 
+    updateProfile(auth.currentUser, {
+      nickName: "",
+    })
+      .then(() => {
+        // Profile updated!
+        // ...
+      })
+      .catch((error) => {
+        // An error occurred
+        // ...
+      });
+
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
         alert("회원가입 성공!");
+        goBack();
       })
       .catch((err) => {
         console.log(err.message);
@@ -57,10 +73,10 @@ export default function SignUp({ navigation }) {
   return (
     <View>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.login_title}>오늘 날°C요 </Text>
+        <Text style={styles.login_title}>회원가입 </Text>
         <View>
           <Text style={styles.email_form_title}>닉네임</Text>
-          <TextInput placeholder="Nickname" value={nickname} onChangeText={(text) => setNickname(text)} style={styles.login_input} />
+          <TextInput placeholder="Nickname" value={nickName} onChangeText={(text) => setnickName(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>이메일</Text>
           <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} style={styles.login_input} />
           <Text style={styles.email_form_title}>비밀번호</Text>
@@ -68,9 +84,6 @@ export default function SignUp({ navigation }) {
 
           <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
             <Text style={styles.text}>이메일로 회원가입하기</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.login_button}>
-            <Text>로그인 하러가기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -92,8 +105,9 @@ const styles = StyleSheet.create({
   login_title: {
     marginTop: 30,
     padding: 30,
-    fontSize: 36,
+    fontSize: 44,
     fontWeight: "bold",
+    fontFamily: "NanumPenScript-Regular",
   },
   email_form_title: {
     fontSize: 13,
@@ -111,6 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 20,
     margin: 10,
+    marginTop: 30,
     backgroundColor: "white",
   },
 });

@@ -11,7 +11,7 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
 
-  // 지역 카테고리 선택하기
+  // TODO: 지역 카테고리 수정 및 추가하기
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -31,8 +31,7 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
     await addDoc(collection(dbService, "List"), {
       title: postTitle,
       content: postContent,
-      // userId: authService.currentUser?.uid,
-      // TODO: login 구현되면 주석 해제하기
+      userId: authService.currentUser?.uid,
       createdAt: new Date(),
       category: value,
     });
