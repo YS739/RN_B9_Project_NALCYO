@@ -40,15 +40,6 @@ const Home = ({ navigation: { navigate } }) => {
           </WrapView>
         </SmallContainerView>
       </ContainerView>
-
-      <TouchableOpacity onPress={() => navigate("Stacks", { screen: "City" })}>
-        <Text>City</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigate("Stacks", { screen: "PostDetail" })}
-      >
-        <Text>Detail</Text>
-      </TouchableOpacity>
     </WrapSafeAreaView>
   );
 };
