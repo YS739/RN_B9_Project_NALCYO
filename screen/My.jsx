@@ -40,7 +40,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       displayName: editName,
     })
       .then(() => {
-        alert("닉네임 변경 완료!");
         setPressEditBtn(false);
       })
       .catch((error) => {
