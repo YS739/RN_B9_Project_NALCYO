@@ -75,10 +75,11 @@ const City = () => {
 
 export default City;
 
+// 날시 box
 const WeatherContainer = styled.TouchableOpacity`
   width: 90%;
   margin-top: 15px;
-  height: 250px;
+  height: 230px;
   background-color: white;
   border-radius: 30px;
   padding: 10px;
@@ -94,6 +95,7 @@ const WeatherWrap = styled.View`
   flex-direction: row;
 `;
 
+//날씨 이미지
 const WeatherImage = styled.Image`
   width: 300px;
   height: 320px;
@@ -101,18 +103,20 @@ const WeatherImage = styled.Image`
   bottom: 80px;
 `;
 
+//온도 텍스트
 const WeatherTemperatureText = styled.Text`
-  top: 70px;
+  top: 65px;
   left: 200px;
-  font-size: 50px;
+  font-size: 45px;
   position: absolute;
 `;
 
+//날씨 텍스트
 const WeatherMainText = styled.Text`
   position: absolute;
-  left: 170px;
+  left: 160px;
   font-size: 40px;
-  top: 25px;
+  top: 15px;
   align-content: center;
 
   width: 80%;
@@ -120,9 +124,10 @@ const WeatherMainText = styled.Text`
   text-align: center;
 `;
 
+//도시 텍스트
 const WeatherCityText = styled.Text`
   position: absolute;
-  top: 150px;
+  top: 130px;
   left: 65px;
   font-size: 60px;
 `;

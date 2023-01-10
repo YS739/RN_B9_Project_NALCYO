@@ -46,12 +46,12 @@ const CityFlatList = () => {
 export default CityFlatList;
 
 const CityContentsBtn = styled.TouchableOpacity`
-  height: 50px;
+  height: 40px;
   width: 325px;
-  margin: 10px;
+  margin: 5px;
   padding-left: 30px;
   background-color: white;
-  border-radius: 15px;
+  border-radius: 30px;
   align-items: center;
   flex-direction: row;
   border: 1px solid;
