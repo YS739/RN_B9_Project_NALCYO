@@ -13,29 +13,31 @@ import {
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
+import { useQuery } from "@tanstack/react-query";
+import getNowWeather from "../../common/api";
 
 const City = () => {
-  const [nowWeather, setNowWeather] = useState([]);
+  // const [nowWeather, setNowWeather] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
-  const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
+  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
+    "getWeather",
+    getNowWeather,
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (e) => {
+        console.log(e.message);
+      },
+    }
+  );
+  console.log("getWeatherData:", getWeatherData);
 
-  const getNowWeather = async () => {
-    const response = await fetch(
-      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`
-    )
-      .then((res) => res.json())
-      .catch((error) => {
-        console.log(error);
-      });
-    setNowWeather(response);
-    setIsLoading(false);
-  };
-  useEffect(() => {
-    getNowWeather();
-  }, []);
+  const isLoading = isLoadingWD;
 
   if (isLoading) {
     return (
@@ -53,18 +55,18 @@ const City = () => {
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
-            <WeatherImage
+            {/* <WeatherImage
               source={{
-                uri: `http://openweathermap.org/img/wn/${nowWeather.weather[0].icon}@2x.png`,
+                uri: `http://openweathermap.org/img/wn/${getWeatherData?.result?.weather[0]?.icon}@2x.png`,
               }}
-            />
-            <WeatherMainText> {nowWeather.weather[0].main}</WeatherMainText>
+            /> */}
+            <WeatherMainText>맑음</WeatherMainText>
             <WeatherTemperatureText>
-              {Math.round(nowWeather.main.temp)}
+              온도
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
             </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>{nowWeather.name}</WeatherCityText>
+          <WeatherCityText>서울</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
@@ -104,14 +106,14 @@ const WeatherWrap = styled.View`
 const WeatherImage = styled.Image`
   width: 300px;
   height: 320px;
-  right: 60px;
+  right: 30px;
   bottom: 80px;
 `;
 
 //온도 텍스트
 const WeatherTemperatureText = styled.Text`
   top: 65px;
-  left: 200px;
+  left: 230px;
   font-size: 45px;
   position: absolute;
 `;
@@ -124,7 +126,7 @@ const WeatherMainText = styled.Text`
   top: 15px;
   align-content: center;
 
-  width: 80%;
+  width: 90%;
   height: 40%;
   text-align: center;
 `;
