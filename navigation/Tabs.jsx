@@ -10,9 +10,7 @@ const Tab = createBottomTabNavigator();
 const Tabs = ({ navigation: { navigate } }) => {
   return (
     <Tab.Navigator
-      // initialRouteName={navigate("Stacks", { screen: "Login" })}
-      // TODO: push 전에 주석 해제
-
+      initialRouteName={navigate("Stacks", { screen: "Login" })}
       sceneContainerStyle={{
         backgroundColor: "#97D2EC",
       }}
