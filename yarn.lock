@@ -1668,7 +1668,9 @@
   "resolved" "https://registry.npmjs.org/@firebase/firestore-types/-/firestore-types-2.5.1.tgz"
   "version" "2.5.1"
 
+
 "@firebase/firestore@^3.8.0", "@firebase/firestore@3.8.0":
+
   "integrity" "sha512-aKwfZ73FmOV8e/dN0anDtrq6+1IhX4zmjxUcXcgaypZ14q6bq0QpUdlRxjsfiUQ5m3H3MwWWIFOcT5Xa89sIkw=="
   "resolved" "https://registry.npmjs.org/@firebase/firestore/-/firestore-3.8.0.tgz"
   "version" "3.8.0"
@@ -3261,9 +3263,11 @@
   "version" "7.2.0"
 
 "commander@^9.4.0":
+
   "integrity" "sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ=="
   "resolved" "https://registry.npmjs.org/commander/-/commander-9.5.0.tgz"
   "version" "9.5.0"
+
 
 "commander@~2.13.0":
   "integrity" "sha512-MVuS359B+YzaWqjCL/c+22gfryv+mCBPHAv3zyVI2GN8EY6IRP8VwtasXn8jyyhvvq84R4ImN1OKRtcbIasjYA=="
@@ -6244,10 +6248,12 @@
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
 
+
 "react-native-dropdown-picker@^5.4.4":
   "integrity" "sha512-MGsFc3Oi6Rc94WoJk3oOGfPe6IVscCrWn1DRCUDB508U4Wmd2b+EYONpsgiXQ89ESoBcOE3qQR6gkY2CVxoC+Q=="
   "resolved" "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.4.tgz"
   "version" "5.4.4"
+
 
 "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-poOSfz/w0IyD6Qwq7aaIRRfEaVTl1ecQFoyiIbpOpfNTjm2B1niY2FLrdVQIOtIOe+K9nH55Qal04nr4jGkHdQ=="
@@ -7431,12 +7437,14 @@
   "resolved" "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   "version" "1.0.1"
 
+
 "uuid@^3.3.2":
   "integrity" "sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   "version" "3.4.0"
 
 "uuid@^3.4.0":
+
   "integrity" "sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   "version" "3.4.0"

@@ -1,6 +1,7 @@
 import styled from "@emotion/native";
 import koreaimg from "../assets/koreaimg.png";
 import React, { useEffect, useState } from "react";
+
 import Loader from "../components/Loader";
 
 const Home = ({ navigation: { navigate } }) => {
@@ -17,6 +18,7 @@ const Home = ({ navigation: { navigate } }) => {
   return isLoading ? (
     <Loader />
   ) : (
+
 
     <WrapSafeAreaView>
       <ContainerView>
