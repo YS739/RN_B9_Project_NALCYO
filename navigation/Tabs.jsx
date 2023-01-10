@@ -10,8 +10,8 @@ const Tab = createBottomTabNavigator();
 const Tabs = ({ navigation: { navigate } }) => {
   return (
     <Tab.Navigator
-
-      initialRouteName={navigate("Stacks", { screen: "Login" })}
+      // initialRouteName={navigate("Stacks", { screen: "Login" })}
+      // TODO: push 전에 주석 해제
 
       sceneContainerStyle={{
         backgroundColor: "#97D2EC",
@@ -28,7 +28,13 @@ const Tabs = ({ navigation: { navigate } }) => {
         options={{
           title: "",
           headerTitleAlign: "center",
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="weather-sunny" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="weather-sunny"
+              size={size}
+              color={color}
+            />
+          ),
         }}
         name="Home"
         component={Home}
@@ -38,7 +44,13 @@ const Tabs = ({ navigation: { navigate } }) => {
           title: null,
           headerTitleAlign: "center",
           tabBarLabel: "",
-          tabBarIcon: ({ color, size }) => <Ionicons name="ios-person-circle-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name="ios-person-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
         }}
         name="My"
         component={My}
