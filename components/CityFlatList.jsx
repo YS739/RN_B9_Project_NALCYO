@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
@@ -13,7 +13,6 @@ const CityFlatList = async () => {
   }, []);
 
  
-
   return (
     <ScrollView style={{ flex: 1, width: "90%" }}>
       <FlatList  data={myData} renderItem={({ item }) => {
