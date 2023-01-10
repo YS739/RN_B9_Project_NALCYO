@@ -11,31 +11,16 @@ import {
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
-import { useQuery } from "react-query";
+import useQuery from "react-query";
+import { getNowWeather } from "../../common/api";
 
 const City = () => {
-  const [nowWeather, setNoewWeather] = useState([]); // 날씨 api 받아서 저장,
-  const [isLoading, setIsLoading] = useState(true); //로딩
-  const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"; // url
-  const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9"; // api key
-
-  const {} = useQuery("getNowWeather");
-
-  //날씨 api 받아서 nowWeather에 저장한다.
-  const getNowWeather = async () => {
-    const response = await fetch(
-      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric&lang=kr`
-    )
-      .then((res) => res.json())
-      .catch((error) => {
-        console.log(error);
-      });
-    // console.log(JSON.stringify(nowWeather.weather[0].main));
-    setNoewWeather(response);
-    setIsLoading(false);
-  };
+  const { data: NowWeatherData, isLoading: isLoadingNP } = useQuery(
+    "NowWeather",
+    getNowWeather
+  );
   useEffect(() => {
-    getNowWeather();
+    console.log(NowWeatherData);
   }, []);
 
   if (isLoading) {
@@ -58,13 +43,13 @@ const City = () => {
                 uri: `http://openweathermap.org/img/wn/${nowWeather.weather[0].icon}@2x.png`,
               }}
             />
-            <WeatherMainText> {nowWeather.weather[0].main}</WeatherMainText>
+            <WeatherMainText>{data.reuslt.weather[0].main}</WeatherMainText>
             <WeatherTemperatureText>
-              {Math.round(nowWeather.main.temp)}
+              {Math.round(data.reuslt.main.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
             </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>{nowWeather.name}</WeatherCityText>
+          <WeatherCityText>{NowWeatherData.reuslt.name}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}

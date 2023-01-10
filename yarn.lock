@@ -2390,17 +2390,17 @@
   "resolved" "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.24.51.tgz"
   "version" "0.24.51"
 
-"@tanstack/query-core@4.20.9":
-  "integrity" "sha512-XTEEvOGy7wlABPTYfmg7U287WYcf2PV8lH15oKWD2I09okqMOHrB23WxyikEVRwJCjYNKcCW0BuYaAY4S2g/jg=="
-  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.20.9.tgz"
-  "version" "4.20.9"
+"@tanstack/query-core@4.22.0":
+  "integrity" "sha512-OeLyBKBQoT265f5G9biReijeP8mBxNFwY7ZUu1dKL+YzqpG5q5z7J/N1eT8aWyKuhyDTiUHuKm5l+oIVzbtrjw=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.22.0.tgz"
+  "version" "4.22.0"
 
 "@tanstack/react-query@^4.20.9":
-  "integrity" "sha512-OqwcmqkxOYgLbVjsMm4Cl8MMZ063VqdRw1GpSWqN8WgppftPiFJTDb6Q1TX5I/ciCbHmRWNPE/D0ayyTesAKug=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.20.9.tgz"
-  "version" "4.20.9"
+  "integrity" "sha512-P9o+HjG42uB/xHR6dMsJaPhtZydSe4v0xdG5G/cEj1oHZAXelMlm67/rYJNQGKgBamKElKogj+HYGF+NY2yHYg=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.22.0.tgz"
+  "version" "4.22.0"
   dependencies:
-    "@tanstack/query-core" "4.20.9"
+    "@tanstack/query-core" "4.22.0"
     "use-sync-external-store" "^1.2.0"
 
 "@types/hammerjs@^2.0.36":
