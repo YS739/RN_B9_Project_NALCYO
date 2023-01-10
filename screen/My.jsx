@@ -14,11 +14,15 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import { signOut } from "firebase/auth";
 
+// 1. 닉네임 등록하기 부분 삭제
+// 2. 닉네임 불러오기
+// 3. 닉네임 수정하기
+
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  const [addName, setAddName] = useState("");
+  // const [addName, setAddName] = useState("");
   const [pressEditBtn, setPressEditBtn] = useState(false);
   const [editName, setEditName] = useState("");
 
@@ -32,30 +36,26 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       .catch((err) => alert(err));
   };
 
-  // // 닉네임 불러오기
-  // const auth = getAuth();
-  // const user = auth.currentUser;
-  // if (user !== null) {
-  //   const displayName = user.displayName;
-  //   const uid = user.uid;
-  // }
+  // 닉네임 불러오기
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userNickName = user.displayName;
+  const uid = user.uid;
+  console.log(userNickName, uid);
 
-  // // 닉네임 등록하기
-  // const addNickname = async () => {
-  //   await addDoc(collection(dbService, "nickName"), {
-  //     userId: authService.currentUser?.uid,
-  //     nickName: addName,
-  //   });
-  //   setPressEditBtn(false);
-  // };
-
-  // // 닉네임 수정하기
-  // const editNickName = async () => {
-  //   await updateDoc(doc(dbService, "nickName", addName[0].id), {
-  //     nickName: editName,
-  //   });
-  //   setPressEditBtn(false);
-  // };
+  // 닉네임 수정하기 - TODO: 공식문서 참고해서 수정하기
+  const editNickName = async () => {
+    updateProfile(user, {
+      displayName: editName,
+    })
+      .then(() => {
+        alert("닉네임 변경 완료!");
+        setPressEditBtn(false);
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      });
+  };
 
   useEffect(() => {
     setOptions({
@@ -72,22 +72,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </TouchableOpacity>
       ),
     });
-
-    // // 닉네임 불러오기
-    // const q = query(
-    //   collection(dbService, "nickName"),
-    //   where("userId", "==", authService.currentUser?.uid)
-    // );
-
-    // // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
-    // const userNickName = onSnapshot(q, (snapshot) => {
-    //   const newNickName = snapshot.docs.map((doc) => ({
-    //     id: doc.id,
-    //     ...doc.data(),
-    //   }));
-    //   setAddName(newNickName);
-    // });
-    // return userNickName;
   }, []);
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
@@ -105,17 +89,12 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         <View>
           {pressEditBtn ? (
             <MyNameTextInput
-              onSubmitEditing={() => {
-                addName ? editNickName(addName[0].id) : addNickname();
-              }}
+              onSubmitEditing={() => editNickName(editName)}
               onChangeText={(text) => setEditName(text)}
-              defaultValue={addName ? addName[0].nickName : ""}
-              value={addName ? addName : editName}
+              defaultValue={userNickName}
             />
           ) : (
-            <MyNameText>
-              {/* {authService.currentUser?.nickName ? addName[0].nickName : "회원"} */}
-            </MyNameText>
+            <MyNameText>{userNickName ? userNickName : "회원"}</MyNameText>
           )}
         </View>
 
