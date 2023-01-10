@@ -14,7 +14,7 @@ const CityFlatList = () => {
       const docSnap = await getDoc(doc(dbService, "list"));
       setMyData(docSnap.data());
     };
-    return () => fetchPost();
+    fetchPost();
   }, []);
 
   return (
