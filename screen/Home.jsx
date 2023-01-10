@@ -3,42 +3,47 @@ import koreaimg from "../assets/koreaimg.png";
 import React from "react";
 
 const Home = ({ navigation: { navigate } }) => {
-  <WrapSafeAreaView>
-    <ContainerView>
-      <SmallContainerView>
-        <WrapView>
-          <KoreaImage source={koreaimg} />
-          <SeoulBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>인천/서울/경기</HomeText>
-          </SeoulBtn>
-          <GangwonBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>강원도</HomeText>
-          </GangwonBtn>
-          <GyongBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>경상북도</HomeText>
-          </GyongBukBtn>
-          <GyongNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>경상남도</HomeText>
-          </GyongNamBtn>
-          <JeonBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>전라북도</HomeText>
-          </JeonBukBtn>
-          <JeonNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>전라남도</HomeText>
-          </JeonNamBtn>
-          <ChungBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>충청북도</HomeText>
-          </ChungBukBtn>
-          <ChungNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>충청남도</HomeText>
-          </ChungNamBtn>
-          <Jeju onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>제주도</HomeText>
-          </Jeju>
-        </WrapView>
-      </SmallContainerView>
-    </ContainerView>
-  </WrapSafeAreaView>;
+  // TODO: Reset으로 분기처리하기 - useFocus로 유저가 없으면 로그인 화면으로
+  // 보내기
+
+  return (
+    <WrapSafeAreaView>
+      <ContainerView>
+        <SmallContainerView>
+          <WrapView>
+            <KoreaImage source={koreaimg} />
+            <SeoulBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>인천/서울/경기</HomeText>
+            </SeoulBtn>
+            <GangwonBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>강원도</HomeText>
+            </GangwonBtn>
+            <GyongBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>경상북도</HomeText>
+            </GyongBukBtn>
+            <GyongNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>경상남도</HomeText>
+            </GyongNamBtn>
+            <JeonBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>전라북도</HomeText>
+            </JeonBukBtn>
+            <JeonNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>전라남도</HomeText>
+            </JeonNamBtn>
+            <ChungBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>충청북도</HomeText>
+            </ChungBukBtn>
+            <ChungNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>충청남도</HomeText>
+            </ChungNamBtn>
+            <Jeju onPress={() => navigate("Stacks", { screen: "City" })}>
+              <HomeText>제주도</HomeText>
+            </Jeju>
+          </WrapView>
+        </SmallContainerView>
+      </ContainerView>
+    </WrapSafeAreaView>
+  );
 };
 
 export default Home;

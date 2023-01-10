@@ -5,7 +5,6 @@ import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-
 import {
   addDoc,
   collection,
@@ -15,7 +14,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-
+import { getAuth } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [addName, setAddName] = useState("");
@@ -27,35 +27,40 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
-
         navigate("Stacks", { screen: "Login" });
       })
       .catch((err) => alert(err));
   };
 
-  // 닉네임 등록하기
-  const addNickname = async () => {
-    await addDoc(collection(dbService, "nickName"), {
-      userId: authService.currentUser?.uid,
-      nickName: addName,
-    });
-    setPressEditBtn(false);
-  };
+  // // 닉네임 불러오기
+  // const auth = getAuth();
+  // const user = auth.currentUser;
+  // if (user !== null) {
+  //   const displayName = user.displayName;
+  //   const uid = user.uid;
+  // }
 
-  // 닉네임 수정하기
-  const editNickName = async () => {
-    await updateDoc(doc(dbService, "nickName", addName[0].id), {
-      nickName: editName,
-    });
-    setPressEditBtn(false);
-  };
+  // // 닉네임 등록하기
+  // const addNickname = async () => {
+  //   await addDoc(collection(dbService, "nickName"), {
+  //     userId: authService.currentUser?.uid,
+  //     nickName: addName,
+  //   });
+  //   setPressEditBtn(false);
+  // };
+
+  // // 닉네임 수정하기
+  // const editNickName = async () => {
+  //   await updateDoc(doc(dbService, "nickName", addName[0].id), {
+  //     nickName: editName,
+  //   });
+  //   setPressEditBtn(false);
+  // };
 
   useEffect(() => {
     setOptions({
       headerLeft: () => (
-
         <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
-
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),
@@ -68,21 +73,21 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       ),
     });
 
-    // 닉네임 불러오기
-    const q = query(
-      collection(dbService, "nickName"),
-      where("userId", "==", authService.currentUser?.uid)
-    );
+    // // 닉네임 불러오기
+    // const q = query(
+    //   collection(dbService, "nickName"),
+    //   where("userId", "==", authService.currentUser?.uid)
+    // );
 
-    // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
-    const userNickName = onSnapshot(q, (snapshot) => {
-      const newNickName = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAddName(newNickName);
-    });
-    return userNickName;
+    // // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
+    // const userNickName = onSnapshot(q, (snapshot) => {
+    //   const newNickName = snapshot.docs.map((doc) => ({
+    //     id: doc.id,
+    //     ...doc.data(),
+    //   }));
+    //   setAddName(newNickName);
+    // });
+    // return userNickName;
   }, []);
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
@@ -109,7 +114,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             />
           ) : (
             <MyNameText>
-              {authService.currentUser?.nickName ? addName[0].nickName : "회원"}
+              {/* {authService.currentUser?.nickName ? addName[0].nickName : "회원"} */}
             </MyNameText>
           )}
         </View>
@@ -122,7 +127,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       <MyPostView>
         {/* TODO: FlatList 변경하기 */}
         <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyPostBoxView>
+          <MyPostBoxBtn>
             {/* TODO: 기온을 가져오게 되면 실시간으로 변하지 않나? */}
             <MyPostCategoryView>
               <Text>지역 기온</Text>
@@ -132,8 +137,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 여기서 제목이 너무너무 길다면 어떻게 될까요
               </Text>
             </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
+          </MyPostBoxBtn>
+          <MyPostBoxBtn>
             <MyPostCategoryView>
               <Text>지역 기온</Text>
             </MyPostCategoryView>
@@ -142,8 +147,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 제목
               </Text>
             </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
+          </MyPostBoxBtn>
+          <MyPostBoxBtn>
             <MyPostCategoryView>
               <Text>지역 기온</Text>
             </MyPostCategoryView>
@@ -152,8 +157,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 제목
               </Text>
             </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
+          </MyPostBoxBtn>
+          <MyPostBoxBtn>
             <MyPostCategoryView>
               <Text>지역 기온</Text>
             </MyPostCategoryView>
@@ -162,8 +167,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 제목
               </Text>
             </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
+          </MyPostBoxBtn>
+          <MyPostBoxBtn>
             <MyPostCategoryView>
               <Text>지역 기온</Text>
             </MyPostCategoryView>
@@ -172,13 +177,13 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 제목
               </Text>
             </MyPostContentsView>
-          </MyPostBoxView>
+          </MyPostBoxBtn>
         </ScrollView>
       </MyPostView>
       <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
       <MyCommentsView>
         <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyCommentsBoxView>
+          <MyCommentsBoxBtn>
             <MyCommentsCategoryView>
               <Text>지역 기온</Text>
             </MyCommentsCategoryView>
@@ -187,8 +192,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 여기서 제목이 너무너무 길다면 어떻게 될까요
               </Text>
             </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
+          </MyCommentsBoxBtn>
+          <MyCommentsBoxBtn>
             <MyCommentsCategoryView>
               <Text>지역 기온</Text>
             </MyCommentsCategoryView>
@@ -197,8 +202,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 여기서 제목이 너무너무 길다면 어떻게 될까요
               </Text>
             </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
+          </MyCommentsBoxBtn>
+          <MyCommentsBoxBtn>
             <MyCommentsCategoryView>
               <Text>지역 기온</Text>
             </MyCommentsCategoryView>
@@ -207,8 +212,8 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 여기서 제목이 너무너무 길다면 어떻게 될까요
               </Text>
             </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
+          </MyCommentsBoxBtn>
+          <MyCommentsBoxBtn>
             <MyCommentsCategoryView>
               <Text>지역 기온</Text>
             </MyCommentsCategoryView>
@@ -217,7 +222,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 여기서 제목이 너무너무 길다면 어떻게 될까요
               </Text>
             </MyCommentsContentsView>
-          </MyCommentsBoxView>
+          </MyCommentsBoxBtn>
         </ScrollView>
       </MyCommentsView>
     </MyContainerView>
@@ -277,7 +282,7 @@ const MyPostView = styled.View`
   align-items: center;
 `;
 
-const MyPostBoxView = styled.View`
+const MyPostBoxBtn = styled.TouchableOpacity`
   width: 270px;
   border: 1px solid #97d2ec;
   border-radius: 10px;
@@ -304,7 +309,7 @@ const MyPostContentsView = styled.View`
 // 내가 댓글 단 글
 const MyCommentsTitleText = styled(MyPostTitleText)``;
 
-const MyCommentsBoxView = styled(MyPostBoxView)``;
+const MyCommentsBoxBtn = styled(MyPostBoxBtn)``;
 
 const MyCommentsView = styled(MyPostView)``;
 
