@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
 import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
-import { async } from "@firebase/util";
 import {
   addDoc,
   collection,
@@ -13,11 +12,8 @@ import {
   query,
   where,
   doc,
-  getDoc,
-  getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { useFocusEffect } from "@react-navigation/native";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   const [addName, setAddName] = useState("");
@@ -54,43 +50,39 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     setPressEditBtn(false);
   };
 
-  useEffect(
-    useCallback(() => {
-      setOptions({
-        headerLeft: () => (
-          <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-        ),
-        // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
-        // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
-        headerRight: () => (
-          <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
-            <Text>로그아웃</Text>
-          </TouchableOpacity>
-        ),
-      });
+  useEffect(() => {
+    setOptions({
+      headerLeft: () => (
+        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+      // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
+      // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
+      headerRight: () => (
+        <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
+          <Text>로그아웃</Text>
+        </TouchableOpacity>
+      ),
+    });
 
-      // 닉네임 불러오기
-      // if (addName) {
-      const q = query(
-        collection(dbService, "nickName"),
-        where("userId", "==", "Yunny")
-        // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
-      );
+    // 닉네임 불러오기
+    const q = query(
+      collection(dbService, "nickName"),
+      where("userId", "==", "Yunny")
+      // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
+    );
 
-      // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
-      const userNickName = onSnapshot(q, (snapshot) => {
-        const newNickName = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAddName(newNickName);
-      });
-      return userNickName;
-      // }
-    }, [])
-  );
+    // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
+    const userNickName = onSnapshot(q, (snapshot) => {
+      const newNickName = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAddName(newNickName);
+    });
+    return userNickName;
+  }, []);
 
   // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
 
