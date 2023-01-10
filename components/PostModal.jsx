@@ -15,10 +15,14 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
+    { label: "강원도 원주", value: "강원도 원주" },
+    { label: "경상남도 부산 ", value: "경상남도 부산" },
+    { label: "경상북도 대구", value: "경상북도 대구" },
     { label: "서울", value: "서울" },
-    { label: "부산", value: "부산" },
-    { label: "청주", value: "청주" },
-    { label: "목포", value: "목포" },
+    { label: "전라남도 광주", value: "전라남도 광주" },
+    { label: "전라북도 전주", value: "전라북도 전주" },
+    { label: "충청남도 천안", value: "충청남도 천안" },
+    { label: "충청북도 청주", value: "충청북도 청주" },
   ]);
 
   // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
