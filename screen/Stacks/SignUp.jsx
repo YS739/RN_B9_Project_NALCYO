@@ -1,5 +1,11 @@
 import { useState, useRef } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
@@ -7,7 +13,7 @@ import { emailRegex, pwRegex } from "../../common/util";
 import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigation } from "@react-navigation/core";
 
-export default function SignUp({ navigation: { goBack } }) {
+export default function SignUp({ navigation: { navigate, goBack } }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -62,7 +68,9 @@ export default function SignUp({ navigation: { goBack } }) {
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
         alert("회원가입 성공!");
-        goBack();
+        navigate("Tabs", { screen: "My" });
+        // FIXME: Home이나 다른 스크린으로 가면 로딩 화면 후에 다시 로그인 화면..
+        // goBack();
       })
       .catch((err) => {
         console.log(err.message);
@@ -76,13 +84,36 @@ export default function SignUp({ navigation: { goBack } }) {
         <Text style={styles.login_title}>회원가입 </Text>
         <View>
           <Text style={styles.email_form_title}>닉네임</Text>
-          <TextInput placeholder="Nickname" value={nickName} onChangeText={(text) => setnickName(text)} style={styles.login_input} />
+          <TextInput
+            placeholder="Nickname"
+            value={nickName}
+            onChangeText={(text) => setnickName(text)}
+            style={styles.login_input}
+          />
           <Text style={styles.email_form_title}>이메일</Text>
-          <TextInput placeholder="Email" ref={emailRef} value={email} onChangeText={(text) => setEmail(text)} style={styles.login_input} />
+          <TextInput
+            placeholder="Email"
+            ref={emailRef}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.login_input}
+          />
           <Text style={styles.email_form_title}>비밀번호</Text>
-          <TextInput secureTextEntry={true} placeholder="Password" ref={pwRef} value={pw} onChangeText={(text) => setPw(text)} returnKeyType="send" style={styles.login_input} />
+          <TextInput
+            secureTextEntry={true}
+            placeholder="Password"
+            ref={pwRef}
+            value={pw}
+            onChangeText={(text) => setPw(text)}
+            returnKeyType="send"
+            style={styles.login_input}
+          />
 
-          <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
+          <TouchableOpacity
+            color="#f194ff"
+            onPress={handleRegister}
+            style={styles.login_button}
+          >
             <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>
