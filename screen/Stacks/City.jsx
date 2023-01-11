@@ -11,8 +11,6 @@ import {
   ActivityIndicator,
   FlatList,
   useColorScheme,
-
-
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
@@ -42,7 +40,6 @@ import 번개 from "../../assets/icons/번개.png";
 
 import { Ionicons } from "@expo/vector-icons";
 
-
 const City = ({
   navigation: { navigate, setOptions },
 
@@ -50,8 +47,6 @@ const City = ({
     params: { WeatherId },
   },
 }) => {
-
-
   const isDark = useColorScheme() === "dark";
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -61,7 +56,6 @@ const City = ({
     ["getWeather", WeatherId],
     getNowWeather
   );
-
 
   const WeatherName = getWeatherData?.name;
 
@@ -209,8 +203,6 @@ const City = ({
     }
   };
 
-
-
   useEffect(() => {
     setOptions({
       headerLeft: () => (
@@ -249,8 +241,7 @@ const City = ({
   }
 
   return (
-
-<View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
+    <View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
       <SafeAreaView
         style={{
           backgroundColor: isDark ? "#202020" : "#97d2ec",
@@ -258,7 +249,6 @@ const City = ({
           flex: 1,
         }}
       >
-        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
             {WeatherImageChange(getWeatherData?.weather[0]?.icon)}

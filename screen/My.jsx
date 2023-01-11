@@ -45,6 +45,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   // 내가 쓴 댓글 불러오기
   const [userCommentList, setUserCommentList] = useState([]);
 
+  // Dark 모드 이벤트 일어날 때마다 실행되게 하기
   useEffect(() => {
     setOptions({
       headerLeft: () => (
@@ -65,7 +66,10 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </TouchableOpacity>
       ),
     });
+  }, [isDark]);
 
+  // 내가 쓴 글, 댓글은 마운트 됐을 때 한 번만 실행되게 하기
+  useEffect(() => {
     // 내가 쓴 글 불러오기
     const q = query(
       collection(dbService, "list"),
@@ -83,27 +87,23 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       setUserPostList(UserPosts);
     });
 
-  }, [isDark]);
-
-//useEffect 분리하기
     // 내가 쓴 댓글 불러오기
-  //  const c = query(
-  //    collection(dbService, "Comment"),
-   //   orderBy("createdAt", "desc"),
-  //   where("userId", "==", userId)
-  //  );
-  //  onSnapshot(c, (snapshot) => {
-  //    const UserComments = snapshot.docs.map((doc) => {
-    //    const newUserComment = {
-     //     id: doc.id,
-    //      ...doc.data(),
-   //     };
-  //      return newUserComment;
- //     });
- //     setUserCommentList(UserComments);
-//   });
-//  }, []);
-
+    const c = query(
+      collection(dbService, "Comment"),
+      orderBy("createdAt", "desc"),
+      where("userId", "==", userId)
+    );
+    onSnapshot(c, (snapshot) => {
+      const UserComments = snapshot.docs.map((doc) => {
+        const newUserComment = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newUserComment;
+      });
+      setUserCommentList(UserComments);
+    });
+  }, []);
 
   // 닉네임 수정하기
   const editNickName = async () => {
