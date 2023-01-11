@@ -26,6 +26,18 @@ const City = () => {
 
   console.log("getWeatherData:", getWeatherData);
 
+  const CityChange = (val) => {
+    switch (val) {
+      case "Jeonju":
+        "전북";
+        break;
+      case "Seoul":
+        "서울 / 인천 / 경기";
+    }
+  };
+
+  const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
+
   if (isLoadingWD) {
     return (
       <CityLoader>
