@@ -16,27 +16,19 @@ import PostModal from "../../components/PostModal";
 import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
 
-const City = () => {
+const City = ({
+  route: {
+    params: { WeatherId },
+  },
+}) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
-    ["getWeather"],
+    ["getWeather", WeatherId],
     getNowWeather
   );
 
-  console.log("getWeatherData:", getWeatherData);
-
-  const CityChange = (val) => {
-    switch (val) {
-      case "Jeonju":
-        "전북";
-        break;
-      case "Seoul":
-        "서울 / 인천 / 경기";
-    }
-  };
-
-  const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
+  console.log(getWeatherData);
 
   if (isLoadingWD) {
     return (
