@@ -122,9 +122,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <MySafeAreaView>
-        {/* <FlatList
-          ListHeaderComponent={
-            <> */}
         <MyNameWrapView>
           <Image
             source={{
@@ -183,16 +180,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             ))}
           </ScrollView>
         </MyCommentsView>
-        {/* </> */}
-        {/* } */}
-        {/* contentContainerStyle={{ width: "90%" }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          data={userPostList}
-          renderItem={({ item }) => {
-            return <MyPostList userPost={item} />;
-          }}
-        /> */}
       </MySafeAreaView>
     </TouchableWithoutFeedback>
   );
