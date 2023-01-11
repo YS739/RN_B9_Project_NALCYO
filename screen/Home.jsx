@@ -3,9 +3,10 @@ import koreaimg from "../assets/koreaimg.png";
 import React, { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { authService } from "../common/firebase";
-
+import { useColorScheme } from "react-native";
 
 const Home = ({ navigation: { navigate, reset } }) => {
+  const isDark = useColorScheme() === "dark";
   useFocusEffect(
     useCallback(() => {
       if (!authService.currentUser) {
@@ -27,7 +28,7 @@ const Home = ({ navigation: { navigate, reset } }) => {
 
   return (
     <WrapSafeAreaView>
-      <ContainerView>
+      <ContainerView style={{ backgroundColor: isDark ? "#2e2e2e" : "white" }}>
         <SmallContainerView>
           <WrapView>
             <KoreaImage source={koreaimg} />
