@@ -17,7 +17,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
       screenOptions={{
         headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         headerTitleAlign: "center",
-        headerLeft: () => (
+        headerLeft: (color) => (
           <TouchableOpacity onPress={() => goBack()}>
             <Ionicons
               name="chevron-back"
