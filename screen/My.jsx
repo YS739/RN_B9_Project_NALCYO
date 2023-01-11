@@ -25,6 +25,7 @@ import {
   getDocs,
 } from "@firebase/firestore";
 import MyPostList from "../components/MyPostList";
+// import MyCommentList from "../components/MyCommentList";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   // 닉네임 불러오기
@@ -62,7 +63,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
 
     // 내가 쓴 글 불러오기
     const q = query(
-      collection(dbService, "list"),
+      collection(dbService, "List"),
       orderBy("createdAt", "desc"),
       where("userId", "==", userId)
     );
@@ -75,6 +76,23 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         return newUserPost;
       });
       setUserPostList(UserPosts);
+    });
+
+    // 내가 쓴 댓글 불러오기
+    const c = query(
+      collection(dbService, "Comment"),
+      orderBy("createdAt", "desc"),
+      where("userId", "==", userId)
+    );
+    onSnapshot(c, (snapshot) => {
+      const UserComments = snapshot.docs.map((doc) => {
+        const newUserComment = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newUserComment;
+      });
+      setUserCommentList(UserComments);
     });
   }, []);
 
@@ -104,7 +122,9 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <MySafeAreaView>
-        {/* <FlatList /> */}
+        {/* <FlatList
+          ListHeaderComponent={
+            <> */}
         <MyNameWrapView>
           <Image
             source={{
@@ -141,51 +161,38 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             }}
           />
         </MyPostView>
-        <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
+        <MyCommentsTitleText>내가 쓴 댓글</MyCommentsTitleText>
         <MyCommentsView>
-          <ScrollView contentContainerStyle={{ width: "90%" }}>
-            <MyCommentsBoxBtn>
-              <MyCommentsCategoryView>
-                <Text>지역 기온</Text>
-              </MyCommentsCategoryView>
-              <MyCommentsContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  여기서 제목이 너무너무 길다면 어떻게 될까요
-                </Text>
-              </MyCommentsContentsView>
-            </MyCommentsBoxBtn>
-            <MyCommentsBoxBtn>
-              <MyCommentsCategoryView>
-                <Text>지역 기온</Text>
-              </MyCommentsCategoryView>
-              <MyCommentsContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  여기서 제목이 너무너무 길다면 어떻게 될까요
-                </Text>
-              </MyCommentsContentsView>
-            </MyCommentsBoxBtn>
-            <MyCommentsBoxBtn>
-              <MyCommentsCategoryView>
-                <Text>지역 기온</Text>
-              </MyCommentsCategoryView>
-              <MyCommentsContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  여기서 제목이 너무너무 길다면 어떻게 될까요
-                </Text>
-              </MyCommentsContentsView>
-            </MyCommentsBoxBtn>
-            <MyCommentsBoxBtn>
-              <MyCommentsCategoryView>
-                <Text>지역 기온</Text>
-              </MyCommentsCategoryView>
-              <MyCommentsContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  여기서 제목이 너무너무 길다면 어떻게 될까요
-                </Text>
-              </MyCommentsContentsView>
-            </MyCommentsBoxBtn>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ width: "90%" }}
+          >
+            {userCommentList.map((co) => (
+              <MyCommentsBoxBtn
+                onPress={() => navigate("Stacks", { screen: "PostDetail" })}
+              >
+                <MyCommentsCategoryView>
+                  <Text>지역...</Text>
+                </MyCommentsCategoryView>
+                <MyCommentsContentsView>
+                  <Text numberOfLines={1} ellipsizeMode="tail">
+                    {co.comment}
+                  </Text>
+                </MyCommentsContentsView>
+              </MyCommentsBoxBtn>
+            ))}
           </ScrollView>
         </MyCommentsView>
+        {/* </> */}
+        {/* } */}
+        {/* contentContainerStyle={{ width: "90%" }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          data={userPostList}
+          renderItem={({ item }) => {
+            return <MyPostList userPost={item} />;
+          }}
+        /> */}
       </MySafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -268,7 +275,7 @@ const MyPostContentsView = styled.View`
   padding-right: 10px;
 `;
 
-// 내가 댓글 단 글
+// 내가 쓴 댓글
 const MyCommentsTitleText = styled(MyPostTitleText)``;
 
 const MyCommentsBoxBtn = styled(MyPostBoxBtn)``;

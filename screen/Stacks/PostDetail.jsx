@@ -27,7 +27,7 @@ import {
   addDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { dbService } from "../../common/firebase";
+import { authService, dbService } from "../../common/firebase";
 // import { async, uuidv4 } from "@firebase/util";
 
 // 1. 상세 페이지 id (댓글을 전체 불러오기) x
@@ -112,7 +112,7 @@ const PostDetail = () => {
   const newComment = {
     nickName,
     // PostId: list.id,
-    // userId: authService.currentUser.uid,
+    userId: authService.currentUser.uid,
     comment: text,
     isEdit: false,
     createdAt: new Date(),
@@ -186,7 +186,6 @@ const PostDetail = () => {
           keyExtractor={(item) => item.id}
         /> */}
 
-
             {commentList.map((el) => {
               return (
                 <ConmmentContentView key={el.id}>
@@ -207,7 +206,6 @@ const PostDetail = () => {
         </CommentScrollView>
       </DetailSafeAreaView>
     </LayoutSafeAreaView>
-
   );
 };
 
