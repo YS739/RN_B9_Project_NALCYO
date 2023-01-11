@@ -45,7 +45,7 @@ const MyPostCategoryView = styled.View`
 `;
 
 const MyPostContentsView = styled.View`
-  width: 40%;
+  width: 70%;
   align-items: center;
   justify-content: center;
   padding-right: 10px;
