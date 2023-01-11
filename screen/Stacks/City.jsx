@@ -10,6 +10,9 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
+  useColorScheme,
+
+
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
@@ -25,6 +28,7 @@ import {
   getDocs,
 } from "@firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
+
 import 구름 from "../../assets/icons/구름.png";
 import 구름_해 from "../../assets/icons/구름_해.png";
 import 구름구름 from "../../assets/icons/구름구름.png";
@@ -36,11 +40,20 @@ import 해 from "../../assets/icons/해.png";
 import 해비 from "../../assets/icons/해비.png";
 import 번개 from "../../assets/icons/번개.png";
 
+import { Ionicons } from "@expo/vector-icons";
+
+
 const City = ({
+  navigation: { navigate, setOptions },
+
   route: {
     params: { WeatherId },
   },
 }) => {
+
+
+  const isDark = useColorScheme() === "dark";
+
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
 
@@ -48,6 +61,7 @@ const City = ({
     ["getWeather", WeatherId],
     getNowWeather
   );
+
 
   const WeatherName = getWeatherData?.name;
 
@@ -195,7 +209,20 @@ const City = ({
     }
   };
 
+
+
   useEffect(() => {
+    setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 15 }}
+          onPress={() => navigate("Tabs", { screen: "Home" })}
+        >
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+
     // 내가 쓴 글 불러오기
     const q = query(
       collection(dbService, "list"),
@@ -222,9 +249,14 @@ const City = ({
   }
 
   return (
-    <View style={{ flex: 1 }}>
+
+<View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
       <SafeAreaView
-        style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
+        style={{
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
+          alignItems: "center",
+          flex: 1,
+        }}
       >
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
@@ -247,6 +279,12 @@ const City = ({
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
+        <PostModal
+          cityId={WeatherId}
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+        />
+
         {/* 글목록 */}
 
         <FlatList

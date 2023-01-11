@@ -4,20 +4,23 @@ import Home from "../screen/Home";
 import { Ionicons } from "@expo/vector-icons";
 import My from "../screen/My";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useColorScheme } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const isDark = useColorScheme() === "dark";
+
   return (
     <Tab.Navigator
       sceneContainerStyle={{
-        backgroundColor: "#97D2EC",
+        backgroundColor: isDark ? "#202020" : "#97d2ec",
       }}
       screenOptions={{
         tabBarLabelPosition: "beside-icon",
-        headerStyle: { backgroundColor: "#97D2EC" },
-        tabBarStyle: { backgroundColor: "#97D2EC" },
-        tabBarActiveTintColor: "blue",
+        headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
+        tabBarStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
+        tabBarActiveTintColor: isDark ? "yellow" : "blue",
         tabBarInactiveTintColor: "white",
       }}
     >
@@ -25,7 +28,13 @@ const Tabs = () => {
         options={{
           title: "",
           headerTitleAlign: "center",
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="weather-sunny" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="weather-sunny"
+              size={size}
+              color={color}
+            />
+          ),
         }}
         name="Home"
         component={Home}
@@ -35,7 +44,13 @@ const Tabs = () => {
           title: null,
           headerTitleAlign: "center",
           tabBarLabel: "",
-          tabBarIcon: ({ color, size }) => <Ionicons name="ios-person-circle-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name="ios-person-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
         }}
         name="My"
         component={My}
