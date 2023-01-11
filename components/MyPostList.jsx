@@ -1,13 +1,14 @@
-import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { View, Text } from "react-native";
 
-
-const CityFlatList = ({ userPost }) => {
+const MyPostList = ({ userPost }) => {
   const navigation = useNavigation();
   return (
-    <CityContentsBtn onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}>
+    <MyPostBoxBtn
+      onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}
+    >
       <MyPostCategoryView>
         <Text>{userPost.category}</Text>
         {/* TODO: 기온은 category가 같은 api의 기온..? */}
@@ -17,22 +18,26 @@ const CityFlatList = ({ userPost }) => {
           {userPost.title}
         </Text>
       </MyPostContentsView>
-    </CityContentsBtn>
+    </MyPostBoxBtn>
   );
 };
-export default CityFlatList;
 
-const CityContentsBtn = styled.TouchableOpacity`
-  height: 40px;
-  width: 325px;
-  margin: 5px;
-  padding-left: 30px;
-  background-color: white;
-  border-radius: 30px;
+export default MyPostList;
+
+// 내가 쓴 글
+
+const MyPostBoxBtn = styled.TouchableOpacity`
+  width: 270px;
+  border: 1px solid #97d2ec;
+  border-radius: 10px;
   align-items: center;
+  justify-content: space-between;
   flex-direction: row;
-  border: 1px solid;
+  margin: 5px 0;
+  padding: 12px 0;
+  background-color: #fffcf1;
 `;
+
 const MyPostCategoryView = styled.View`
   width: 30%;
   margin-left: 10px;

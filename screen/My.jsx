@@ -1,71 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Text, Image, ScrollView, View } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  Image,
+  ScrollView,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+  FlatList,
+} from "react-native";
 import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { getAuth, updateProfile } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import {
-  addDoc,
   collection,
-  onSnapshot,
   query,
   where,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-
+  onSnapshot,
+  orderBy,
+  getDocs,
+} from "@firebase/firestore";
+import MyPostList from "../components/MyPostList";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  const [addName, setAddName] = useState("");
+  // 닉네임 불러오기
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userNickName = user.displayName;
+
+  // 닉네임 수정하기
   const [pressEditBtn, setPressEditBtn] = useState(false);
   const [editName, setEditName] = useState("");
 
+  // 내가 쓴 글 불러오기
+  const userId = user.uid;
+  const [userPostList, setUserPostList] = useState([]);
 
-  // 로그아웃 성공 시 Login Screen으로 이동
-  const logout = () => {
-    signOut(authService)
-      .then(() => {
-        console.log("로그아웃 성공");
-
-        navigate("Stacks", { screen: "Login" });
-
-      })
-      .catch((err) => alert(err));
-  };
-  // FIXME: 현재 로그아웃 안 됨 - can't find variable logout = 현재 유저가 없어서 그런 듯?
-
-  // 닉네임 등록하기
-  const addNickname = async () => {
-    await addDoc(collection(dbService, "nickName"), {
-      // TODO: userId: authService.currentUser?.uid,
-      // 임시 유저 아이디
-      userId: "Yunny",
-      nickName: addName,
-    });
-    setPressEditBtn(false);
-  };
-
-  // 닉네임 수정하기
-  const editNickName = async () => {
-    await updateDoc(doc(dbService, "nickName", addName[0].id), {
-      nickName: editName,
-    });
-    setPressEditBtn(false);
-  };
+  // 내가 쓴 댓글 불러오기
+  const [userCommentList, setUserCommentList] = useState([]);
 
   useEffect(() => {
-    navigation.setOptions({
+    setOptions({
       headerLeft: () => (
-        <TouchableOpacity
-          style={{ marginLeft: 15 }}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
       ),
       // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
       // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
+      // reset으로..?
       headerRight: () => (
         <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
           <Text>로그아웃</Text>
@@ -73,166 +60,141 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       ),
     });
 
-    // 닉네임 불러오기
+    // 내가 쓴 글 불러오기
     const q = query(
-      collection(dbService, "nickName"),
-      where("userId", "==", "Yunny")
-      // TODO: where("userId", "==", authService.currentUser?.uid) 변경하기
+      collection(dbService, "list"),
+      orderBy("createdAt", "desc"),
+      where("userId", "==", userId)
     );
-
-    // 닉네임 변경이 있을 때마다 변화를 감지해서 변경된 닉네임을 가져온다
-    const userNickName = onSnapshot(q, (snapshot) => {
-      const newNickName = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAddName(newNickName);
+    onSnapshot(q, (snapshot) => {
+      const UserPosts = snapshot.docs.map((doc) => {
+        const newUserPost = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newUserPost;
+      });
+      setUserPostList(UserPosts);
     });
-    return userNickName;
   }, []);
 
-  // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기
+  // 닉네임 수정하기
+  const editNickName = async () => {
+    updateProfile(user, {
+      displayName: editName,
+    })
+      .then(() => {
+        setPressEditBtn(false);
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      });
+  };
+
+  // 로그아웃 성공 시 Login Screen으로 이동
+  const logout = () => {
+    signOut(authService)
+      .then(() => {
+        console.log("로그아웃 성공");
+        navigate("Stacks", { screen: "Login" });
+      })
+      .catch((err) => alert(err));
+  };
 
   return (
-    <MyContainerView>
-      <MyNameWrapView>
-        <Image
-          source={{
-            uri: "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png",
-            width: 60,
-            height: 60,
-          }}
-        ></Image>
-        <View>
-          {pressEditBtn ? (
-            <MyNameTextInput
-              onSubmitEditing={() => {
-                addName ? editNickName(addName[0].id) : addNickname();
-              }}
-              onChangeText={(text) => setEditName(text)}
-              defaultValue={addName ? addName[0].nickName : ""}
-              value={addName ? addName : editName}
-              // TODO: defaultValue도 nickName 가져와서 수정하기
-            />
-          ) : (
-            <MyNameText>{addName ? addName[0].nickName : "회원"}</MyNameText>
-            //TODO: addName을authService.currentUser.nickName로 변경. userId가 있다면~
-          )}
-        </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <MySafeAreaView>
+        {/* <FlatList /> */}
+        <MyNameWrapView>
+          <Image
+            source={{
+              uri: "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png",
+              width: 60,
+              height: 60,
+            }}
+          ></Image>
+          <View>
+            {pressEditBtn ? (
+              <MyNameTextInput
+                onSubmitEditing={() => editNickName(editName)}
+                onChangeText={(text) => setEditName(text)}
+                defaultValue={userNickName}
+              />
+            ) : (
+              <MyNameText>{userNickName}</MyNameText>
+            )}
+          </View>
 
-        <TouchableOpacity onPress={() => setPressEditBtn(true)}>
-          <AntDesign name="edit" size={24} color="black" />
-        </TouchableOpacity>
-      </MyNameWrapView>
-      <MyPostTitleText>내가 쓴 글</MyPostTitleText>
-      <MyPostView>
-        <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyPostBoxView>
-            {/* TODO: 기온을 가져오게 되면 실시간으로 변하지 않나? */}
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxView>
-          <MyPostBoxView>
-            <MyPostCategoryView>
-              <Text>지역 기온</Text>
-            </MyPostCategoryView>
-            <MyPostContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                제목
-              </Text>
-            </MyPostContentsView>
-          </MyPostBoxView>
-        </ScrollView>
-      </MyPostView>
-      <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
-      <MyCommentsView>
-        <ScrollView contentContainerStyle={{ width: "90%" }}>
-          <MyCommentsBoxView>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxView>
-          <MyCommentsBoxView>
-            <MyCommentsCategoryView>
-              <Text>지역 기온</Text>
-            </MyCommentsCategoryView>
-            <MyCommentsContentsView>
-              <Text numberOfLines={1} ellipsizeMode="tail">
-                여기서 제목이 너무너무 길다면 어떻게 될까요
-              </Text>
-            </MyCommentsContentsView>
-          </MyCommentsBoxView>
-        </ScrollView>
-      </MyCommentsView>
-    </MyContainerView>
+          <TouchableOpacity onPress={() => setPressEditBtn(true)}>
+            <AntDesign name="edit" size={24} color="black" />
+          </TouchableOpacity>
+        </MyNameWrapView>
+        <MyPostTitleText>내가 쓴 글</MyPostTitleText>
+        <MyPostView>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ width: "90%" }}
+            keyExtractor={(item) => item.id}
+            data={userPostList}
+            renderItem={({ item }) => {
+              return <MyPostList userPost={item} />;
+            }}
+          />
+        </MyPostView>
+        <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
+        <MyCommentsView>
+          <ScrollView contentContainerStyle={{ width: "90%" }}>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+            <MyCommentsBoxBtn>
+              <MyCommentsCategoryView>
+                <Text>지역 기온</Text>
+              </MyCommentsCategoryView>
+              <MyCommentsContentsView>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  여기서 제목이 너무너무 길다면 어떻게 될까요
+                </Text>
+              </MyCommentsContentsView>
+            </MyCommentsBoxBtn>
+          </ScrollView>
+        </MyCommentsView>
+      </MySafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
 export default My;
 
 // Styled Component
-const MyContainerView = styled.View`
+const MySafeAreaView = styled.SafeAreaView`
   flex: 1;
   width: 90%;
   justify-content: center;
@@ -282,7 +244,7 @@ const MyPostView = styled.View`
   align-items: center;
 `;
 
-const MyPostBoxView = styled.View`
+const MyPostBoxBtn = styled.TouchableOpacity`
   width: 270px;
   border: 1px solid #97d2ec;
   border-radius: 10px;
@@ -309,7 +271,7 @@ const MyPostContentsView = styled.View`
 // 내가 댓글 단 글
 const MyCommentsTitleText = styled(MyPostTitleText)``;
 
-const MyCommentsBoxView = styled(MyPostBoxView)``;
+const MyCommentsBoxBtn = styled(MyPostBoxBtn)``;
 
 const MyCommentsView = styled(MyPostView)``;
 

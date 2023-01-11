@@ -6,20 +6,21 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { SafeAreaView } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import { useNavigation } from "@react-navigation/native";
 import Loader from "../../components/Loader";
+// TODO: font - 주석처리 해제
 
-export default function Login({ navigation: { goBack } }) {
+const Login = ({ navigation: { navigate } }) => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const navigation = useNavigation();
 
   const validateInputs = () => {
     if (!email) {
@@ -46,6 +47,7 @@ export default function Login({ navigation: { goBack } }) {
       return true;
     }
   };
+
   const handleLogin = () => {
     // 유효성 검사
     if (validateInputs()) {
@@ -55,17 +57,16 @@ export default function Login({ navigation: { goBack } }) {
     // 로그인 요청
     signInWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인성공");
+        console.log("로그인 성공");
         setEmail("");
         setPw("");
-        goBack();
-
-        // 로그인 화면 이전 화면으로 돌아가기
+        navigate("Tabs", { screen: "Home" });
       })
       .catch((err) => {
         console.log("err.message:", err.message);
         if (err.message.includes("user-not-found")) {
           alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
+          navigate("SignUp");
         }
         if (err.message.includes("wrong-password")) {
           alert("비밀번호가 틀렸습니다.");
@@ -84,13 +85,10 @@ export default function Login({ navigation: { goBack } }) {
   return isLoading ? (
     <Loader />
   ) : (
-    <View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
-        <Image
-          style={styles.Logo}
-          source={require("../../assets/adaptive-icon.png")}
-        />
+        <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
         <View>
           <Text style={styles.email_form_title}>이메일</Text>
           <TextInput
@@ -122,16 +120,17 @@ export default function Login({ navigation: { goBack } }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("SignUp")}
+            onPress={() => navigate("SignUp")}
             style={styles.login_button}
           >
             <Text style={styles.text}>회원가입 하러가기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    </View>
+    </TouchableWithoutFeedback>
   );
-}
+};
+export default Login;
 
 const styles = StyleSheet.create({
   Logo: {
@@ -147,9 +146,12 @@ const styles = StyleSheet.create({
   login_title: {
     marginTop: 50,
     padding: 30,
-    fontSize: 36,
+    fontSize: 44,
     fontWeight: "bold",
+    // fontFamily: "NanumPenScript-Regular",
   },
+
+  titleText: {},
   email_form_title: {
     fontSize: 13,
     padding: 10,

@@ -186,6 +186,7 @@ const PostDetail = () => {
           keyExtractor={(item) => item.id}
         /> */}
 
+
             {commentList.map((el) => {
               return (
                 <ConmmentContentView key={el.id}>
@@ -206,6 +207,7 @@ const PostDetail = () => {
         </CommentScrollView>
       </DetailSafeAreaView>
     </LayoutSafeAreaView>
+
   );
 };
 

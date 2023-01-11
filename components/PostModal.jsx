@@ -1,24 +1,27 @@
 import React, { useState } from "react";
-import { Modal, TouchableWithoutFeedback } from "react-native";
+import { Modal, Keyboard, TouchableWithoutFeedback, Text } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useNavigation } from "@react-navigation/native";
 
 const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
 
-  // 지역 카테고리 선택하기
+  // TODO: 지역 카테고리 수정 및 추가하기
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
+    { label: "강원도 원주", value: "강원도 원주" },
+    { label: "경상남도 부산 ", value: "경상남도 부산" },
+    { label: "경상북도 대구", value: "경상북도 대구" },
     { label: "서울", value: "서울" },
-    { label: "부산", value: "부산" },
-    { label: "청주", value: "청주" },
-    { label: "목포", value: "목포" },
+    { label: "전라남도 광주", value: "전라남도 광주" },
+    { label: "전라북도 전주", value: "전라북도 전주" },
+    { label: "충청남도 천안", value: "충청남도 천안" },
+    { label: "충청북도 청주", value: "충청북도 청주" },
   ]);
 
   // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
@@ -28,11 +31,10 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
 
   // 등록하기 버튼을 누르면 db의 "List" collection에 포스트 데이터가 들어감
   const addPost = async () => {
-    await addDoc(collection(dbService, "List"), {
+    await addDoc(collection(dbService, "list"), {
       title: postTitle,
       content: postContent,
-      // userId: authService.currentUser?.uid,
-      // TODO: login 구현되면 주석 해제하기
+      userId: authService.currentUser?.uid,
       createdAt: new Date(),
       category: value,
     });
@@ -45,52 +47,57 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
 
   return (
     <Modal visible={isOpenModal} transparent animationType="slide">
-      <ModalContainerView>
-        <ModalWrapView>
-          <ModalAddCloseView>
-            <ModalAddPostView>
-              <ModalAddPostButton
-                onPress={addPost}
-                // 제목이나 내용이 입력되지 않으면 버튼 비활성화
-                // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
-                disabled={!postTitle || !postContent || !value}
-                title={screenName === "Detail" ? "수정하기" : "등록하기"}
-              ></ModalAddPostButton>
-            </ModalAddPostView>
-            <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
-              <AntDesign name="close" size={24} color="black" />
-            </ModalCloseBtn>
-          </ModalAddCloseView>
-          <ModalCategoryView>
-            <DropDownPicker
-              open={open}
-              value={value}
-              // TODO: value={screenName === "Detail" ? city.category  : value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder={value ? "city.category" : "지역을 선택해주세요."}
-              //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
-            />
-          </ModalCategoryView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ModalContainerView>
+          <ModalWrapView>
+            <ModalAddCloseView>
+              <ModalAddPostView>
+                <ModalAddPostPressable
+                  onPress={addPost}
+                  // 제목이나 내용이 입력되지 않으면 버튼 비활성화
+                  // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
+                  disabled={!postTitle || !postContent || !value}
+                >
+                  <ModalAddBtnText>
+                    {screenName === "Detail" ? "수정하기" : "등록하기"}
+                  </ModalAddBtnText>
+                </ModalAddPostPressable>
+              </ModalAddPostView>
+              <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
+                <AntDesign name="close" size={24} color="black" />
+              </ModalCloseBtn>
+            </ModalAddCloseView>
+            <ModalCategoryView>
+              <DropDownPicker
+                open={open}
+                value={value}
+                // TODO: value={screenName === "Detail" ? city.category  : value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                placeholder={value ? "city.category" : "지역을 선택해주세요."}
+                //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
+              />
+            </ModalCategoryView>
 
-          <ModalTitleTextInput
-            autoFocus
-            value={postTitle}
-            onChangeText={(title) => setPostTitle(title)}
-            placeholder="제목을 입력해주세요."
-          />
-          <ModalContentTexInput
-            value={postContent}
-            onChangeText={(content) => setPostContent(content)}
-            textAlignVertical="top"
-            multiline
-            maxLength={300}
-            placeholder="내용을 입력해주세요."
-          />
-        </ModalWrapView>
-      </ModalContainerView>
+            <ModalTitleTextInput
+              autoFocus
+              value={postTitle}
+              onChangeText={(title) => setPostTitle(title)}
+              placeholder="제목을 입력해주세요."
+            />
+            <ModalContentTexInput
+              value={postContent}
+              onChangeText={(content) => setPostContent(content)}
+              textAlignVertical="top"
+              multiline
+              maxLength={300}
+              placeholder="내용을 입력해주세요."
+            />
+          </ModalWrapView>
+        </ModalContainerView>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -130,15 +137,12 @@ const ModalAddPostView = styled.View`
   align-items: center;
 `;
 
-const ModalAddPostButton = styled.Button`
-  :active&:focus&:enabled {
-    color: black;
-  }
-  :enabled {
-    color: black;
-  }
+const ModalAddPostPressable = styled.Pressable``;
+
+const ModalAddBtnText = styled.Text`
+  font-size: 16px;
+  color: black;
 `;
-// TODO: enabled됐을 때 색 파란색말고 다른 색으로 바꾸기..
 
 const ModalCloseBtn = styled.TouchableOpacity`
   position: absolute;

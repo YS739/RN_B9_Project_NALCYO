@@ -1,46 +1,131 @@
 import styled from "@emotion/native";
 import koreaimg from "../assets/koreaimg.png";
-import React, { useEffect, useState } from "react";
+import React, { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { authService } from "../common/firebase";
 
-import Loader from "../components/Loader";
 
-const Home = ({ navigation: { navigate } }) => {
-  <WrapSafeAreaView>
-    <ContainerView>
-      <SmallContainerView>
-        <WrapView>
-          <KoreaImage source={koreaimg} />
-          <SeoulBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>인천/서울/경기</HomeText>
-          </SeoulBtn>
-          <GangwonBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>강원도</HomeText>
-          </GangwonBtn>
-          <GyongBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>경상북도</HomeText>
-          </GyongBukBtn>
-          <GyongNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>경상남도</HomeText>
-          </GyongNamBtn>
-          <JeonBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>전라북도</HomeText>
-          </JeonBukBtn>
-          <JeonNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>전라남도</HomeText>
-          </JeonNamBtn>
-          <ChungBukBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>충청북도</HomeText>
-          </ChungBukBtn>
-          <ChungNamBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>충청남도</HomeText>
-          </ChungNamBtn>
-          <Jeju onPress={() => navigate("Stacks", { screen: "City" })}>
-            <HomeText>제주도</HomeText>
-          </Jeju>
-        </WrapView>
-      </SmallContainerView>
-    </ContainerView>
-  </WrapSafeAreaView>;
+const Home = ({ navigation: { navigate, reset } }) => {
+  useFocusEffect(
+    useCallback(() => {
+      if (!authService.currentUser) {
+        //Tab의 첫화면인 Home에서 바로 로그인화면으로 이동
+        reset({
+          routes: [
+            {
+              name: "Stacks",
+              params: {
+                screen: "Login",
+              },
+            },
+          ],
+        });
+        return;
+      }
+    })
+  );
+
+  return (
+    <WrapSafeAreaView>
+      <ContainerView>
+        <SmallContainerView>
+          <WrapView>
+            <KoreaImage source={koreaimg} />
+            <SeoulBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1835848 },
+                })
+              }
+            >
+              <HomeText>인천/서울/경기</HomeText>
+            </SeoulBtn>
+            <GangwonBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1833105 },
+                })
+              }
+            >
+              <HomeText>강원도</HomeText>
+            </GangwonBtn>
+            <GyongBukBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1835329 },
+                })
+              }
+            >
+              <HomeText>경상북도</HomeText>
+            </GyongBukBtn>
+            <GyongNamBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1838524 },
+                })
+              }
+            >
+              <HomeText>경상남도</HomeText>
+            </GyongNamBtn>
+            <JeonBukBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1845457 },
+                })
+              }
+            >
+              <HomeText>전라북도</HomeText>
+            </JeonBukBtn>
+            <JeonNamBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1841811 },
+                })
+              }
+            >
+              <HomeText>전라남도</HomeText>
+            </JeonNamBtn>
+            <ChungBukBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1845604 },
+                })
+              }
+            >
+              <HomeText>충청북도</HomeText>
+            </ChungBukBtn>
+            <ChungNamBtn
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1845759 },
+                })
+              }
+            >
+              <HomeText>충청남도</HomeText>
+            </ChungNamBtn>
+            <Jeju
+              onPress={() =>
+                navigate("Stacks", {
+                  screen: "City",
+                  params: { WeatherId: 1846266 },
+                })
+              }
+            >
+              <HomeText>제주도</HomeText>
+            </Jeju>
+          </WrapView>
+        </SmallContainerView>
+      </ContainerView>
+    </WrapSafeAreaView>
+  );
 };
 
 export default Home;
