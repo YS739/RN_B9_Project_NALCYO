@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = ({ navigation: { navigate } }) => {
+const Tabs = () => {
   return (
     <Tab.Navigator
       sceneContainerStyle={{
@@ -25,13 +25,7 @@ const Tabs = ({ navigation: { navigate } }) => {
         options={{
           title: "",
           headerTitleAlign: "center",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              size={size}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="weather-sunny" size={size} color={color} />,
         }}
         name="Home"
         component={Home}
@@ -41,13 +35,7 @@ const Tabs = ({ navigation: { navigate } }) => {
           title: null,
           headerTitleAlign: "center",
           tabBarLabel: "",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="ios-person-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="ios-person-circle-outline" size={size} color={color} />,
         }}
         name="My"
         component={My}
