@@ -18,19 +18,18 @@ const CityFlatList = () => {
   }, []);
 
   return (
-    <ScrollView style={{ flex: 1, width: "90%" }}>
-      <FlatList
-        data={myData}
-        renderItem={({ item }) => {
-          return (
-            <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-              <Text>{item.nickname}</Text>
-              <Text style={{ left: 100 }}> {item.title}</Text>
-            </CityContentsBtn>
-          );
-        }}
-      />
-    </ScrollView>
+    <FlatList
+      style={{ flex: 1, width: "90%" }}
+      data={myData}
+      renderItem={({ item }) => {
+        return (
+          <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+            <Text>{item.nickname}</Text>
+            <Text style={{ left: 100 }}> {item.title}</Text>
+          </CityContentsBtn>
+        );
+      }}
+    />
   );
 };
 
