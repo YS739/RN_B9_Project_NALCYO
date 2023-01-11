@@ -8,25 +8,22 @@ import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
 import { collection, query, where, onSnapshot, orderBy, getDocs } from "@firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
-const City = () => {
+
+const City = ({
+  route: {
+    params: { WeatherId },
+  },
+}) => {
+
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
 
-  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather"], getNowWeather);
+  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
+    ["getWeather", WeatherId],
+    getNowWeather
+  );
 
-  console.log("getWeatherData:", getWeatherData);
-
-  const CityChange = (val) => {
-    switch (val) {
-      case "Jeonju":
-        "전북";
-        break;
-      case "Seoul":
-        "서울 / 인천 / 경기";
-    }
-  };
-
-  const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
+  console.log(getWeatherData);
 
   useEffect(() => {
     // 내가 쓴 글 불러오기
