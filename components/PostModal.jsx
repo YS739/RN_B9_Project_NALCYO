@@ -14,15 +14,15 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: "강원도 원주", value: "원주" },
-    { label: "경상남도 부산 ", value: "부산" },
-    { label: "경상북도 대구", value: "대구" },
-    { label: "서울", value: "서울" },
-    { label: "전라남도 광주", value: "광주" },
-    { label: "전라북도 전주", value: "전주" },
+    { label: "강원도 원주", value: "원주", WeatherId: 1835329 },
+    { label: "경상남도 부산 ", value: "부산", WeatherId: 1845457 },
+    { label: "경상북도 대구", value: "대구", WeatherId: 1838524 },
+    { label: "서울", value: "서울", WeatherId: 1833105 },
+    { label: "전라남도 광주", value: "광주", WeatherId: 1845604 },
+    { label: "전라북도 전주", value: "전주", WeatherId: 1841811 },
     { label: "제주도", value: "제주도" },
-    { label: "충청남도 천안", value: "천안" },
-    { label: "충청북도 청주", value: "청주" },
+    { label: "충청남도 천안", value: "천안", WeatherId: 1846266 },
+    { label: "충청북도 청주", value: "청주", WeatherId: 1845759 },
   ]);
 
   // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
@@ -38,7 +38,7 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
       userId: authService.currentUser?.uid,
       createdAt: new Date(),
       category: value,
-      cityId: cityId,
+      WeatherId: WeatherId,
     });
     // 포스트가 등록되면 모달이 닫히고 input, 카테고리 선택 초기화
     setIsOpenModal(false);
@@ -60,9 +60,7 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
                   // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
                   disabled={!postTitle || !postContent || !value}
                 >
-                  <ModalAddBtnText>
-                    {screenName === "Detail" ? "수정하기" : "등록하기"}
-                  </ModalAddBtnText>
+                  <ModalAddBtnText>{screenName === "Detail" ? "수정하기" : "등록하기"}</ModalAddBtnText>
                 </ModalAddPostPressable>
               </ModalAddPostView>
               <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
@@ -83,20 +81,8 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
               />
             </ModalCategoryView>
 
-            <ModalTitleTextInput
-              autoFocus
-              value={postTitle}
-              onChangeText={(title) => setPostTitle(title)}
-              placeholder="제목을 입력해주세요."
-            />
-            <ModalContentTexInput
-              value={postContent}
-              onChangeText={(content) => setPostContent(content)}
-              textAlignVertical="top"
-              multiline
-              maxLength={300}
-              placeholder="내용을 입력해주세요."
-            />
+            <ModalTitleTextInput autoFocus value={postTitle} onChangeText={(title) => setPostTitle(title)} placeholder="제목을 입력해주세요." />
+            <ModalContentTexInput value={postContent} onChangeText={(content) => setPostContent(content)} textAlignVertical="top" multiline maxLength={300} placeholder="내용을 입력해주세요." />
           </ModalWrapView>
         </ModalContainerView>
       </TouchableWithoutFeedback>

@@ -126,7 +126,7 @@ const PostDetail = ({ route }) => {
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
-              <CommentAddTextInput onSubmitEditing={addCommentList} onChangeText={setText} value={text}></CommentAddTextInput>
+              <CommentAddTextInput onChangeText={setText} value={text}></CommentAddTextInput>
               <CommentAddBtn onPress={addCommentList}>
                 <Text>댓글 달기</Text>
               </CommentAddBtn>

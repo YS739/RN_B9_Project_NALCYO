@@ -8,25 +8,19 @@ import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
 import { collection, query, where, onSnapshot, orderBy, getDocs } from "@firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
-const City = () => {
+import { Ionicons } from "@expo/vector-icons";
+
+const City = ({
+  navigation: { navigate, setOptions },
+
+  route: {
+    params: { WeatherId },
+  },
+}) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
 
-  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather"], getNowWeather);
-
-  console.log("getWeatherData:", getWeatherData);
-
-  const CityChange = (val) => {
-    switch (val) {
-      case "Jeonju":
-        "전북";
-        break;
-      case "Seoul":
-        "서울 / 인천 / 경기";
-    }
-  };
-
-  const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
+  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather", WeatherId], getNowWeather);
 
   useEffect(() => {
     setOptions({
@@ -45,6 +39,8 @@ const City = () => {
         const newUserPost = {
           id: doc.id,
           ...doc.data(),
+
+          //filter(cityid == item.cityid)
         };
         return newUserPost;
       });
