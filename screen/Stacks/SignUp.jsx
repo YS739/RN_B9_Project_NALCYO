@@ -77,7 +77,7 @@ const SignUp = ({ navigation: { navigate } }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView
         style={{
-          backgroundColor: isDark ? "#15147a" : "#97d2ec",
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
           alignItems: "center",
           height: 900,
         }}

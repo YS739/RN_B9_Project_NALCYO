@@ -131,7 +131,7 @@ const PostDetail = () => {
   };
   return (
     <LayoutSafeAreaView
-      style={{ backgroundColor: isDark ? "#15147a" : "#97d2ec" }}
+      style={{ backgroundColor: isDark ? "#202020" : "#97d2ec" }}
     >
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>

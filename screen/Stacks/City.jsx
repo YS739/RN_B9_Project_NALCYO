@@ -70,10 +70,10 @@ const City = ({
   }
 
   return (
-    <View style={{ backgroundColor: isDark ? "#15147a" : "#97d2ec", flex: 1 }}>
+    <View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
       <SafeAreaView
         style={{
-          backgroundColor: isDark ? "#15147a" : "#97d2ec",
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
           alignItems: "center",
           flex: 1,
         }}

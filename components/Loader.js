@@ -34,7 +34,7 @@ const Loader = (props) => {
     >
       <ContainerView
         style={{
-          backgroundColor: isDark ? "#15147a" : "#97d2ec",
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
         }}
       >
         <WrapContainerView>

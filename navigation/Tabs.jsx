@@ -14,12 +14,12 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       sceneContainerStyle={{
-        backgroundColor: isDark ? "#15147a" : "#97d2ec",
+        backgroundColor: isDark ? "#202020" : "#97d2ec",
       }}
       screenOptions={{
         tabBarLabelPosition: "beside-icon",
-        headerStyle: { backgroundColor: isDark ? "#15147a" : "#97d2ec" },
-        tabBarStyle: { backgroundColor: isDark ? "#15147a" : "#97d2ec" },
+        headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
+        tabBarStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         tabBarActiveTintColor: isDark ? "yellow" : "blue",
         tabBarInactiveTintColor: "white",
       }}

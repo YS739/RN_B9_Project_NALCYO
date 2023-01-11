@@ -15,7 +15,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
   return (
     <NativeStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: isDark ? "#15147a" : "#97d2ec" },
+        headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         headerTitleAlign: "center",
         headerLeft: () => (
           <TouchableOpacity onPress={() => goBack()}>
