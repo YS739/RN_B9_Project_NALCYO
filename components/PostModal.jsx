@@ -55,7 +55,7 @@ const PostModal = ({
   };
 
   // 본문 수정하기
-  const editPost = async () => {
+  const editPost = async (id) => {
     const editPostRef = doc(dbService, "list", id);
     await updateDoc(editPostRef, {
       title: editTitle,
@@ -73,7 +73,11 @@ const PostModal = ({
             <ModalAddCloseView>
               <ModalAddPostView>
                 <ModalAddPostPressable
-                  onPress={screenName === "Detail" ? editPost : addPost}
+                  onPress={
+                    screenName === "Detail"
+                      ? editPost(detailPost[0]?.id)
+                      : addPost
+                  }
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                   // TODO: || !value 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
                   disabled={!postTitle || !postContent}
