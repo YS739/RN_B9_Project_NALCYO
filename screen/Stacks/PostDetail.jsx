@@ -69,6 +69,7 @@ const PostDetail = ({ route }) => {
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
+
   // console.log("list=", DetailList);
   useEffect(() => {
     // 댓글
@@ -157,6 +158,7 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
   // 댓글 수정 / 토글 수정알림창
   const updateCommentListAlert = (id) => {
     Alert.alert(
@@ -233,38 +235,39 @@ const PostDetail = ({ route }) => {
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
-          <DetailContentWrapView>
-            <WeatherView>
-              <Text>해당 지역 날씨</Text>
-            </WeatherView>
-            <TitleView>
-              <Text>{DetailList[0]?.title}</Text>
-            </TitleView>
-            <NickNameView>
-              <Text>닉네임</Text>
-            </NickNameView>
-            <ContentView>
-              <ContentText>{DetailList[0]?.content}</ContentText>
-            </ContentView>
-            <ModifyWrap>
-              <ModifyBtn>
-                <Text>수정 하기</Text>
-                <AntDesign name="edit" size={24} color="black" />
-              </ModifyBtn>
+          {DetailList.map((list) => (
+            <DetailContentWrapView key={list.id}>
+              <WeatherView>
+                <Text>해당 지역 날씨</Text>
+              </WeatherView>
+              <TitleView>
+                <Text>{list.title}</Text>
+              </TitleView>
+              <NickNameView>
+                <Text>닉네임</Text>
+              </NickNameView>
+              <ContentView>
+                <ContentText>{list.content}</ContentText>
+              </ContentView>
+              <ModifyWrap>
+                <ModifyBtn onPress={() => setIsOpenModal(true)}>
+                  <Text>수정 하기</Text>
+                  <AntDesign name="edit" size={24} color="black" />
+                </ModifyBtn>
+                <PostModal
+                  detailPost={list}
+                  screenName={screenName}
+                  isOpenModal={isOpenModal}
+                  setIsOpenModal={setIsOpenModal}
+                />
 
-              <PostModal
-                detailPost={DetailList}
-                screenName={screenName}
-                isOpenModal={isOpenModal}
-                setIsOpenModal={setIsOpenModal}
-              />
-
-              <ModifyBtn>
-                <Text>삭제 하기</Text>
-                <FontAwesome name="trash-o" size={24} color="black" />
-              </ModifyBtn>
-            </ModifyWrap>
-          </DetailContentWrapView>
+                <ModifyBtn>
+                  <Text>삭제 하기</Text>
+                  <FontAwesome name="trash-o" size={24} color="black" />
+                </ModifyBtn>
+              </ModifyWrap>
+            </DetailContentWrapView>
+          ))}
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>

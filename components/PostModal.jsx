@@ -19,6 +19,8 @@ const PostModal = ({
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
 
+  console.log(detailPost);
+
   // 본문 등록하기
   const addPost = async () => {
     await addDoc(collection(dbService, "list"), {
@@ -34,7 +36,6 @@ const PostModal = ({
     setIsOpenModal(false);
     setPostTitle("");
     setPostContent("");
-    setValue("");
   };
 
   // 본문 수정하기
@@ -45,6 +46,14 @@ const PostModal = ({
       content: editContent,
     });
     setIsOpenModal(false);
+    // setEditTitle("");
+    // setEditContent("");
+    // .then(() => {
+    //   setIsOpenModal(false);
+    // })
+    // .catch((error) => {
+    //   console.log("error:", error);
+    // });
   };
 
   return (
@@ -54,17 +63,20 @@ const PostModal = ({
           <ModalWrapView>
             <ModalAddCloseView>
               <ModalAddPostView>
-                <ModalAddPostPressable
-                  onPress={
-                    screenName === "Detail" ? editPost(detailPost?.id) : addPost
-                  }
+                <ModalAddPostBtn
+                  onPress={detailPost ? editPost(detailPost.id) : addPost}
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
-                  disabled={!postTitle || !postContent}
+                  disabled={
+                    detailPost
+                      ? !editTitle || !editContent
+                      : !postTitle || !postContent
+                  }
+                  title={detailPost ? "수정하기" : "등록하기"}
                 >
-                  <ModalAddBtnText>
-                    {screenName === "Detail" ? "수정하기" : "등록하기"}
-                  </ModalAddBtnText>
-                </ModalAddPostPressable>
+                  {/* <ModalAddBtnText>
+                    {detailPost ? "수정하기" : "등록하기"}
+                  </ModalAddBtnText> */}
+                </ModalAddPostBtn>
               </ModalAddPostView>
               <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
                 <AntDesign name="close" size={24} color="black" />
@@ -74,7 +86,7 @@ const PostModal = ({
 
             <ModalTitleTextInput
               autoFocus
-              defaultValue={detailPost ?? detailPost?.content}
+              defaultValue={detailPost ? detailPost?.title : ""}
               // value={postTitle}
               onChangeText={(title) =>
                 detailPost ? setEditTitle(title) : setPostTitle(title)
@@ -135,7 +147,7 @@ const ModalAddPostView = styled.View`
   align-items: center;
 `;
 
-const ModalAddPostPressable = styled.Pressable``;
+const ModalAddPostBtn = styled.Button``;
 
 const ModalCityNameText = styled.Text`
   font-size: 20px;
