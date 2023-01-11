@@ -7,30 +7,42 @@ import { dbService } from "../common/firebase";
 
 const CityFlatList = () => {
   const navigate = useNavigation();
-  const [myData, setMyData] = useState([]);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      const docSnap = await getDoc(doc(dbService, "List"));
-      setMyData(docSnap.data());
-    };
-
-    fetchPost();
-  }, []);
-
   return (
-    <FlatList
-      style={{ flex: 1, width: "90%" }}
-      data={myData}
-      renderItem={({ items }) => {
-        return (
-          <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <Text>{items.nickname}</Text>
-            <Text style={{ left: 100 }}> {items.title}</Text>
-          </CityContentsBtn>
-        );
-      }}
-    />
+    <ScrollView style={{ flex: 1, width: "90%" }}>
+      <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+      <CityContentsBtn>
+        <Text>닉네임</Text>
+        <Text style={{ left: 100 }}> 제 목</Text>
+      </CityContentsBtn>
+    </ScrollView>
   );
 };
 
