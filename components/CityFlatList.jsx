@@ -1,52 +1,24 @@
 import React from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
-import { useState, useEffect } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
-const CityFlatList = () => {
+const CityFlatList = ({ userPost }) => {
   const navigation = useNavigation();
   return (
-    <ScrollView style={{ flex: 1, width: "90%" }}>
-      <CityContentsBtn
-        onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}
-      >
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-      <CityContentsBtn>
-        <Text>닉네임</Text>
-        <Text style={{ left: 100 }}> 제 목</Text>
-      </CityContentsBtn>
-    </ScrollView>
+    <CityContentsBtn onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}>
+      <MyPostCategoryView>
+        <Text>{userPost.category}</Text>
+        {/* TODO: 기온은 category가 같은 api의 기온..? */}
+      </MyPostCategoryView>
+      <MyPostContentsView>
+        <Text numberOfLines={1} ellipsizeMode="tail">
+          {userPost.title}
+        </Text>
+      </MyPostContentsView>
+    </CityContentsBtn>
   );
 };
-
 export default CityFlatList;
 
 const CityContentsBtn = styled.TouchableOpacity`
@@ -60,10 +32,14 @@ const CityContentsBtn = styled.TouchableOpacity`
   flex-direction: row;
   border: 1px solid;
 `;
+const MyPostCategoryView = styled.View`
+  width: 30%;
+  margin-left: 10px;
+`;
 
-const CityLoader = styled.View`
-  flex: 1;
-  justify-content: center;
+const MyPostContentsView = styled.View`
+  width: 70%;
   align-items: center;
-  background-color: #97d2ec;
+  justify-content: center;
+  padding-right: 10px;
 `;

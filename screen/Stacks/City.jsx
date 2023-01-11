@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
-
+import { collection, query, where, onSnapshot, orderBy, getDocs } from "@firebase/firestore";
+import { authService, dbService } from "../../common/firebase";
 const City = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [userPostList, setUserPostList] = useState([]);
 
-  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
-    ["getWeather"],
-    getNowWeather
-  );
+  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather"], getNowWeather);
 
   console.log("getWeatherData:", getWeatherData);
 
@@ -38,6 +28,21 @@ const City = () => {
 
   const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
 
+  useEffect(() => {
+    // 내가 쓴 글 불러오기
+    const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const UserPosts = snapshot.docs.map((doc) => {
+        const newUserPost = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newUserPost;
+      });
+      setUserPostList(UserPosts);
+    });
+  }, []);
+
   if (isLoadingWD) {
     return (
       <CityLoader>
@@ -48,9 +53,7 @@ const City = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <SafeAreaView
-        style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
-      >
+      <SafeAreaView style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}>
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
@@ -59,9 +62,7 @@ const City = () => {
                 uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
-            <WeatherMainText>
-              {getWeatherData?.weather[0]?.main}
-            </WeatherMainText>
+            <WeatherMainText>{getWeatherData?.weather[0]?.main}</WeatherMainText>
             <WeatherTemperatureText>
               {Math.round(getWeatherData?.main?.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
@@ -75,7 +76,16 @@ const City = () => {
           <Text>글쓰기</Text>
         </CityWriteBtn>
         {/* 글목록 */}
-        <CityFlatList style={{ flex: 1, backgroundcolor: "red" }} />
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ width: "90%" }}
+          keyExtractor={(item) => item.id}
+          data={userPostList}
+          renderItem={({ item }) => {
+            return <CityFlatList userPost={item} />;
+          }}
+        />
       </SafeAreaView>
     </View>
   );
@@ -91,14 +101,12 @@ const WeatherContainer = styled.TouchableOpacity`
   background-color: white;
   border-radius: 30px;
   padding: 10px;
-
   box-shadow: 5px 5px 2px black;
 `;
 
 const WeatherWrap = styled.View`
   width: 60%;
   height: 70%;
-
   border-radius: 30px;
   flex-direction: row;
 `;
@@ -126,7 +134,6 @@ const WeatherMainText = styled.Text`
   font-size: 40px;
   top: 15px;
   align-content: center;
-
   width: 80%;
   height: 40%;
   text-align: center;
