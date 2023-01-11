@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
@@ -9,11 +9,12 @@ const CityFlatList = () => {
   const navigate = useNavigation();
   const [myData, setMyData] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchPost = async () => {
-      const docSnap = await getDoc(doc(dbService, "list"));
+      const docSnap = await getDoc(doc(dbService, "List"));
       setMyData(docSnap.data());
     };
+
     fetchPost();
   }, []);
 
@@ -21,11 +22,11 @@ const CityFlatList = () => {
     <FlatList
       style={{ flex: 1, width: "90%" }}
       data={myData}
-      renderItem={({ item }) => {
+      renderItem={({ items }) => {
         return (
           <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
-            <Text>{item.nickname}</Text>
-            <Text style={{ left: 100 }}> {item.title}</Text>
+            <Text>{items.nickname}</Text>
+            <Text style={{ left: 100 }}> {items.title}</Text>
           </CityContentsBtn>
         );
       }}

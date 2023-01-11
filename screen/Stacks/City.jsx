@@ -8,6 +8,7 @@ import PostModal from "../../components/PostModal";
 import { FlatList } from "react-native-gesture-handler";
 
 const City = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [nowWeather, setNowWeather] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,8 +36,6 @@ const City = () => {
       </CityLoader>
     );
   }
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (
     <View style={{ flex: 1 }}>
