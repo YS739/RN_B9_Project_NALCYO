@@ -41,9 +41,6 @@ const City = ({
     ["getWeather", WeatherId],
     getNowWeather
   );
-
-  console.log(getWeatherData);
-
   useEffect(() => {
     setOptions({
       headerLeft: () => (
@@ -55,6 +52,7 @@ const City = ({
         </TouchableOpacity>
       ),
     });
+
     // 내가 쓴 글 불러오기
     const q = query(
       collection(dbService, "list"),
@@ -85,7 +83,6 @@ const City = ({
       <SafeAreaView
         style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
       >
-        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
@@ -108,8 +105,13 @@ const City = ({
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
-        {/* 글목록 */}
+        <PostModal
+          cityId={WeatherId}
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+        />
 
+        {/* 글목록 */}
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}
