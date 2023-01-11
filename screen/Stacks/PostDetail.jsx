@@ -13,6 +13,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   StyleSheet,
+  useColorScheme,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
@@ -58,6 +59,16 @@ const PostDetail = ({ route }) => {
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
+  const isDark = useColorScheme() === "dark";
+  useEffect(() => {
+    // 특정 댓글 get
+    // const getComment = async () => {
+    //   const snapshot = await getDoc(doc(dbService, "Comment"));
+    //   setComment(snapshot.data().comment);
+    //   setNickName(snapshot.data().nickName);
+    // };
+    // getComment();
+
 
   const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
   // console.log("DetailcommentList:", DetailcommentList);
@@ -124,7 +135,9 @@ const PostDetail = ({ route }) => {
   //
 
   return (
-    <LayoutSafeAreaView>
+    <LayoutSafeAreaView
+      style={{ backgroundColor: isDark ? "#202020" : "#97d2ec" }}
+    >
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
@@ -171,8 +184,8 @@ const PostDetail = ({ route }) => {
             </CommentAddView>
 
 
-            {DetailcommentList.map((el) => {
 
+            {DetailcommentList.map((el) => {
               return (
                 <ConmmentContentView key={el.id}>
                   <Text>{el?.nickName}</Text>
@@ -218,7 +231,7 @@ const styles = StyleSheet.create({
 
 const LayoutSafeAreaView = styled.SafeAreaView`
   width: 100%;
-  background-color: #97d2ec;
+  /* background-color: #97d2ec; */
 `;
 
 const DetailSafeAreaView = styled.SafeAreaView`

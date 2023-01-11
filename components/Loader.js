@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "@emotion/native";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, useColorScheme } from "react-native";
 import icon from "../assets/icon1.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { Animated } from "react-native";
 
 const Loader = (props) => {
+  const isDark = useColorScheme() === "dark";
   const [isReady, setIsReady] = useState(false);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -31,13 +32,24 @@ const Loader = (props) => {
         opacity: fadeAnim,
       }}
     >
-      <ContainerView>
+      <ContainerView
+        style={{
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
+        }}
+      >
         <WrapContainerView>
           <WrapView>
             <IconImage source={icon} />
-            <TittleText>오늘 날°C요</TittleText>
-            <ActivityIndicator size="large" color={"#15147a"} />
-            <LoadingText>Loading...</LoadingText>
+            <TittleText style={{ color: isDark ? "white" : "dark" }}>
+              오늘 날°C요
+            </TittleText>
+            <ActivityIndicator
+              size="large"
+              color={isDark ? "white" : "#15147a"}
+            />
+            <LoadingText style={{ color: isDark ? "white" : "dark" }}>
+              Loading...
+            </LoadingText>
           </WrapView>
         </WrapContainerView>
       </ContainerView>
@@ -56,7 +68,7 @@ export default Loader;
 const ContainerView = styled.View`
   width: 100%;
   height: 100%;
-  background-color: #97d2ec;
+  /* background-color: #97d2ec; */
 `;
 
 const WrapContainerView = styled.View`
