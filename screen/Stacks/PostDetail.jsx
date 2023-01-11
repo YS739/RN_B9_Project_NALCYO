@@ -13,6 +13,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
@@ -98,6 +99,91 @@ const PostDetail = ({ route }) => {
     createdAt: new Date(),
   };
 
+  // 댓글 추가 알람창
+  const addCommentListAlert = () => {
+    Alert.alert(
+      "추가",
+      "정말로 추가하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "추가",
+          onPress: () => {
+            addCommentList();
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+  // 댓글 삭제 알림창
+  const deleteCommentListAlert = (id) => {
+    Alert.alert(
+      "삭제",
+      "정말로 삭제하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "삭제",
+          onPress: () => {
+            deleteCommentList(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+  // 댓글 수정 / 토글 수정알림창
+  const updateCommentListAlert = (id) => {
+    Alert.alert(
+      "수정완료",
+      "정말로 수정완료하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "수정완료",
+          onPress: () => {
+            editCommentList(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+  const updateToggleCommentListAlert = (id) => {
+    Alert.alert(
+      "수정",
+      "정말로 수정하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "수정",
+          onPress: () => {
+            toggleEdit(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+  // 댓글 수정 완료 알림창
+
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
@@ -158,12 +244,12 @@ const PostDetail = ({ route }) => {
             <CommentAddView>
               <CommentAddTextInputView>
                 <CommentAddTextInput
-                  onSubmitEditing={addCommentList}
+                  onSubmitEditing={() => addCommentListAlert()}
                   onChangeText={setText}
                   value={text}
                 ></CommentAddTextInput>
               </CommentAddTextInputView>
-              <CommentAddBtn onPress={addCommentList}>
+              <CommentAddBtn onPress={() => addCommentListAlert()}>
                 <Text>댓글 달기</Text>
               </CommentAddBtn>
             </CommentAddView>
@@ -174,13 +260,17 @@ const PostDetail = ({ route }) => {
                   <EditCommentTextInput
                     value={editText}
                     onChangeText={setEditText}
-                    onSubmitEditing={() => editCommentList(el.id)}
+                    onSubmitEditing={() => updateCommentListAlert(el.id)}
                   ></EditCommentTextInput>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity onPress={() => editCommentList(el.id)}>
+                    <TouchableOpacity
+                      onPress={() => updateCommentListAlert(el.id)}
+                    >
                       <AntDesign name="edit" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => deleteCommentList(el.id)}>
+                    <TouchableOpacity
+                      onPress={() => deleteCommentListAlert(el.id)}
+                    >
                       <FontAwesome name="trash-o" size={24} color="black" />
                     </TouchableOpacity>
                   </CommentContentIconBtnView>
@@ -190,10 +280,14 @@ const PostDetail = ({ route }) => {
                   <Text>{el?.nickName}</Text>
                   <Text>{el?.comment}</Text>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity onPress={() => toggleEdit(el.id)}>
+                    <TouchableOpacity
+                      onPress={() => updateToggleCommentListAlert(el.id)}
+                    >
                       <AntDesign name="edit" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => deleteCommentList(el.id)}>
+                    <TouchableOpacity
+                      onPress={() => deleteCommentListAlert(el.id)}
+                    >
                       <FontAwesome name="trash-o" size={24} color="black" />
                     </TouchableOpacity>
                   </CommentContentIconBtnView>
@@ -364,10 +458,9 @@ const EditCommentTextInput = styled.TextInput`
 `;
 
 // style
-// 1.input text indent 글자 들여쓰기
 // 2.댓글 양쪽 마진값
 // 3.댓글 버튼 2개 마진값
 // 4.본문 수정하기 삭제하기 마진값
 
 // 기능
-// 1. 유효성 검사 해야함 / alert창 만들어서 지우기 수정 해야함
+// 1. 유효성 검사 해야함
