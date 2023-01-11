@@ -5,10 +5,12 @@ import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
 const CityFlatList = () => {
-  const navigate = useNavigation();
+  const navigation = useNavigation();
   return (
     <ScrollView style={{ flex: 1, width: "90%" }}>
-      <CityContentsBtn onPress={() => navigate("Stacks", { screen: "City" })}>
+      <CityContentsBtn
+        onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}
+      >
         <Text>닉네임</Text>
         <Text style={{ left: 100 }}> 제 목</Text>
       </CityContentsBtn>

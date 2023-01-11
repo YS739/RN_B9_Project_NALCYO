@@ -7,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
@@ -58,7 +60,7 @@ const Login = ({ navigation: { navigate } }) => {
         console.log("로그인 성공");
         setEmail("");
         setPw("");
-        navigate("Home");
+        navigate("Tabs", { screen: "Home" });
       })
       .catch((err) => {
         console.log("err.message:", err.message);
@@ -83,7 +85,7 @@ const Login = ({ navigation: { navigate } }) => {
   return isLoading ? (
     <Loader />
   ) : (
-    <View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.login_title}>오늘 날°C요 </Text>
         <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
@@ -125,7 +127,7 @@ const Login = ({ navigation: { navigate } }) => {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 export default Login;
