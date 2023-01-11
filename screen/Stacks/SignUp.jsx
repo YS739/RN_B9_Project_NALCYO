@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import styled from "@emotion/native";
 import {
   Text,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   SafeAreaView,
   Keyboard,
   TouchableWithoutFeedback,
+  useColorScheme,
 } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
@@ -15,6 +17,7 @@ import { emailRegex, pwRegex } from "../../common/util";
 import { updateProfile } from "firebase/auth";
 
 const SignUp = ({ navigation: { navigate } }) => {
+  const isDark = useColorScheme() === "dark";
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -72,25 +75,82 @@ const SignUp = ({ navigation: { navigate } }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.login_title}>회원가입 </Text>
+      <SafeAreaView
+        style={{
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
+          alignItems: "center",
+          height: 900,
+        }}
+      >
+        <Text
+          style={{
+            color: isDark ? "white" : "black",
+            marginTop: 50,
+            padding: 30,
+            fontSize: 44,
+            fontWeight: "bold",
+            fontFamily: "NanumPenScript-Regular",
+          }}
+        >
+          회원가입{" "}
+        </Text>
         <View>
-          <Text style={styles.email_form_title}>닉네임</Text>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            닉네임
+          </Text>
           <TextInput
             placeholder="Nickname"
             value={nickName}
             onChangeText={(text) => setNickName(text)}
-            style={styles.login_input}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
           />
-          <Text style={styles.email_form_title}>이메일</Text>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            이메일
+          </Text>
           <TextInput
             placeholder="Email"
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
-            style={styles.login_input}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
           />
-          <Text style={styles.email_form_title}>비밀번호</Text>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            비밀번호
+          </Text>
           <TextInput
             secureTextEntry={true}
             placeholder="Password"
@@ -98,7 +158,15 @@ const SignUp = ({ navigation: { navigate } }) => {
             value={pw}
             onChangeText={(text) => setPw(text)}
             returnKeyType="send"
-            style={styles.login_input}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
           />
 
           <TouchableOpacity
@@ -132,7 +200,7 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 44,
     fontWeight: "bold",
-    // fontFamily: "NanumPenScript-Regular",
+    fontFamily: "NanumPenScript-Regular",
   },
   email_form_title: {
     fontSize: 13,
@@ -147,10 +215,13 @@ const styles = StyleSheet.create({
   },
   login_button: {
     width: 280,
+    height: 40,
     borderRadius: 30,
-    padding: 20,
+    // padding: 20,
     margin: 10,
-    marginTop: 30,
     backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

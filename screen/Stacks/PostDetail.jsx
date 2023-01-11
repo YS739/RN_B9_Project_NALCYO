@@ -2,15 +2,27 @@ import styled from "@emotion/native";
 
 import React, { useEffect, useState } from "react";
 
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Image, FlatList, ScrollView, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  ScrollView,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
 
 import { getDoc, doc, onSnapshot, query, collection, orderBy, addDoc, deleteDoc, where } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
-
 import PostModal from "../../components/PostModal";
 
+const PostDetail = () => {
+  
 import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
@@ -30,11 +42,22 @@ const PostDetail = ({ route }) => {
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
 
+  // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
   const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
+  const isDark = useColorScheme() === "dark";
+  useEffect(() => {
+    // 특정 댓글 get
+    // const getComment = async () => {
+    //   const snapshot = await getDoc(doc(dbService, "Comment"));
+    //   setComment(snapshot.data().comment);
+    //   setNickName(snapshot.data().nickName);
+    // };
+    // getComment();
+
 
   const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
   // console.log("DetailcommentList:", DetailcommentList);
@@ -94,7 +117,9 @@ const PostDetail = ({ route }) => {
   //
 
   return (
-    <LayoutSafeAreaView>
+    <LayoutSafeAreaView
+      style={{ backgroundColor: isDark ? "#202020" : "#97d2ec" }}
+    >
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
@@ -116,7 +141,11 @@ const PostDetail = ({ route }) => {
                 <Text>수정 하기</Text>
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
-              <PostModal screenName={screenName} isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
+              <PostModal
+                screenName={screenName}
+                isOpenModal={isOpenModal}
+                setIsOpenModal={setIsOpenModal}
+              />
               <ModifyBtn>
                 <Text>삭제 하기</Text>
                 <FontAwesome name="trash-o" size={24} color="black" />
@@ -178,7 +207,7 @@ const styles = StyleSheet.create({
 
 const LayoutSafeAreaView = styled.SafeAreaView`
   width: 100%;
-  background-color: #97d2ec;
+  /* background-color: #97d2ec; */
 `;
 
 const DetailSafeAreaView = styled.SafeAreaView`

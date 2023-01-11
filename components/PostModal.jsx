@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { Modal, Keyboard, TouchableWithoutFeedback, Text } from "react-native";
+import { Modal, Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
 
-const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
+const PostModal = ({
+  isOpenModal,
+  setIsOpenModal,
+  screenName,
+  cityId,
+  detailPost,
+}) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-
-  // TODO: 지역 카테고리 수정 및 추가하기
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
+  // const [editCategory, setEditcategory] = useState("")
+  // TODO: useEffect 분리 =
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -25,12 +33,10 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
     { label: "충청북도 청주", value: "청주", WeatherId: 1845759 },
   ]);
 
-  // FIXME: textinput을 누르고 나서 배경 등을 눌러도 키보드가 사라지지
-  // 않아서 내용을 입력하고 엔터를 눌러야함.
-  // 내용 입력칸에는 multiline으로 해서 그런지 엔터 눌러도 줄만 바뀌고 키보드가 사라지지 않음
+  // FIXME: 내용 입력칸에는 multiline으로 해서 그런지 엔터 눌러도 줄만 바뀌고 키보드가 사라지지 않음
   // onSubmit 사용해보기
 
-  // 등록하기 버튼을 누르면 db의 "list" collection에 포스트 데이터가 들어감
+  // 본문 등록하기
   const addPost = async () => {
     await addDoc(collection(dbService, "list"), {
       title: postTitle,
@@ -38,13 +44,29 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
       userId: authService.currentUser?.uid,
       createdAt: new Date(),
       category: value,
+<<<<<<< HEAD
       WeatherId: WeatherId,
+=======
+      cityId,
+>>>>>>> 050c4ed4507fe00ffd386c9e63d4075a9f380a06
     });
+
     // 포스트가 등록되면 모달이 닫히고 input, 카테고리 선택 초기화
     setIsOpenModal(false);
     setPostTitle("");
     setPostContent("");
     setValue("");
+  };
+
+  // 본문 수정하기
+  const editPost = async (id) => {
+    const editPostRef = doc(dbService, "list", id);
+    await updateDoc(editPostRef, {
+      title: editTitle,
+      content: editContent,
+      // category: editCategory,
+    });
+    setIsOpenModal(false);
   };
 
   return (
@@ -55,10 +77,14 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
             <ModalAddCloseView>
               <ModalAddPostView>
                 <ModalAddPostPressable
-                  onPress={addPost}
+                  onPress={
+                    screenName === "Detail"
+                      ? editPost(detailPost[0]?.id)
+                      : addPost
+                  }
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
-                  // TODO: 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
-                  disabled={!postTitle || !postContent || !value}
+                  // TODO: || !value 카테고리 선택에 city 값을 자동으로 불러올 수 있으면 || 삭제
+                  disabled={!postTitle || !postContent}
                 >
                   <ModalAddBtnText>{screenName === "Detail" ? "수정하기" : "등록하기"}</ModalAddBtnText>
                 </ModalAddPostPressable>
@@ -71,18 +97,42 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName, cityId }) => {
               <DropDownPicker
                 open={open}
                 value={value}
-                // TODO: value={screenName === "Detail" ? city.category  : value}
+                // defaultValue={detailPost ? detailPost[0]?.category : ""}
                 items={items}
                 setOpen={setOpen}
                 setValue={setValue}
                 setItems={setItems}
-                placeholder={value ? "city.category" : "지역을 선택해주세요."}
-                //TODO: palceholder? value에 글을 등록하는 cityscreen의 city가 들어가야함  = defaultValue?
+                placeholder={
+                  detailPost ? detailPost[0]?.category : "지역을 선택해주세요."
+                }
               />
             </ModalCategoryView>
 
+<<<<<<< HEAD
             <ModalTitleTextInput autoFocus value={postTitle} onChangeText={(title) => setPostTitle(title)} placeholder="제목을 입력해주세요." />
             <ModalContentTexInput value={postContent} onChangeText={(content) => setPostContent(content)} textAlignVertical="top" multiline maxLength={300} placeholder="내용을 입력해주세요." />
+=======
+            <ModalTitleTextInput
+              autoFocus
+              defaultValue={detailPost ? detailPost[0]?.content : ""}
+              // value={postTitle}
+              onChangeText={(title) =>
+                detailPost ? setEditTitle(title) : setPostTitle(title)
+              }
+              placeholder="제목을 입력해주세요."
+            />
+            <ModalContentTexInput
+              defaultValue={detailPost ? detailPost[0]?.content : ""}
+              // value={postContent}
+              onChangeText={(content) =>
+                detailPost ? setEditContent(content) : setPostContent(content)
+              }
+              textAlignVertical="top"
+              multiline
+              maxLength={300}
+              placeholder="내용을 입력해주세요."
+            />
+>>>>>>> 050c4ed4507fe00ffd386c9e63d4075a9f380a06
           </ModalWrapView>
         </ModalContainerView>
       </TouchableWithoutFeedback>
