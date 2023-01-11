@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
-
+import { collection, query, where, onSnapshot, orderBy, getDocs } from "@firebase/firestore";
+import { authService, dbService } from "../../common/firebase";
 const City = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [userPostList, setUserPostList] = useState([]);
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather"], getNowWeather);
 
@@ -27,16 +29,17 @@ const City = () => {
   const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
 
   useEffect(() => {
+    // 내가 쓴 글 불러오기
     const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
-      const newComments = snapshot.docs.map((doc) => {
-        const newComment = {
+      const UserPosts = snapshot.docs.map((doc) => {
+        const newUserPost = {
           id: doc.id,
           ...doc.data(),
         };
-        return newComment;
+        return newUserPost;
       });
-      setCommentList(newComments);
+      setUserPostList(UserPosts);
     });
   }, []);
 
@@ -73,7 +76,16 @@ const City = () => {
           <Text>글쓰기</Text>
         </CityWriteBtn>
         {/* 글목록 */}
-        <CityFlatList style={{ flex: 1, backgroundcolor: "red" }} />
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ width: "90%" }}
+          keyExtractor={(item) => item.id}
+          data={userPostList}
+          renderItem={({ item }) => {
+            return <CityFlatList userPost={item} />;
+          }}
+        />
       </SafeAreaView>
     </View>
   );
