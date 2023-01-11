@@ -77,7 +77,9 @@ const PostModal = ({
                 <AntDesign name="close" size={24} color="black" />
               </ModalCloseBtn>
             </ModalAddCloseView>
-            <ModalCityNameText>{cityName}</ModalCityNameText>
+            <ModalCityNameText>
+              {detailPost ? detailPost.cityName : cityName}
+            </ModalCityNameText>
 
             <ModalTitleTextInput
               autoFocus
