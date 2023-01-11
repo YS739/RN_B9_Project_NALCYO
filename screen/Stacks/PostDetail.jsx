@@ -66,45 +66,45 @@ const PostDetail = ({ route }) => {
     // };
     // getComment();
 
+    const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
+    // console.log("DetailcommentList:", DetailcommentList);
+    const [list, setList] = useState([]);
 
-  const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
-  // console.log("DetailcommentList:", DetailcommentList);
-  const [list, setList] = useState([]);
-
-  const DetailList = list.filter((el) => el.id == PostID);
-  // console.log("list=", DetailList);
-  useEffect(() => {
-    // 댓글
-    const q = query(
-      collection(dbService, "Comment"),
-      orderBy("createdAt", "desc")
-    );
-    onSnapshot(q, (snapshot) => {
-      const newComments = snapshot.docs.map((doc) => {
-        const newComment = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newComment;
+    const DetailList = list.filter((el) => el.id == PostID);
+    // console.log("list=", DetailList);
+    useEffect(() => {
+      // 댓글
+      const q = query(
+        collection(dbService, "Comment"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(q, (snapshot) => {
+        const newComments = snapshot.docs.map((doc) => {
+          const newComment = {
+            id: doc.id,
+            ...doc.data(),
+          };
+          return newComment;
+        });
+        setCommentList(newComments);
       });
-      setCommentList(newComments);
-    });
-    // 본문
-    const p = query(
-      collection(dbService, "list"),
-      orderBy("createdAt", "desc")
-    );
-    onSnapshot(p, (snapshot) => {
-      const newLists = snapshot.docs.map((doc) => {
-        const newList = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newList;
+      // 본문
+      const p = query(
+        collection(dbService, "list"),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(p, (snapshot) => {
+        const newLists = snapshot.docs.map((doc) => {
+          const newList = {
+            id: doc.id,
+            ...doc.data(),
+          };
+          return newList;
+        });
+        setList(newLists);
       });
-      setList(newLists);
-    });
-  }, []);
+    }, []);
+  });
 
   // add commentList
   const [text, setText] = useState("");
@@ -179,7 +179,6 @@ const PostDetail = ({ route }) => {
                 <Text>댓글 달기</Text>
               </CommentAddBtn>
             </CommentAddView>
-
 
             {DetailcommentList.map((el) => {
               return (
