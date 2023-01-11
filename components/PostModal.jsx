@@ -31,7 +31,7 @@ const PostModal = ({ isOpenModal, setIsOpenModal, screenName }) => {
 
   // 등록하기 버튼을 누르면 db의 "List" collection에 포스트 데이터가 들어감
   const addPost = async () => {
-    await addDoc(collection(dbService, "List"), {
+    await addDoc(collection(dbService, "list"), {
       title: postTitle,
       content: postContent,
       userId: authService.currentUser?.uid,

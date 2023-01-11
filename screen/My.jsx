@@ -7,23 +7,41 @@ import {
   View,
   Keyboard,
   TouchableWithoutFeedback,
+  FlatList,
 } from "react-native";
-import { authService } from "../common/firebase";
+import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../common/util";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { getAuth, updateProfile } from "firebase/auth";
 import { signOut } from "firebase/auth";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+  getDocs,
+} from "@firebase/firestore";
+import MyPostList from "../components/MyPostList";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
-  const [pressEditBtn, setPressEditBtn] = useState(false);
-  const [editName, setEditName] = useState("");
-
   // 닉네임 불러오기
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
+
+  // 닉네임 수정하기
+  const [pressEditBtn, setPressEditBtn] = useState(false);
+  const [editName, setEditName] = useState("");
+
+  // 내가 쓴 글 불러오기
+  const userId = user.uid;
+  const [userPostList, setUserPostList] = useState([]);
+
+  // 내가 쓴 댓글 불러오기
+  const [userCommentList, setUserCommentList] = useState([]);
 
   useEffect(() => {
     setOptions({
@@ -34,11 +52,29 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       ),
       // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
       // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
+      // reset으로..?
       headerRight: () => (
         <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
           <Text>로그아웃</Text>
         </TouchableOpacity>
       ),
+    });
+
+    // 내가 쓴 글 불러오기
+    const q = query(
+      collection(dbService, "list"),
+      orderBy("createdAt", "desc"),
+      where("userId", "==", userId)
+    );
+    onSnapshot(q, (snapshot) => {
+      const UserPosts = snapshot.docs.map((doc) => {
+        const newUserPost = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newUserPost;
+      });
+      setUserPostList(UserPosts);
     });
   }, []);
 
@@ -65,11 +101,10 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       .catch((err) => alert(err));
   };
 
-  // TODO: MY page 내가 쓴 글 불러오기 코드 작성하기(MyFlatList)
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <MySafeAreaView>
+        {/* <FlatList /> */}
         <MyNameWrapView>
           <Image
             source={{
@@ -96,59 +131,15 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         </MyNameWrapView>
         <MyPostTitleText>내가 쓴 글</MyPostTitleText>
         <MyPostView>
-          {/* TODO: FlatList 변경하기 */}
-          <ScrollView contentContainerStyle={{ width: "90%" }}>
-            <MyPostBoxBtn>
-              <MyPostCategoryView>
-                <Text>지역 기온</Text>
-              </MyPostCategoryView>
-              <MyPostContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  여기서 제목이 너무너무 길다면 어떻게 될까요
-                </Text>
-              </MyPostContentsView>
-            </MyPostBoxBtn>
-            <MyPostBoxBtn>
-              <MyPostCategoryView>
-                <Text>지역 기온</Text>
-              </MyPostCategoryView>
-              <MyPostContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  제목
-                </Text>
-              </MyPostContentsView>
-            </MyPostBoxBtn>
-            <MyPostBoxBtn>
-              <MyPostCategoryView>
-                <Text>지역 기온</Text>
-              </MyPostCategoryView>
-              <MyPostContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  제목
-                </Text>
-              </MyPostContentsView>
-            </MyPostBoxBtn>
-            <MyPostBoxBtn>
-              <MyPostCategoryView>
-                <Text>지역 기온</Text>
-              </MyPostCategoryView>
-              <MyPostContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  제목
-                </Text>
-              </MyPostContentsView>
-            </MyPostBoxBtn>
-            <MyPostBoxBtn>
-              <MyPostCategoryView>
-                <Text>지역 기온</Text>
-              </MyPostCategoryView>
-              <MyPostContentsView>
-                <Text numberOfLines={1} ellipsizeMode="tail">
-                  제목
-                </Text>
-              </MyPostContentsView>
-            </MyPostBoxBtn>
-          </ScrollView>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ width: "90%" }}
+            keyExtractor={(item) => item.id}
+            data={userPostList}
+            renderItem={({ item }) => {
+              return <MyPostList userPost={item} />;
+            }}
+          />
         </MyPostView>
         <MyCommentsTitleText>내가 댓글 단 글</MyCommentsTitleText>
         <MyCommentsView>

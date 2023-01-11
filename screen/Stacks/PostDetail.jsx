@@ -2,7 +2,6 @@ import styled from "@emotion/native";
 
 import React, { useEffect, useState } from "react";
 
-
 import {
   View,
   Text,
@@ -195,7 +194,6 @@ const PostDetail = () => {
           })}
         </CommentWrapView>
       </CommentScrollView>
-
     </DetailSafeAreaView>
   );
 };
