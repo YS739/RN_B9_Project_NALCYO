@@ -60,7 +60,6 @@ const City = ({
     });
 
     // 내가 쓴 글 불러오기
-
     const q = query(
       collection(dbService, "list"),
       orderBy("createdAt", "desc")
@@ -95,9 +94,6 @@ const City = ({
           flex: 1,
         }}
       >
-
-        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
-
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
@@ -120,13 +116,11 @@ const City = ({
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
-
         <PostModal
           cityId={WeatherId}
           isOpenModal={isOpenModal}
           setIsOpenModal={setIsOpenModal}
         />
-
 
         {/* 글목록 */}
 

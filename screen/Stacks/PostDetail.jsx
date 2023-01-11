@@ -30,11 +30,7 @@ import {
   where,
 } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
-
 import PostModal from "../../components/PostModal";
-
-const PostDetail = () => {
-  
 import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
@@ -54,6 +50,7 @@ const PostDetail = ({ route }) => {
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
 
+  // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
   const screenName = "Detail";
 
@@ -112,7 +109,6 @@ const PostDetail = ({ route }) => {
   // add commentList
   const [text, setText] = useState("");
   const newComment = {
-
     nickName: userNickName,
     PostId: PostID,
     userId: userId,
@@ -160,6 +156,7 @@ const PostDetail = ({ route }) => {
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
               <PostModal
+                detailPost={DetailList}
                 screenName={screenName}
                 isOpenModal={isOpenModal}
                 setIsOpenModal={setIsOpenModal}
@@ -182,7 +179,6 @@ const PostDetail = ({ route }) => {
                 <Text>댓글 달기</Text>
               </CommentAddBtn>
             </CommentAddView>
-
 
 
             {DetailcommentList.map((el) => {
