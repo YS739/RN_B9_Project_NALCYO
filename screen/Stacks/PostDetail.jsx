@@ -29,6 +29,11 @@ import {
   where,
 } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
+
+import PostModal from "../../components/PostModal";
+
+const PostDetail = () => {
+  
 import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
@@ -44,8 +49,12 @@ const PostDetail = ({ route }) => {
 
   const PostID = route.params.postId;
   // console.log("PostID=", PostID);
+
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
@@ -92,9 +101,11 @@ const PostDetail = ({ route }) => {
   // add commentList
   const [text, setText] = useState("");
   const newComment = {
+
     nickName: userNickName,
     PostId: PostID,
     userId: userId,
+
     comment: text,
     isEdit: false,
     createdAt: new Date(),
@@ -131,10 +142,15 @@ const PostDetail = ({ route }) => {
               <ContentText>{DetailList[0]?.content}</ContentText>
             </ContentView>
             <ModifyWrap>
-              <ModifyBtn>
+              <ModifyBtn onPress={() => setIsOpenModal(true)}>
                 <Text>수정 하기</Text>
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
+              <PostModal
+                screenName={screenName}
+                isOpenModal={isOpenModal}
+                setIsOpenModal={setIsOpenModal}
+              />
               <ModifyBtn>
                 <Text>삭제 하기</Text>
                 <FontAwesome name="trash-o" size={24} color="black" />
@@ -154,7 +170,9 @@ const PostDetail = ({ route }) => {
               </CommentAddBtn>
             </CommentAddView>
 
+
             {DetailcommentList.map((el) => {
+
               return (
                 <ConmmentContentView key={el.id}>
                   <Text>{el?.nickName}</Text>
