@@ -2,18 +2,20 @@ import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
+import { getAuth } from "firebase/auth";
 
 const CityFlatList = ({ userPost }) => {
   const navigation = useNavigation();
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userNickName = user.displayName;
 
   const postId = userPost.id;
   // console.log("userPost=", userPost.id);
   return (
-    <CityContentsBtn
-      onPress={() => navigation.navigate("PostDetail", { postId })}
-    >
+    <CityContentsBtn onPress={() => navigation.navigate("PostDetail", { postId })}>
       <MyPostCategoryView>
-        <Text>{userPost.category}</Text>
+        <Text>{userNickName}</Text>
         {/* TODO: 기온은 category가 같은 api의 기온..? */}
       </MyPostCategoryView>
       <MyPostContentsView>
@@ -43,7 +45,7 @@ const MyPostCategoryView = styled.View`
 `;
 
 const MyPostContentsView = styled.View`
-  width: 70%;
+  width: 40%;
   align-items: center;
   justify-content: center;
   padding-right: 10px;
