@@ -41,6 +41,7 @@ const City = ({
     ["getWeather", WeatherId],
     getNowWeather
   );
+
   useEffect(() => {
     setOptions({
       headerLeft: () => (
@@ -54,6 +55,7 @@ const City = ({
     });
 
     // 내가 쓴 글 불러오기
+
     const q = query(
       collection(dbService, "list"),
       orderBy("createdAt", "desc")
@@ -83,6 +85,9 @@ const City = ({
       <SafeAreaView
         style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
       >
+
+        <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
+
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
@@ -105,11 +110,13 @@ const City = ({
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
+
         <PostModal
           cityId={WeatherId}
           isOpenModal={isOpenModal}
           setIsOpenModal={setIsOpenModal}
         />
+
 
         {/* 글목록 */}
         <FlatList
