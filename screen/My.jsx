@@ -181,6 +181,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
           >
             {userCommentList.map((co) => (
               <MyCommentsBoxBtn
+                key={co.id}
                 onPress={() => navigate("Stacks", { screen: "PostDetail" })}
               >
                 <MyCommentsCategoryView>

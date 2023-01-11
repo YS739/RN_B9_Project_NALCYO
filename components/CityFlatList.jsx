@@ -13,7 +13,7 @@ const CityFlatList = ({ userPost }) => {
       onPress={() => navigation.navigate("PostDetail", { postId, cityName })}
     >
       <MyPostCategoryView>
-        <Text>{userPost.cityName}</Text>
+        <Text>{cityName}</Text>
       </MyPostCategoryView>
       <MyPostContentsView>
         <Text numberOfLines={1} ellipsizeMode="tail">
