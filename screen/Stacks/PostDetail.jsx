@@ -13,6 +13,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   StyleSheet,
+  useColorScheme,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
@@ -83,6 +84,7 @@ const PostDetail = () => {
   const [nickName, setNickName] = useState("");
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState([]);
+  const isDark = useColorScheme() === "dark";
   useEffect(() => {
     // 특정 댓글 get
     // const getComment = async () => {
@@ -128,7 +130,9 @@ const PostDetail = () => {
     await deleteDoc(doc(dbService, "Comment", id));
   };
   return (
-    <LayoutSafeAreaView>
+    <LayoutSafeAreaView
+      style={{ backgroundColor: isDark ? "#15147a" : "#97d2ec" }}
+    >
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
@@ -186,7 +190,6 @@ const PostDetail = () => {
           keyExtractor={(item) => item.id}
         /> */}
 
-
             {commentList.map((el) => {
               return (
                 <ConmmentContentView key={el.id}>
@@ -207,7 +210,6 @@ const PostDetail = () => {
         </CommentScrollView>
       </DetailSafeAreaView>
     </LayoutSafeAreaView>
-
   );
 };
 
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
 
 const LayoutSafeAreaView = styled.SafeAreaView`
   width: 100%;
-  background-color: #97d2ec;
+  /* background-color: #97d2ec; */
 `;
 
 const DetailSafeAreaView = styled.SafeAreaView`

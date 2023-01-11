@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from "react";
 
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  FlatList,
+  useColorScheme,
+} from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 import { useQuery } from "@tanstack/react-query";
 import { getNowWeather } from "../../common/api";
-import { collection, query, where, onSnapshot, orderBy, getDocs } from "@firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+  getDocs,
+} from "@firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
 
 const City = ({
@@ -14,7 +32,7 @@ const City = ({
     params: { WeatherId },
   },
 }) => {
-
+  const isDark = useColorScheme() === "dark";
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
 
@@ -25,10 +43,12 @@ const City = ({
 
   console.log(getWeatherData);
 
-
   useEffect(() => {
     // 내가 쓴 글 불러오기
-    const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(dbService, "list"),
+      orderBy("createdAt", "desc")
+    );
     onSnapshot(q, (snapshot) => {
       const UserPosts = snapshot.docs.map((doc) => {
         const newUserPost = {
@@ -49,10 +69,15 @@ const City = ({
     );
   }
 
-
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}>
+    <View style={{ backgroundColor: isDark ? "#15147a" : "#97d2ec", flex: 1 }}>
+      <SafeAreaView
+        style={{
+          backgroundColor: isDark ? "#15147a" : "#97d2ec",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         <WeatherContainer>
           <WeatherWrap>
@@ -61,7 +86,9 @@ const City = ({
                 uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
-            <WeatherMainText>{getWeatherData?.weather[0]?.main}</WeatherMainText>
+            <WeatherMainText>
+              {getWeatherData?.weather[0]?.main}
+            </WeatherMainText>
             <WeatherTemperatureText>
               {Math.round(getWeatherData?.main?.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
@@ -76,7 +103,6 @@ const City = ({
         </CityWriteBtn>
         {/* 글목록 */}
 
-
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}
@@ -85,7 +111,6 @@ const City = ({
           renderItem={({ item }) => {
             return <CityFlatList userPost={item} />;
           }}
-
         />
       </SafeAreaView>
     </View>

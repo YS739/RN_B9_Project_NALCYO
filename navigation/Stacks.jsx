@@ -3,21 +3,27 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import City from "../screen/Stacks/City";
 import Login from "../screen/Stacks/Login";
 import PostDetail from "../screen/Stacks/PostDetail";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SignUp from "../screen/Stacks/SignUp";
 
 const NativeStack = createNativeStackNavigator();
 
 const Stacks = ({ navigation: { goBack, navigate } }) => {
+  const isDark = useColorScheme() === "dark";
+
   return (
     <NativeStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#97D2EC" },
+        headerStyle: { backgroundColor: isDark ? "#15147a" : "#97d2ec" },
         headerTitleAlign: "center",
         headerLeft: () => (
           <TouchableOpacity onPress={() => goBack()}>
-            <Ionicons name="chevron-back" size={24} color="black" />
+            <Ionicons
+              name="chevron-back"
+              size={24}
+              color={isDark ? "white" : "black"}
+            />
           </TouchableOpacity>
         ),
         headerRight: ({ color }) => (
@@ -25,7 +31,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
             <Ionicons
               name="ios-person-circle-outline"
               size={28}
-              color={color}
+              color={isDark ? "white" : "black"}
             />
           </TouchableOpacity>
         ),
