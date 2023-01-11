@@ -13,31 +13,32 @@ import {
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
+import { useQuery } from "@tanstack/react-query";
+import { getNowWeather } from "../../common/api";
 
 const City = () => {
-  const [nowWeather, setNowWeather] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
-  const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
-  const getNowWeather = async () => {
-    const response = await fetch(
-      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`
-    )
-      .then((res) => res.json())
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log("response", response);
-    setNowWeather(response);
-    setIsLoading(false);
+  const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(
+    ["getWeather"],
+    getNowWeather
+  );
+
+  console.log("getWeatherData:", getWeatherData);
+
+  const CityChange = (val) => {
+    switch (val) {
+      case "Jeonju":
+        "전북";
+        break;
+      case "Seoul":
+        "서울 / 인천 / 경기";
+    }
   };
-  useEffect(() => {
-    getNowWeather();
-  }, []);
 
-  if (isLoading) {
+  const WeatherCT = console.log("CityChange:", typeof getWeatherData?.name);
+
+  if (isLoadingWD) {
     return (
       <CityLoader>
         <ActivityIndicator />
@@ -55,16 +56,18 @@ const City = () => {
           <WeatherWrap>
             <WeatherImage
               source={{
-                uri: `http://openweathermap.org/img/wn/${nowWeather.weather[0].icon}@2x.png`,
+                uri: `http://openweathermap.org/img/wn/${getWeatherData?.weather[0]?.icon}@2x.png`,
               }}
             />
-            <WeatherMainText> {nowWeather.weather[0].main}</WeatherMainText>
+            <WeatherMainText>
+              {getWeatherData?.weather[0]?.main}
+            </WeatherMainText>
             <WeatherTemperatureText>
-              {Math.round(nowWeather.main.temp)}
+              {Math.round(getWeatherData?.main?.temp)}
               <Text style={{ fontSize: 40, color: "gray" }}>℃</Text>
             </WeatherTemperatureText>
           </WeatherWrap>
-          <WeatherCityText>{nowWeather.name}</WeatherCityText>
+          <WeatherCityText>{getWeatherData?.name}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
