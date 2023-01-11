@@ -50,7 +50,6 @@ const PostDetail = ({ route }) => {
 
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
@@ -256,7 +255,6 @@ const PostDetail = ({ route }) => {
                 </ModifyBtn>
                 <PostModal
                   detailPost={list}
-                  screenName={screenName}
                   isOpenModal={isOpenModal}
                   setIsOpenModal={setIsOpenModal}
                 />

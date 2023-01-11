@@ -9,7 +9,6 @@ import DropDownPicker from "react-native-dropdown-picker";
 const PostModal = ({
   isOpenModal,
   setIsOpenModal,
-  screenName,
   cityId,
   cityName,
   detailPost,
@@ -18,8 +17,6 @@ const PostModal = ({
   const [postContent, setPostContent] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-
-  console.log(detailPost);
 
   // 본문 등록하기
   const addPost = async () => {
@@ -46,14 +43,6 @@ const PostModal = ({
       content: editContent,
     });
     setIsOpenModal(false);
-    // setEditTitle("");
-    // setEditContent("");
-    // .then(() => {
-    //   setIsOpenModal(false);
-    // })
-    // .catch((error) => {
-    //   console.log("error:", error);
-    // });
   };
 
   return (
@@ -64,7 +53,13 @@ const PostModal = ({
             <ModalAddCloseView>
               <ModalAddPostView>
                 <ModalAddPostBtn
-                  onPress={detailPost ? editPost(detailPost.id) : addPost}
+                  onPress={
+                    detailPost
+                      ? () => {
+                          editPost(detailPost.id);
+                        }
+                      : addPost
+                  }
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                   disabled={
                     detailPost
