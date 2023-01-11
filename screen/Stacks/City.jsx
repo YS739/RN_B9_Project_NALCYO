@@ -14,7 +14,11 @@ import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
 
-const City = () => {
+const City = ({
+  route: {
+    params: { WeatherId },
+  },
+}) => {
   const [nowWeather, setNowWeather] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +27,8 @@ const City = () => {
   const API_KEY = "4fd038a04c718c64d1c7f8089aa6adb9";
   const getNowWeather = async () => {
     const response = await fetch(
-      `${BASE_URL}id=1845457&appid=${API_KEY}&units=Metric`
+      // `${BASE_URL}id=1835848&appid=${API_KEY}&units=Metric`
+      `${BASE_URL}id=${WeatherId}&appid=${API_KEY}&units=Metric`
     )
       .then((res) => res.json())
       .catch((error) => {

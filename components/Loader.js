@@ -56,7 +56,7 @@ export default Loader;
 const ContainerView = styled.View`
   width: 100%;
   height: 100%;
-  background-color: #97d2ec;
+  /* background-color: #97d2ec; */
 `;
 
 const WrapContainerView = styled.View`
