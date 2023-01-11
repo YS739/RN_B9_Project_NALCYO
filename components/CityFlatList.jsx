@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 
+
 const CityFlatList = ({ userPost }) => {
   const navigation = useNavigation();
   return (

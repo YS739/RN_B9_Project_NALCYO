@@ -25,6 +25,7 @@ const City = ({
 
   console.log(getWeatherData);
 
+
   useEffect(() => {
     // 내가 쓴 글 불러오기
     const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
@@ -47,6 +48,7 @@ const City = ({
       </CityLoader>
     );
   }
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -74,6 +76,7 @@ const City = ({
         </CityWriteBtn>
         {/* 글목록 */}
 
+
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}
@@ -82,6 +85,7 @@ const City = ({
           renderItem={({ item }) => {
             return <CityFlatList userPost={item} />;
           }}
+
         />
       </SafeAreaView>
     </View>

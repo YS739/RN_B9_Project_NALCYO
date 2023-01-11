@@ -12,6 +12,7 @@ import {
   FlatList,
   ScrollView,
   TouchableWithoutFeedback,
+  StyleSheet,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
@@ -24,6 +25,7 @@ import {
   collection,
   orderBy,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { dbService } from "../../common/firebase";
 // import { async, uuidv4 } from "@firebase/util";
@@ -82,10 +84,9 @@ const PostDetail = () => {
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState([]);
   useEffect(() => {
+    // 특정 댓글 get
     // const getComment = async () => {
-    //   const snapshot = await getDoc(
-    //     doc(dbService, "Comment", "9009q42XRMaUPCT1eO60")
-    //   );
+    //   const snapshot = await getDoc(doc(dbService, "Comment"));
     //   setComment(snapshot.data().comment);
     //   setNickName(snapshot.data().nickName);
     // };
@@ -122,47 +123,52 @@ const PostDetail = () => {
     setText("");
   };
 
+  // delete commentLis
+  const deleteCommentList = async (id) => {
+    await deleteDoc(doc(dbService, "Comment", id));
+  };
   return (
-    <DetailSafeAreaView>
-      <CommentScrollView showsVerticalScrollIndicator={false}>
-        {/* Detail content */}
-        <DetailContentWrapView>
-          <WeatherView>
-            <Text>해당 지역 날씨</Text>
-          </WeatherView>
-          <TitleView>
-            <Text>제목</Text>
-          </TitleView>
-          <NickNameView>
-            <Text>닉네임</Text>
-          </NickNameView>
-          <ContentView>
-            <ContentText>내용</ContentText>
-          </ContentView>
-          <ModifyWrap>
-            <ModifyBtn>
-              <Text>수정 하기</Text>
-              <AntDesign name="edit" size={24} color="black" />
-            </ModifyBtn>
-            <ModifyBtn>
-              <Text>삭제 하기</Text>
-              <FontAwesome name="trash-o" size={24} color="black" />
-            </ModifyBtn>
-          </ModifyWrap>
-        </DetailContentWrapView>
-        {/* 댓글 area */}
-        <CommentWrapView>
-          <CommentAddView>
-            <CommentAddTextInput
-              onSubmitEditing={addCommentList}
-              onChangeText={setText}
-              value={text}
-            ></CommentAddTextInput>
-            <CommentAddBtn onPress={addCommentList}>
-              <Text>댓글 달기</Text>
-            </CommentAddBtn>
-          </CommentAddView>
-          {/* <FlatList
+    <LayoutSafeAreaView>
+      <DetailSafeAreaView>
+        <CommentScrollView showsVerticalScrollIndicator={false}>
+          {/* Detail content */}
+          <DetailContentWrapView>
+            <WeatherView>
+              <Text>해당 지역 날씨</Text>
+            </WeatherView>
+            <TitleView>
+              <Text>제목</Text>
+            </TitleView>
+            <NickNameView>
+              <Text>닉네임</Text>
+            </NickNameView>
+            <ContentView>
+              <ContentText>내용</ContentText>
+            </ContentView>
+            <ModifyWrap>
+              <ModifyBtn>
+                <Text>수정 하기</Text>
+                <AntDesign name="edit" size={24} color="black" />
+              </ModifyBtn>
+              <ModifyBtn>
+                <Text>삭제 하기</Text>
+                <FontAwesome name="trash-o" size={24} color="black" />
+              </ModifyBtn>
+            </ModifyWrap>
+          </DetailContentWrapView>
+          {/* 댓글 area */}
+          <CommentWrapView style={styles.shadow}>
+            <CommentAddView>
+              <CommentAddTextInput
+                onSubmitEditing={addCommentList}
+                onChangeText={setText}
+                value={text}
+              ></CommentAddTextInput>
+              <CommentAddBtn onPress={addCommentList}>
+                <Text>댓글 달기</Text>
+              </CommentAddBtn>
+            </CommentAddView>
+            {/* <FlatList
           showsVerticalScrollIndicator={false}
           data={commentList}
           renderItem={({ item }) => {
@@ -180,25 +186,56 @@ const PostDetail = () => {
           keyExtractor={(item) => item.id}
         /> */}
 
-          {commentList.map((el) => {
-            return (
-              <ConmmentContentView>
-                <Text>{el?.nickName}</Text>
-                <Text>{el?.comment}</Text>
-                <CommentContentIconBtnView>
-                  <AntDesign name="edit" size={24} color="black" />
-                  <FontAwesome name="trash-o" size={24} color="black" />
-                </CommentContentIconBtnView>
-              </ConmmentContentView>
-            );
-          })}
-        </CommentWrapView>
-      </CommentScrollView>
-    </DetailSafeAreaView>
+
+            {commentList.map((el) => {
+              return (
+                <ConmmentContentView key={el.id}>
+                  <Text>{el?.nickName}</Text>
+                  <Text>{el?.comment}</Text>
+                  <CommentContentIconBtnView>
+                    <TouchableOpacity>
+                      <AntDesign name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => deleteCommentList(el.id)}>
+                      <FontAwesome name="trash-o" size={24} color="black" />
+                    </TouchableOpacity>
+                  </CommentContentIconBtnView>
+                </ConmmentContentView>
+              );
+            })}
+          </CommentWrapView>
+        </CommentScrollView>
+      </DetailSafeAreaView>
+    </LayoutSafeAreaView>
+
   );
 };
 
 export default PostDetail;
+
+const styles = StyleSheet.create({
+  shadow: {
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 1,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
+  },
+});
+
+const LayoutSafeAreaView = styled.SafeAreaView`
+  width: 100%;
+  background-color: #97d2ec;
+`;
 
 const DetailSafeAreaView = styled.SafeAreaView`
   width: 90%;
@@ -211,24 +248,24 @@ const DetailContentWrapView = styled.View`
   align-items: center;
   height: ${SCREEN_HEIGHT / 2 + "px"};
   margin-top: 15px;
-  border: 1px solid black;
-  border-radius: 30px;
+  /* border: 1px solid black; */
+  border-radius: 20px;
+  background-color: #fff;
 `;
 
 const WeatherView = styled.View`
   justify-content: center;
   align-items: center;
-  height: 7%;
+  height: 15%;
   width: 45%;
   border-radius: 30px;
   margin-top: 10px;
-  margin-bottom: 5px;
 `;
 
 const TitleView = styled.View`
   justify-content: center;
   align-items: center;
-  height: 13.5%;
+  height: 6.5%;
   width: 50%;
   border-radius: 30px;
 `;
@@ -245,7 +282,7 @@ const NickNameView = styled.View`
 const ContentView = styled.View`
   height: 60%;
   width: 90%;
-  border: 1px solid black;
+  border: 1px solid #ece0ed;
   border-radius: 30px;
 `;
 
@@ -266,7 +303,9 @@ const ModifyBtn = styled.TouchableOpacity`
 `;
 
 const CommentWrapView = styled.View`
-  height: ${SCREEN_HEIGHT + "px"};
+  height: 100%;
+  min-height: ${SCREEN_HEIGHT / 2 + "px"};
+  border-radius: 30px;
 `;
 
 const CommentAddView = styled.View`
@@ -279,19 +318,21 @@ const CommentAddView = styled.View`
 
 const CommentAddTextInput = styled.TextInput`
   width: 66%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 20px;
   margin-right: 10px;
   height: 35px;
+  background-color: #fff;
 `;
 
 const CommentAddBtn = styled.TouchableOpacity`
   width: 30%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 20px;
   height: 35px;
   align-items: center;
   justify-content: center;
+  background-color: #fff;
 `;
 
 const ConmmentContentView = styled.View`
@@ -299,9 +340,10 @@ const ConmmentContentView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 20px;
   padding: 4px;
+  background-color: #fff;
 `;
 
 const CommentContentIconBtnView = styled.View`
