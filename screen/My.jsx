@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   FlatList,
+  useColorScheme,
 } from "react-native";
 import { authService, dbService } from "../common/firebase";
 import styled from "@emotion/native";
@@ -27,6 +28,7 @@ import {
 import MyPostList from "../components/MyPostList";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
+  const isDark = useColorScheme() === "dark";
   // 닉네임 불러오기
   const auth = getAuth();
   const user = auth.currentUser;
@@ -47,7 +49,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     setOptions({
       headerLeft: () => (
         <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => goBack()}>
-          <Ionicons name="chevron-back" size={24} color="black" />
+          <Ionicons
+            name="chevron-back"
+            size={24}
+            color={isDark ? "white" : "black"}
+          />
         </TouchableOpacity>
       ),
       // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
@@ -55,7 +61,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       // reset으로..?
       headerRight: () => (
         <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
-          <Text>로그아웃</Text>
+          <Text style={{ color: isDark ? "white" : "black" }}>로그아웃</Text>
         </TouchableOpacity>
       ),
     });
@@ -77,23 +83,27 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
       setUserPostList(UserPosts);
     });
 
+  }, [isDark]);
+
+//useEffect 분리하기
     // 내가 쓴 댓글 불러오기
-    const c = query(
-      collection(dbService, "Comment"),
-      orderBy("createdAt", "desc"),
-      where("userId", "==", userId)
-    );
-    onSnapshot(c, (snapshot) => {
-      const UserComments = snapshot.docs.map((doc) => {
-        const newUserComment = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newUserComment;
-      });
-      setUserCommentList(UserComments);
-    });
-  }, []);
+  //  const c = query(
+  //    collection(dbService, "Comment"),
+   //   orderBy("createdAt", "desc"),
+  //   where("userId", "==", userId)
+  //  );
+  //  onSnapshot(c, (snapshot) => {
+  //    const UserComments = snapshot.docs.map((doc) => {
+    //    const newUserComment = {
+     //     id: doc.id,
+    //      ...doc.data(),
+   //     };
+  //      return newUserComment;
+ //     });
+ //     setUserCommentList(UserComments);
+//   });
+//  }, []);
+
 
   // 닉네임 수정하기
   const editNickName = async () => {
@@ -145,7 +155,9 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             <AntDesign name="edit" size={24} color="black" />
           </TouchableOpacity>
         </MyNameWrapView>
-        <MyPostTitleText>내가 쓴 글</MyPostTitleText>
+        <MyPostTitleText style={{ color: isDark ? "white" : "black" }}>
+          내가 쓴 글
+        </MyPostTitleText>
         <MyPostView>
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -157,7 +169,11 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
             }}
           />
         </MyPostView>
-        <MyCommentsTitleText>내가 쓴 댓글</MyCommentsTitleText>
+
+        <MyCommentsTitleText style={{ color: isDark ? "white" : "black" }}>
+          내가 쓴 댓글
+        </MyCommentsTitleText>
+
         <MyCommentsView>
           <ScrollView
             showsVerticalScrollIndicator={false}

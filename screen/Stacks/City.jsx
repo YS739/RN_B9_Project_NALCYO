@@ -10,6 +10,8 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
+  useColorScheme,
+
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
@@ -34,6 +36,8 @@ const City = ({
     params: { WeatherId },
   },
 }) => {
+
+  const isDark = useColorScheme() === "dark";
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
 
@@ -41,6 +45,7 @@ const City = ({
     ["getWeather", WeatherId],
     getNowWeather
   );
+
 
   useEffect(() => {
     setOptions({
@@ -80,9 +85,14 @@ const City = ({
   }
 
   return (
-    <View style={{ flex: 1 }}>
+
+    <View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
       <SafeAreaView
-        style={{ alignItems: "center", flex: 1, backgroundColor: "#97d2ec" }}
+        style={{
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
+          alignItems: "center",
+          flex: 1,
+        }}
       >
         <WeatherContainer>
           <WeatherWrap>
@@ -113,6 +123,7 @@ const City = ({
         />
 
         {/* 글목록 */}
+
         <FlatList
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}

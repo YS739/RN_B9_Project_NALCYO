@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import styled from "@emotion/native";
 import {
   Image,
   Text,
@@ -9,6 +10,7 @@ import {
   SafeAreaView,
   Keyboard,
   TouchableWithoutFeedback,
+  useColorScheme,
 } from "react-native";
 import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
@@ -16,6 +18,7 @@ import { emailRegex, pwRegex } from "../../common/util";
 import Loader from "../../components/Loader";
 
 const Login = ({ navigation: { navigate } }) => {
+  const isDark = useColorScheme() === "dark";
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -85,20 +88,61 @@ const Login = ({ navigation: { navigate } }) => {
     <Loader />
   ) : (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.login_title}>오늘 날°C요 </Text>
+      <SafeAreaView
+        style={{
+          backgroundColor: isDark ? "#202020" : "#97d2ec",
+          alignItems: "center",
+          height: 900,
+        }}
+      >
+        <Text
+          style={{
+            color: isDark ? "white" : "black",
+            marginTop: 50,
+            padding: 30,
+            fontSize: 44,
+            fontWeight: "bold",
+            fontFamily: "NanumPenScript-Regular",
+          }}
+        >
+          오늘 날°C요{" "}
+        </Text>
         <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
         <View>
-          <Text style={styles.email_form_title}>이메일</Text>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            이메일
+          </Text>
           <TextInput
             placeholder="Email"
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
             textContentType="emailAddress"
-            style={styles.login_input}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
           />
-          <Text style={styles.email_form_title}>비밀번호</Text>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            비밀번호
+          </Text>
 
           <TextInput
             secureTextEntry={true}
@@ -108,21 +152,29 @@ const Login = ({ navigation: { navigate } }) => {
             onChangeText={(text) => setPw(text)}
             textContentType="password"
             returnKeyType="send"
-            style={styles.login_input}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
           />
           <TouchableOpacity
             color="#f194ff"
             onPress={handleLogin}
             style={styles.login_button}
           >
-            <Text style={styles.text}>이메일로 로그인하기</Text>
+            <Text style={styles.text}>로그인</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigate("SignUp")}
             style={styles.login_button}
           >
-            <Text style={styles.text}>회원가입 하러가기</Text>
+            <Text style={styles.text}>회원가입</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -139,7 +191,6 @@ const styles = StyleSheet.create({
 
   container: {
     alignItems: "center",
-    backgroundColor: "#97D2EC",
     height: 900,
   },
   login_title: {
@@ -164,9 +215,13 @@ const styles = StyleSheet.create({
   },
   login_button: {
     width: 280,
+    height: 40,
     borderRadius: 30,
-    padding: 20,
+    // padding: 20,
     margin: 10,
     backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

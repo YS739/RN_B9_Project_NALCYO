@@ -1,9 +1,10 @@
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 
 const MyPostList = ({ userPost }) => {
+  const isDark = useColorScheme() === "dark";
   const navigation = useNavigation();
   return (
     <MyPostBoxBtn
