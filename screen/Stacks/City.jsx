@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   FlatList,
   useColorScheme,
+
 } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
@@ -26,12 +27,16 @@ import {
   getDocs,
 } from "@firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
+import { Ionicons } from "@expo/vector-icons";
 
 const City = ({
+  navigation: { navigate, setOptions },
+
   route: {
     params: { WeatherId },
   },
 }) => {
+
   const isDark = useColorScheme() === "dark";
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
@@ -41,10 +46,21 @@ const City = ({
     getNowWeather
   );
 
-  console.log(getWeatherData);
 
   useEffect(() => {
+    setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 15 }}
+          onPress={() => navigate("Tabs", { screen: "Home" })}
+        >
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+
     // 내가 쓴 글 불러오기
+
     const q = query(
       collection(dbService, "list"),
       orderBy("createdAt", "desc")
@@ -70,6 +86,7 @@ const City = ({
   }
 
   return (
+
     <View style={{ backgroundColor: isDark ? "#202020" : "#97d2ec", flex: 1 }}>
       <SafeAreaView
         style={{
@@ -78,7 +95,9 @@ const City = ({
           flex: 1,
         }}
       >
+
         <PostModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
+
         <WeatherContainer>
           <WeatherWrap>
             <WeatherImage
@@ -101,6 +120,14 @@ const City = ({
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
           <Text>글쓰기</Text>
         </CityWriteBtn>
+
+        <PostModal
+          cityId={WeatherId}
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+        />
+
+
         {/* 글목록 */}
 
         <FlatList

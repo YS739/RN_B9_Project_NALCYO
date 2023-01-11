@@ -16,7 +16,6 @@ import { authService } from "../../common/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
 import Loader from "../../components/Loader";
-// TODO: font - 주석처리 해제
 
 const Login = ({ navigation: { navigate } }) => {
   const isDark = useColorScheme() === "dark";
