@@ -63,7 +63,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
 
     // 내가 쓴 글 불러오기
     const q = query(
-      collection(dbService, "List"),
+      collection(dbService, "list"),
       orderBy("createdAt", "desc"),
       where("userId", "==", userId)
     );
