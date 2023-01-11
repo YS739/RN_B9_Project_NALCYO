@@ -28,6 +28,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
+import PostModal from "../../components/PostModal";
 // import { async, uuidv4 } from "@firebase/util";
 
 // 1. 상세 페이지 id (댓글을 전체 불러오기) x
@@ -78,6 +79,9 @@ const PostDetail = () => {
   // deleteDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"));
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [nickName, setNickName] = useState("");
@@ -146,10 +150,15 @@ const PostDetail = () => {
               <ContentText>내용</ContentText>
             </ContentView>
             <ModifyWrap>
-              <ModifyBtn>
+              <ModifyBtn onPress={() => setIsOpenModal(true)}>
                 <Text>수정 하기</Text>
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
+              <PostModal
+                screenName={screenName}
+                isOpenModal={isOpenModal}
+                setIsOpenModal={setIsOpenModal}
+              />
               <ModifyBtn>
                 <Text>삭제 하기</Text>
                 <FontAwesome name="trash-o" size={24} color="black" />
