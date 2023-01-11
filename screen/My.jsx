@@ -184,7 +184,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 onPress={() => navigate("Stacks", { screen: "PostDetail" })}
               >
                 <MyCommentsCategoryView>
-                  <Text>지역...</Text>
+                  <Text>{co.cityName}</Text>
                 </MyCommentsCategoryView>
                 <MyCommentsContentsView>
                   <Text numberOfLines={1} ellipsizeMode="tail">

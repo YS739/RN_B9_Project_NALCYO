@@ -11,7 +11,7 @@ const MyPostList = ({ userPost }) => {
       onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}
     >
       <MyPostCategoryView>
-        <Text>{userPost.category}</Text>
+        <Text>{userPost.cityName}</Text>
         {/* TODO: 기온은 category가 같은 api의 기온..? */}
       </MyPostCategoryView>
       <MyPostContentsView>

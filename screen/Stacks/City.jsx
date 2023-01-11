@@ -57,6 +57,7 @@ const City = ({
     getNowWeather
   );
 
+  // PostModal로 보내는 지역 이름
   const WeatherName = getWeatherData?.name;
 
   const CityNameChange = (val) => {
@@ -271,6 +272,7 @@ const City = ({
           <Text>글쓰기</Text>
         </CityWriteBtn>
         <PostModal
+          cityName={CityNameChange(WeatherName)}
           cityId={WeatherId}
           isOpenModal={isOpenModal}
           setIsOpenModal={setIsOpenModal}

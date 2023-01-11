@@ -43,6 +43,7 @@ const PostDetail = ({ route }) => {
   const userId = user.uid;
 
   const PostID = route.params.postId;
+  const cityName = route.params.cityName;
   // console.log("PostID=", PostID);
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
@@ -111,6 +112,7 @@ const PostDetail = ({ route }) => {
     comment: text,
     isEdit: false,
     createdAt: new Date(),
+    cityName,
   };
 
   // 댓글 추가 알람창
