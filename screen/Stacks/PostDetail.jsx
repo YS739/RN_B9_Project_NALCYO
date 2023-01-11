@@ -27,13 +27,9 @@ import {
   addDoc,
   deleteDoc,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
-
-import PostModal from "../../components/PostModal";
-
-const PostDetail = () => {
-  
 import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
@@ -43,18 +39,11 @@ const PostDetail = ({ route }) => {
   const user = auth.currentUser;
   const userNickName = user.displayName;
   const userId = user.uid;
-  // 1. 해당글의 list id 필요함
-  // 2. 댓글을 전체가 아닌 해당글의 댓글만 받아와야함
-  // 3. 유효성 검사 해야함 / alert창 만들어서 지우기 수정 해야함
 
   const PostID = route.params.postId;
   // console.log("PostID=", PostID);
-
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
@@ -101,11 +90,9 @@ const PostDetail = ({ route }) => {
   // add commentList
   const [text, setText] = useState("");
   const newComment = {
-
     nickName: userNickName,
     PostId: PostID,
     userId: userId,
-
     comment: text,
     isEdit: false,
     createdAt: new Date(),
@@ -116,13 +103,27 @@ const PostDetail = ({ route }) => {
     setText("");
   };
 
-  // delete commentLis
+  // delete commentList
   const deleteCommentList = async (id) => {
     await deleteDoc(doc(dbService, "Comment", id));
   };
 
-  //
+  // update commentList
+  const toggleEdit = async (id) => {
+    await updateDoc(doc(dbService, "Comment", id), {
+      isEdit: DetailcommentList[0].isEdit ? false : true,
+    });
+    // console.log("DetailList.isEdit=", DetailcommentList[0].isEdit);
+  };
+  const [editText, setEditText] = useState("");
 
+  const editCommentList = async (id) => {
+    await updateDoc(doc(dbService, "Comment", id), {
+      comment: editText,
+      isEdit: DetailcommentList[0].isEdit ? false : true,
+    });
+    setEditText("");
+  };
   return (
     <LayoutSafeAreaView>
       <DetailSafeAreaView>
@@ -142,15 +143,10 @@ const PostDetail = ({ route }) => {
               <ContentText>{DetailList[0]?.content}</ContentText>
             </ContentView>
             <ModifyWrap>
-              <ModifyBtn onPress={() => setIsOpenModal(true)}>
+              <ModifyBtn>
                 <Text>수정 하기</Text>
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
-              <PostModal
-                screenName={screenName}
-                isOpenModal={isOpenModal}
-                setIsOpenModal={setIsOpenModal}
-              />
               <ModifyBtn>
                 <Text>삭제 하기</Text>
                 <FontAwesome name="trash-o" size={24} color="black" />
@@ -160,25 +156,41 @@ const PostDetail = ({ route }) => {
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
-              <CommentAddTextInput
-                onSubmitEditing={addCommentList}
-                onChangeText={setText}
-                value={text}
-              ></CommentAddTextInput>
+              <CommentAddTextInputView>
+                <CommentAddTextInput
+                  onSubmitEditing={addCommentList}
+                  onChangeText={setText}
+                  value={text}
+                ></CommentAddTextInput>
+              </CommentAddTextInputView>
               <CommentAddBtn onPress={addCommentList}>
                 <Text>댓글 달기</Text>
               </CommentAddBtn>
             </CommentAddView>
 
-
             {DetailcommentList.map((el) => {
-
-              return (
+              return el.isEdit ? (
+                <ConmmentContentView key={el.id}>
+                  <EditCommentTextInput
+                    value={editText}
+                    onChangeText={setEditText}
+                    onSubmitEditing={() => editCommentList(el.id)}
+                  ></EditCommentTextInput>
+                  <CommentContentIconBtnView>
+                    <TouchableOpacity onPress={() => editCommentList(el.id)}>
+                      <AntDesign name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => deleteCommentList(el.id)}>
+                      <FontAwesome name="trash-o" size={24} color="black" />
+                    </TouchableOpacity>
+                  </CommentContentIconBtnView>
+                </ConmmentContentView>
+              ) : (
                 <ConmmentContentView key={el.id}>
                   <Text>{el?.nickName}</Text>
                   <Text>{el?.comment}</Text>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => toggleEdit(el.id)}>
                       <AntDesign name="edit" size={24} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => deleteCommentList(el.id)}>
@@ -299,14 +311,17 @@ const CommentAddView = styled.View`
   height: 45px;
   margin-top: 5px;
 `;
-
-const CommentAddTextInput = styled.TextInput`
+const CommentAddTextInputView = styled.View`
   width: 66%;
-  /* border: 1px solid black; */
   border-radius: 20px;
   margin-right: 10px;
   height: 35px;
   background-color: #fff;
+`;
+const CommentAddTextInput = styled.TextInput`
+  width: 90%;
+  height: 100%;
+  margin-left: 10px;
 `;
 
 const CommentAddBtn = styled.TouchableOpacity`
@@ -338,3 +353,21 @@ const CommentContentIconBtnView = styled.View`
 `;
 
 const CommentScrollView = styled.ScrollView``;
+
+const EditCommentTextInput = styled.TextInput`
+  margin-left: -5px;
+  width: 80%;
+  height: 130%;
+  border-radius: 20px;
+  background-color: #ccc6ff;
+  text-indent: 5px;
+`;
+
+// style
+// 1.input text indent 글자 들여쓰기
+// 2.댓글 양쪽 마진값
+// 3.댓글 버튼 2개 마진값
+// 4.본문 수정하기 삭제하기 마진값
+
+// 기능
+// 1. 유효성 검사 해야함 / alert창 만들어서 지우기 수정 해야함
