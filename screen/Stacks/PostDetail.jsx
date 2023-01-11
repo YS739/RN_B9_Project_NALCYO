@@ -2,38 +2,15 @@ import styled from "@emotion/native";
 
 import React, { useEffect, useState } from "react";
 
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
-  StyleSheet,
-} from "react-native";
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Image, FlatList, ScrollView, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
 
-import {
-  getDoc,
-  doc,
-  onSnapshot,
-  query,
-  collection,
-  orderBy,
-  addDoc,
-  deleteDoc,
-  where,
-} from "firebase/firestore";
+import { getDoc, doc, onSnapshot, query, collection, orderBy, addDoc, deleteDoc, where } from "firebase/firestore";
 import { authService, dbService } from "../../common/firebase";
 
 import PostModal from "../../components/PostModal";
 
-const PostDetail = () => {
-  
 import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
@@ -67,10 +44,7 @@ const PostDetail = ({ route }) => {
   // console.log("list=", DetailList);
   useEffect(() => {
     // 댓글
-    const q = query(
-      collection(dbService, "Comment"),
-      orderBy("createdAt", "desc")
-    );
+    const q = query(collection(dbService, "Comment"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       const newComments = snapshot.docs.map((doc) => {
         const newComment = {
@@ -82,10 +56,7 @@ const PostDetail = ({ route }) => {
       setCommentList(newComments);
     });
     // 본문
-    const p = query(
-      collection(dbService, "list"),
-      orderBy("createdAt", "desc")
-    );
+    const p = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
     onSnapshot(p, (snapshot) => {
       const newLists = snapshot.docs.map((doc) => {
         const newList = {
@@ -101,7 +72,6 @@ const PostDetail = ({ route }) => {
   // add commentList
   const [text, setText] = useState("");
   const newComment = {
-
     nickName: userNickName,
     PostId: PostID,
     userId: userId,
@@ -146,11 +116,7 @@ const PostDetail = ({ route }) => {
                 <Text>수정 하기</Text>
                 <AntDesign name="edit" size={24} color="black" />
               </ModifyBtn>
-              <PostModal
-                screenName={screenName}
-                isOpenModal={isOpenModal}
-                setIsOpenModal={setIsOpenModal}
-              />
+              <PostModal screenName={screenName} isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
               <ModifyBtn>
                 <Text>삭제 하기</Text>
                 <FontAwesome name="trash-o" size={24} color="black" />
@@ -160,19 +126,13 @@ const PostDetail = ({ route }) => {
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
-              <CommentAddTextInput
-                onSubmitEditing={addCommentList}
-                onChangeText={setText}
-                value={text}
-              ></CommentAddTextInput>
+              <CommentAddTextInput onSubmitEditing={addCommentList} onChangeText={setText} value={text}></CommentAddTextInput>
               <CommentAddBtn onPress={addCommentList}>
                 <Text>댓글 달기</Text>
               </CommentAddBtn>
             </CommentAddView>
 
-
             {DetailcommentList.map((el) => {
-
               return (
                 <ConmmentContentView key={el.id}>
                   <Text>{el?.nickName}</Text>
