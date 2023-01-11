@@ -25,7 +25,6 @@ import {
   getDocs,
 } from "@firebase/firestore";
 import MyPostList from "../components/MyPostList";
-// import MyCommentList from "../components/MyCommentList";
 
 const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   // 닉네임 불러오기
