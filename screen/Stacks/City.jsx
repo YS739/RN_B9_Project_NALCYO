@@ -192,7 +192,7 @@ const City = ({
     });
 
     // 내가 쓴 글 불러오기
-    const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
+    const q = query(collection(dbService, "list"), where("cityId", "==", WeatherId), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       const UserPosts = snapshot.docs.map((doc) => {
         const newUserPost = {
