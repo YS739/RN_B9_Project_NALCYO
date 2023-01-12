@@ -60,13 +60,17 @@ const SignUp = ({ navigation: { navigate } }) => {
         console.log("회원가입 성공!");
         updateProfile(authService.currentUser, {
           displayName: nickName,
-        }).then(() => {
-          alert("회원가입 성공!");
-          setEmail("");
-          setNickName("");
-          setPw("");
-          navigate("Tabs", { screen: "Home" });
-        });
+        })
+          .then(() => {
+            alert("회원가입 성공!");
+            setEmail("");
+            setNickName("");
+            setPw("");
+            navigate("Tabs", { screen: "Home" });
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
       })
       .catch((err) => {
         console.log(err.message);
