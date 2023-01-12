@@ -5,9 +5,6 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  StyleSheet,
-  Image,
-  ScrollView,
   ActivityIndicator,
   FlatList,
   useColorScheme,
@@ -65,7 +62,7 @@ const City = ({
         return "전라북도";
         break;
       case "Seoul":
-        return "서울/경기";
+        return "서울/인천/경기";
         break;
       case "Cheonan":
         return "충청남도";
@@ -95,59 +92,59 @@ const City = ({
   const WeatherImageChange = (val) => {
     switch (val) {
       case "01d":
-        return <WeatherImage source={해} />;
+        return <WeatherImage source={해} resizeMode="stretch" />;
         break;
       case "02d":
-        return <WeatherImage source={구름_해} />;
+        return <WeatherImage source={구름_해} resizeMode="stretch" />;
         break;
       case "03d":
-        return <WeatherImage source={구름} />;
+        return <WeatherImage source={구름} resizeMode="stretch" />;
         break;
       case "04d":
-        return <WeatherImage source={구름구름} />;
+        return <WeatherImage source={구름구름} resizeMode="stretch" />;
         break;
       case "09d":
-        return <WeatherImage source={구름구름비} />;
+        return <WeatherImage source={구름구름비} resizeMode="stretch" />;
         break;
       case "10d":
-        return <WeatherImage source={해비} />;
+        return <WeatherImage source={해비} resizeMode="stretch" />;
         break;
       case "11d":
-        return <WeatherImage source={번개} />;
+        return <WeatherImage source={번개} resizeMode="stretch" />;
         break;
       case "13d":
-        return <WeatherImage source={눈} />;
+        return <WeatherImage source={눈} resizeMode="stretch" />;
         break;
       case "50d":
-        return <WeatherImage source={안개} />;
+        return <WeatherImage source={안개} resizeMode="stretch" />;
         break;
       //밤
       case "01n":
-        return <WeatherImage source={달} />;
+        return <WeatherImage source={달} resizeMode="stretch" />;
         break;
       case "02n":
-        return <WeatherImage source={구름} />;
+        return <WeatherImage source={구름} resizeMode="stretch" />;
         break;
       case "03n":
-        return <WeatherImage source={구름} />;
+        return <WeatherImage source={구름} resizeMode="stretch" />;
         break;
       case "04n":
-        return <WeatherImage source={구름구름} />;
+        return <WeatherImage source={구름구름} resizeMode="stretch" />;
         break;
       case "09n":
-        return <WeatherImage source={구름구름비} />;
+        return <WeatherImage source={구름구름비} resizeMode="stretch" />;
         break;
       case "10n":
-        return <WeatherImage source={구름구름비} />;
+        return <WeatherImage source={구름구름비} resizeMode="stretch" />;
         break;
       case "11n":
-        return <WeatherImage source={번개} />;
+        return <WeatherImage source={번개} resizeMode="stretch" />;
         break;
       case "13n":
-        return <WeatherImage source={눈} />;
+        return <WeatherImage source={눈} resizeMode="stretch" />;
         break;
       case "50n":
-        return <WeatherImage source={안개} />;
+        return <WeatherImage source={안개} resizeMode="stretch" />;
         break;
     }
   };
@@ -252,18 +249,33 @@ const City = ({
       >
         <WeatherContainer>
           <WeatherWrap>
-            {WeatherImageChange(getWeatherData?.weather[0]?.icon)}
-            <WeatherMainText>
-              {WeatherChange(getWeatherData?.weather[0]?.main)}
-            </WeatherMainText>
-            <WeatherTemperatureText>
-              {Math.round(getWeatherData?.main?.temp)}
-              <Text style={{ fontSize: 30, color: "gray" }}>℃</Text>
-            </WeatherTemperatureText>
+            <CityView>
+              <CityimgText>
+                {WeatherImageChange(getWeatherData?.weather[0]?.icon)}
+              </CityimgText>
+            </CityView>
+
+            <TextView>
+              <CityText>{CityNameChange(getWeatherData?.name)}</CityText>
+              <TempBox>
+                <TempText>
+                  <TempText
+                    style={{
+                      color: getWeatherData?.main?.temp > 0 ? "red" : "blue",
+                    }}
+                  >
+                    {Math.round(getWeatherData?.main?.temp)}
+                  </TempText>
+                  <SubTempText>℃</SubTempText>
+                </TempText>
+                <TempText>
+                  <WeatherText>
+                    {WeatherChange(getWeatherData?.weather[0]?.main)}
+                  </WeatherText>
+                </TempText>
+              </TempBox>
+            </TextView>
           </WeatherWrap>
-          <WeatherCityText>
-            {CityNameChange(getWeatherData?.name)}
-          </WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
@@ -306,52 +318,22 @@ const WeatherContainer = styled.TouchableOpacity`
 `;
 
 const WeatherWrap = styled.View`
-  width: 60%;
-  height: 70%;
+  width: 100%;
+  height: 100%;
   border-radius: 30px;
-  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
-//날씨 이미지
 const WeatherImage = styled.Image`
-  width: 230px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   bottom: 45px;
-  right: 45px;
+  left: 50px;
   margin: 35px;
   border-radius: 30px;
-  /* position: relative; */
-  overflow: hidden;
-`;
-
-//온도 텍스트
-const WeatherTemperatureText = styled.Text`
-  top: 72px;
-  left: 220px;
-  font-size: 45px;
-  position: absolute;
-  color: gray;
-`;
-
-//날씨 텍스트
-const WeatherMainText = styled.Text`
-  position: absolute;
-  left: 183px;
-  font-size: 40px;
-  top: 25px;
-  align-content: center;
-  width: 80%;
-  height: 40%;
-  text-align: center;
-`;
-
-//도시 텍스트
-const WeatherCityText = styled.Text`
-  position: absolute;
-  top: 150px;
-  left: 40px;
-  font-size: 55px;
-  font-weight: 600;
 `;
 
 const CityWriteBtn = styled.TouchableOpacity`
@@ -370,5 +352,44 @@ const CityLoader = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: #97d2ec;
+`;
+
+const CityView = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+`;
+
+const CityimgText = styled.Text`
+  display: flex;
+`;
+
+const TextView = styled.View`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 5px;
+`;
+
+const CityText = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+`;
+const WeatherText = styled.Text`
+  font-size: 24px;
+`;
+
+const TempBox = styled.View``;
+
+const TempText = styled.Text`
+  font-size: 24px;
+`;
+const SubTempText = styled.Text`
+  font-size: 24px;
+  color: gray;
 `;
