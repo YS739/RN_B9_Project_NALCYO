@@ -41,7 +41,6 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   const user = auth.currentUser;
   const userNickName = user.displayName;
   const userId = user.uid;
-
   const PostID = route.params.postId;
   const cityName = route.params.cityName;
   // console.log("PostID=", PostID);
@@ -68,6 +67,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
+  // const UserPost = list.filter((el)=>el.userId == userId)
 
   // console.log("list=", DetailList);
   useEffect(() => {
@@ -272,7 +272,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                 <Text>{list.title}</Text>
               </TitleView>
               <NickNameView>
-                <Text>닉네임</Text>
+                <Text>{list.userName}</Text>
               </NickNameView>
               <ContentView>
                 <ContentText>{list.content}</ContentText>

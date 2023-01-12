@@ -8,7 +8,12 @@ const MyPostList = ({ userPost }) => {
   const navigation = useNavigation();
   return (
     <MyPostBoxBtn
-      onPress={() => navigation.navigate("Stacks", { screen: "PostDetail" })}
+      onPress={() =>
+        navigation.navigate("Stacks", {
+          screen: "PostDetail",
+          params: { postId: userPost.id },
+        })
+      }
     >
       <MyPostCategoryView>
         <Text>{userPost.cityName}</Text>
