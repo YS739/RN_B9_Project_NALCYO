@@ -167,7 +167,7 @@ const SeoulBtn = styled.TouchableOpacity`
   position: absolute;
   width: 140px;
   background-color: ${textBackgroundColor};
-  border-radius: 10px;
+  border-radius: 20px;
   top: 150px;
   right: 180px;
   display: flex;
@@ -177,6 +177,7 @@ const SeoulBtn = styled.TouchableOpacity`
 
 const GangwonBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   top: 130px;
   right: 100px;
   width: 70px;
@@ -187,6 +188,7 @@ const GangwonBtn = styled.TouchableOpacity`
 `;
 const GyongBukBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   top: 280px;
   right: 50px;
   width: 90px;
@@ -197,6 +199,7 @@ const GyongBukBtn = styled.TouchableOpacity`
 `;
 const GyongNamBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   top: 400px;
   right: 80px;
   width: 90px;
@@ -207,6 +210,7 @@ const GyongNamBtn = styled.TouchableOpacity`
 `;
 const JeonBukBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   left: 110px;
   top: 360px;
   width: 90px;
@@ -217,6 +221,7 @@ const JeonBukBtn = styled.TouchableOpacity`
 `;
 const JeonNamBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   top: 440px;
   left: 90px;
   width: 90px;
@@ -227,6 +232,7 @@ const JeonNamBtn = styled.TouchableOpacity`
 `;
 const ChungBukBtn = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   top: 230px;
   right: 130px;
   width: 90px;
@@ -242,11 +248,13 @@ const ChungNamBtn = styled.TouchableOpacity`
   width: 90px;
   background-color: ${textBackgroundColor};
   display: flex;
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
 `;
 const Jeju = styled.TouchableOpacity`
   position: absolute;
+  border-radius: 20px;
   bottom: 80px;
   left: 60px;
   width: 70px;
