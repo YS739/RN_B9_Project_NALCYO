@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import styled from "@emotion/native";
 import {
-  Image,
   Text,
   StyleSheet,
   View,
@@ -13,16 +12,17 @@ import {
   useColorScheme,
 } from "react-native";
 import { authService } from "../../common/firebase";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
-import Loader from "../../components/Loader";
+import { updateProfile } from "firebase/auth";
 
-const Login = ({ navigation: { navigate } }) => {
+const SignUp = ({ navigation: { navigate } }) => {
   const isDark = useColorScheme() === "dark";
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [nickName, setNickName] = useState("");
 
   const validateInputs = () => {
     if (!email) {
@@ -49,44 +49,35 @@ const Login = ({ navigation: { navigate } }) => {
       return true;
     }
   };
-
-  const handleLogin = () => {
+  const handleRegister = () => {
     // 유효성 검사
     if (validateInputs()) {
       return;
     }
 
-    // 로그인 요청
-    signInWithEmailAndPassword(authService, email, pw)
+    createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인 성공");
-        setEmail("");
-        setPw("");
-        navigate("Tabs", { screen: "Home" });
+        console.log("회원가입 성공!");
+        updateProfile(authService.currentUser, {
+          displayName: nickName,
+        })
+          .then(() => {
+            alert("회원가입 성공!");
+            setEmail("");
+            setNickName("");
+            setPw("");
+            navigate("Tabs", { screen: "Home" });
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
       })
       .catch((err) => {
-        console.log("err.message:", err.message);
-        if (err.message.includes("user-not-found")) {
-          alert("회원이 아닙니다. 회원가입을 먼저 진행해 주세요.");
-          navigate("SignUp");
-        }
-        if (err.message.includes("wrong-password")) {
-          alert("비밀번호가 틀렸습니다.");
-        }
+        console.log(err.message);
       });
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 4000);
-  }, []);
-
-  return isLoading ? (
-    <Loader />
-  ) : (
+  return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView
         style={{
@@ -105,10 +96,33 @@ const Login = ({ navigation: { navigate } }) => {
             fontFamily: "NanumPenScript-Regular",
           }}
         >
-          오늘 날°C요{" "}
+          회원가입
         </Text>
-        <Image style={styles.Logo} source={require("../../assets/icon1.png")} />
         <View>
+          <Text
+            style={{
+              color: isDark ? "white" : "black",
+              fontSize: 13,
+              paddingLeft: 10,
+            }}
+          >
+            닉네임
+          </Text>
+          <TextInput
+            placeholder="Nickname"
+            value={nickName}
+            maxLength={5}
+            onChangeText={(text) => setNickName(text)}
+            style={{
+              width: 280,
+              margin: 10,
+              padding: 20,
+              borderRadius: 30,
+              borderWidth: 1,
+              color: isDark ? "white" : "black",
+              borderColor: isDark ? "white" : "black",
+            }}
+          />
           <Text
             style={{
               color: isDark ? "white" : "black",
@@ -123,8 +137,7 @@ const Login = ({ navigation: { navigate } }) => {
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
-            onSubmitEditing={handleLogin}
-            textContentType="emailAddress"
+            onSubmitEditing={handleRegister}
             style={{
               width: 280,
               margin: 10,
@@ -144,15 +157,13 @@ const Login = ({ navigation: { navigate } }) => {
           >
             비밀번호
           </Text>
-
           <TextInput
             secureTextEntry={true}
             placeholder="Password"
             ref={pwRef}
             value={pw}
-            onSubmitEditing={handleLogin}
             onChangeText={(text) => setPw(text)}
-            textContentType="password"
+            onSubmitEditing={handleRegister}
             returnKeyType="send"
             style={{
               width: 280,
@@ -164,46 +175,40 @@ const Login = ({ navigation: { navigate } }) => {
               borderColor: isDark ? "white" : "black",
             }}
           />
-          <TouchableOpacity
-            color="#f194ff"
-            onPress={handleLogin}
-            style={styles.login_button}
-          >
-            <Text style={styles.text}>로그인</Text>
-          </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigate("SignUp")}
+            color="#f194ff"
+            onPress={handleRegister}
             style={styles.login_button}
           >
-            <Text style={styles.text}>회원가입</Text>
+            <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
-export default Login;
+
+export default SignUp;
 
 const styles = StyleSheet.create({
   Logo: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
   },
 
   container: {
     alignItems: "center",
+    backgroundColor: "#97D2EC",
     height: 900,
   },
   login_title: {
-    marginTop: 50,
+    marginTop: 30,
     padding: 30,
     fontSize: 44,
     fontWeight: "bold",
     fontFamily: "NanumPenScript-Regular",
   },
-
-  titleText: {},
   email_form_title: {
     fontSize: 13,
     padding: 10,
