@@ -158,7 +158,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
         <MyPostTitleText style={{ color: isDark ? "white" : "black" }}>
           내가 쓴 글
         </MyPostTitleText>
-        <MyPostView>
+        <MyPostView style={{ shadowColor: isDark ? "#5F6F94" : "black" }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ width: "90%" }}
@@ -174,7 +174,7 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
           내가 쓴 댓글
         </MyCommentsTitleText>
 
-        <MyCommentsView>
+        <MyCommentsView style={{ shadowColor: isDark ? "#5F6F94" : "black" }}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ width: "90%" }}
@@ -251,6 +251,7 @@ const MyPostView = styled.View`
   background-color: white;
   border-radius: 20px;
   align-items: center;
+  box-shadow: 5px 5px 2px;
 `;
 
 const MyPostBoxBtn = styled.TouchableOpacity`
