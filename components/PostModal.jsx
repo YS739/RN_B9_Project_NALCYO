@@ -176,6 +176,8 @@ const ModalTitleInputBox = styled.View`
 
 const ModalTitleTextInput = styled.TextInput`
   margin-left: 10px;
+  align-items: center;
+  justify-content: center;
 `;
 const ModalContentInputBox = styled(ModalTitleInputBox)`
   height: 50%;

@@ -1,40 +1,40 @@
-import 구름 from "../../assets/icons/구름.png";
-import 구름_해 from "../../assets/icons/구름_해.png";
-import 구름구름 from "../../assets/icons/구름구름.png";
-import 구름구름비 from "../../assets/icons/구름구름비.png";
-import 눈 from "../../assets/icons/눈.png";
-import 달 from "../../assets/icons/달.png";
-import 안개 from "../../assets/icons/안개.png";
-import 해 from "../../assets/icons/해.png";
-import 해비 from "../../assets/icons/해비.png";
-import 번개 from "../../assets/icons/번개.png";
+import 구름 from "../assets/icons/구름.png";
+import 구름_해 from "../assets/icons/구름_해.png";
+import 구름구름 from "../assets/icons/구름구름.png";
+import 구름구름비 from "../assets/icons/구름구름비.png";
+import 눈 from "../assets/icons/눈.png";
+import 달 from "../assets/icons/달.png";
+import 안개 from "../assets/icons/안개.png";
+import 해 from "../assets/icons/해.png";
+import 해비 from "../assets/icons/해비.png";
+import 번개 from "../assets/icons/번개.png";
 import styled from "@emotion/native";
 
 export const CityNameChange = (val) => {
   switch (val) {
     case "Jeonju":
-      return "전라북도";
+      return "전북 전주";
       break;
     case "Seoul":
       return "서울/인천/경기";
       break;
     case "Cheonan":
-      return "충청남도";
+      return "충남 천안";
       break;
     case "Cheongju-si":
-      return "충청북도";
+      return "충북 청주";
       break;
     case "Gwangju":
-      return "전라남도";
+      return "전남 광주";
       break;
     case "Wŏnju":
-      return "강원도";
+      return "강원도 원주";
       break;
     case "Daegu":
-      return "경상북도";
+      return "경북 대구";
       break;
     case "Busan":
-      return "경상남도";
+      return "경남 부산";
       break;
     case "Jeju City":
       return "제주도";
