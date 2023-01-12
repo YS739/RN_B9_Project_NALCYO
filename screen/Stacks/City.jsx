@@ -137,7 +137,7 @@ const City = ({
 
         {/* 글쓰기버튼 */}
         <CityWriteBtn onPress={() => setIsOpenModal(true)}>
-          <Text>글쓰기</Text>
+          <SizeText>글작성</SizeText>
         </CityWriteBtn>
         <PostModal
           cityName={CityNameChange(WeatherName)}
@@ -165,7 +165,7 @@ const City = ({
 export default City;
 
 // 날시 box
-const WeatherContainer = styled.TouchableOpacity`
+const WeatherContainer = styled.View`
   width: 90%;
   margin-top: 15px;
   height: 230px;
@@ -198,9 +198,9 @@ const WeatherWrap = styled.View`
 const CityWriteBtn = styled.TouchableOpacity`
   background-color: white;
   margin-top: 15px;
-  left: 105px;
+  left: 120px;
   width: 30%;
-  height: 50px;
+  height: 40px;
   border-radius: 30px;
   justify-content: center;
   align-items: center;
@@ -251,4 +251,8 @@ const TempText = styled.Text`
 const SubTempText = styled.Text`
   font-size: 24px;
   color: gray;
+`;
+
+const SizeText = styled.Text`
+  font-size: 16px;
 `;
