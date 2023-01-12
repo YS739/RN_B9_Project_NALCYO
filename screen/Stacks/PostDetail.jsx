@@ -410,7 +410,7 @@ const TitleView = styled.View`
   justify-content: center;
   align-items: center;
   height: 6.5%;
-  width: 120px;
+  width: auto;
   margin-bottom: 5px;
   border-radius: 30px;
   border-bottom-width: 1px;
