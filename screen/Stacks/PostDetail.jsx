@@ -1,23 +1,9 @@
 import styled from "@emotion/native";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Alert,
-  useColorScheme,
-} from "react-native";
+import { Text, StyleSheet, Alert, useColorScheme } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { SCREEN_HEIGHT } from "../../common/util";
 import {
-  getDoc,
   doc,
   onSnapshot,
   query,
@@ -25,18 +11,17 @@ import {
   orderBy,
   addDoc,
   deleteDoc,
-  where,
   updateDoc,
 } from "firebase/firestore";
-import { authService, dbService } from "../../common/firebase";
-
+import { dbService } from "../../common/firebase";
 import PostModal from "../../components/PostModal";
-
 import { getAuth } from "firebase/auth";
-
-// 로그인한 유저 아이디 / 닉네임
+import { useMutation } from "@tanstack/react-query";
+import { deletePost } from "../../common/api";
+import Loader from "../../components/Loader";
 
 const PostDetail = ({ navigation: { goBack }, route }) => {
+  // 로그인한 유저 아이디 / 닉네임
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
@@ -45,23 +30,48 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
 
   const cityName = route.params.cityName;
 
-  // 댓글 수정
-  // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
-
   const isDark = useColorScheme() === "dark";
 
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
+  // firebase 컬렉션 comment의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
-
-  const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
-
+  const DetailCommentList = commentList.filter((el) => el.PostId === PostID);
   const [list, setList] = useState([]);
-
   const DetailList = list.filter((el) => el.id == PostID);
-  // console.log("날씨 온도 =", DetailList[0].weather, DetailList[0].temp, "°C");
+
+  const { isLoading: isLoadingPost, mutate: deletePost } = useMutation(
+    ["deletePost", list.id],
+    (body) => deletePost(body),
+    {
+      onSuccess: () => {
+        console.log("삭제성공");
+      },
+      onError: (err) => {
+        console.log("err in delete:", err);
+      },
+    }
+  );
+
+  // 본문 삭제 알림창
+  const deletePostAlert = async () => {
+    Alert.alert("삭제", "정말로 삭제하시겠습니까?", [
+      { text: "취소", style: "destructive" },
+      {
+        text: "삭제",
+        onPress: async () => {
+          try {
+            await deletePost(list.id);
+            goBack();
+          } catch (error) {
+            console.log("error:", error);
+          }
+        },
+      },
+    ]);
+  };
+
   useEffect(() => {
     // 댓글
     const q = query(
@@ -151,28 +161,6 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
     );
   };
 
-  // 본문 삭제 알림창
-  const deletePostAlert = (id) => {
-    Alert.alert(
-      "삭제",
-      "정말로 삭제하시겠습니까?",
-      [
-        { text: "취소", onPress: () => {}, style: "cancel" },
-        {
-          text: "삭제",
-          onPress: () => {
-            deletePost(id);
-          },
-          style: "destructive",
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () => {},
-      }
-    );
-  };
-
   const updateToggleCommentListAlert = (id) => {
     Alert.alert(
       "수정",
@@ -193,18 +181,18 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
       }
     );
   };
-  // 댓글 수정 완료 알림창
 
+  // 댓글 수정 완료 알림창
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
   };
 
-  // 본문 삭제
-  const deletePost = async (id) => {
-    await deleteDoc(doc(dbService, "list", id));
-    goBack();
-  };
+  // // 본문 삭제
+  // const deletePost = async (id) => {
+  //   await deleteDoc(doc(dbService, "list", id));
+  //   goBack();
+  // };
 
   // delete commentList
   const deleteCommentList = async (id) => {
@@ -214,19 +202,22 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   // update commentList
   const toggleEdit = async (id) => {
     await updateDoc(doc(dbService, "Comment", id), {
-      isEdit: DetailcommentList[0].isEdit ? false : true,
+      isEdit: DetailCommentList[0].isEdit ? false : true,
     });
-    // console.log("DetailList.isEdit=", DetailcommentList[0].isEdit);
   };
   const [editText, setEditText] = useState("");
 
   const editCommentList = async (id) => {
     await updateDoc(doc(dbService, "Comment", id), {
       comment: editText,
-      isEdit: DetailcommentList[0].isEdit ? false : true,
+      isEdit: DetailCommentList[0].isEdit ? false : true,
     });
     setEditText("");
   };
+
+  if (isLoadingPost) {
+    return <Loader />;
+  }
   return (
     <LayoutSafeAreaView
       style={{ backgroundColor: isDark ? "#202020" : "#97d2ec" }}
@@ -280,7 +271,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                   setIsOpenModal={setIsOpenModal}
                 />
 
-                <ModifyBtn onPress={() => deletePostAlert(list.id)}>
+                <ModifyBtn onPress={deletePostAlert}>
                   <AllText>삭제 하기</AllText>
                   <FontAwesome name="trash-o" size={24} color="black" />
                 </ModifyBtn>
@@ -313,7 +304,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
               </CommentAddBtn>
             </CommentAddView>
 
-            {DetailcommentList.map((el) => {
+            {DetailCommentList.map((el) => {
               return el.isEdit ? (
                 <ConmmentContentView key={el.id}>
                   <EditCommentTextInput

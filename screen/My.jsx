@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   Text,
-  Image,
   ScrollView,
   View,
   Keyboard,
@@ -23,7 +22,6 @@ import {
   where,
   onSnapshot,
   orderBy,
-  getDocs,
 } from "@firebase/firestore";
 import MyPostList from "../components/MyPostList";
 
