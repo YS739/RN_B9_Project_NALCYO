@@ -42,34 +42,28 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   const userNickName = user.displayName;
   const userId = user.uid;
   const PostID = route.params.postId;
+
   const cityName = route.params.cityName;
-  // console.log("PostID=", PostID);
+
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
+
+
+  const isDark = useColorScheme() === "dark";
+
 
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
-  const isDark = useColorScheme() === "dark";
-  // useEffect(() => {
-  // 특정 댓글 get
-  // const getComment = async () => {
-  //   const snapshot = await getDoc(doc(dbService, "Comment"));
-  //   setComment(snapshot.data().comment);
-  //   setNickName(snapshot.data().nickName);
-  // };
-  // getComment();
 
   const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
-  // console.log("DetailcommentList:", DetailcommentList);
+
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
-  // const UserPost = list.filter((el)=>el.userId == userId)
 
-  // console.log("list=", DetailList);
   useEffect(() => {
     // 댓글
     const q = query(
@@ -263,6 +257,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
+
           {DetailList.map((list) => (
             <DetailContentWrapView key={list.id}>
               <WeatherView>
@@ -295,6 +290,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
               </ModifyWrap>
             </DetailContentWrapView>
           ))}
+
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
@@ -319,33 +315,39 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                     onSubmitEditing={() => updateCommentListAlert(el.id)}
                   ></EditCommentTextInput>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity
+                    <CommentContentUpdateIconBtn
                       onPress={() => updateCommentListAlert(el.id)}
                     >
                       <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                    </CommentContentUpdateIconBtn>
+                    <CommentContentDeleteIconBtn
                       onPress={() => deleteCommentListAlert(el.id)}
                     >
                       <FontAwesome name="trash-o" size={24} color="black" />
-                    </TouchableOpacity>
+                    </CommentContentDeleteIconBtn>
                   </CommentContentIconBtnView>
                 </ConmmentContentView>
               ) : (
                 <ConmmentContentView key={el.id}>
-                  <Text>{el?.nickName}</Text>
-                  <Text>{el?.comment}</Text>
+                  <ConmmentContentNicknameTextView>
+                    <ConmmentContentNicknameText>
+                      {el?.nickName}
+                    </ConmmentContentNicknameText>
+                  </ConmmentContentNicknameTextView>
+                  <ConmmentContentConmmentTextView>
+                    <Text>{el?.comment}</Text>
+                  </ConmmentContentConmmentTextView>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity
+                    <CommentContentUpdateIconBtn
                       onPress={() => updateToggleCommentListAlert(el.id)}
                     >
                       <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
+                    </CommentContentUpdateIconBtn>
+                    <CommentContentDeleteIconBtn
                       onPress={() => deleteCommentListAlert(el.id)}
                     >
                       <FontAwesome name="trash-o" size={24} color="black" />
-                    </TouchableOpacity>
+                    </CommentContentDeleteIconBtn>
                   </CommentContentIconBtnView>
                 </ConmmentContentView>
               );
@@ -380,7 +382,6 @@ const styles = StyleSheet.create({
 
 const LayoutSafeAreaView = styled.SafeAreaView`
   width: 100%;
-  /* background-color: #97d2ec; */
 `;
 
 const DetailSafeAreaView = styled.SafeAreaView`
@@ -394,7 +395,6 @@ const DetailContentWrapView = styled.View`
   align-items: center;
   height: ${SCREEN_HEIGHT / 2 + "px"};
   margin-top: 15px;
-  /* border: 1px solid black; */
   border-radius: 20px;
   background-color: #fff;
 `;
@@ -406,6 +406,8 @@ const WeatherView = styled.View`
   width: 45%;
   border-radius: 30px;
   margin-top: 10px;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
 `;
 
 const TitleView = styled.View`
@@ -414,19 +416,21 @@ const TitleView = styled.View`
   height: 6.5%;
   width: 50%;
   border-radius: 30px;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
 `;
 
 const NickNameView = styled.View`
   justify-content: center;
   align-items: flex-end;
-  height: 3%;
-  width: 100%;
+  height: 5%;
+  width: 350px;
   margin-right: 40px;
   margin-bottom: 20px;
 `;
 
 const ContentView = styled.View`
-  height: 60%;
+  height: 58%;
   width: 90%;
   border: 1px solid #ece0ed;
   border-radius: 30px;
@@ -446,6 +450,8 @@ const ModifyWrap = styled.View`
 const ModifyBtn = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  width: 80px;
+  justify-content: space-between;
 `;
 
 const CommentWrapView = styled.View`
@@ -501,7 +507,10 @@ const CommentContentIconBtnView = styled.View`
   justify-content: center;
   margin-right: 15px;
 `;
-
+const CommentContentDeleteIconBtn = styled.TouchableOpacity`
+  margin-left: 7px;
+`;
+const CommentContentUpdateIconBtn = styled.TouchableOpacity``;
 const CommentScrollView = styled.ScrollView``;
 
 const EditCommentTextInput = styled.TextInput`
@@ -512,11 +521,23 @@ const EditCommentTextInput = styled.TextInput`
   background-color: #ccc6ff;
   text-indent: 5px;
 `;
-
-// style
-// 2.댓글 양쪽 마진값
-// 3.댓글 버튼 2개 마진값
-// 4.본문 수정하기 삭제하기 마진값
+const ConmmentContentNicknameTextView = styled.View`
+  height: 30px;
+  width: 80px;
+  align-items: center;
+  justify-content: center;
+`;
+const ConmmentContentNicknameText = styled.Text`
+  margin-left: 5px;
+  width: 50px;
+`;
+const ConmmentContentConmmentTextView = styled.View`
+  height: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  width: 196px;
+`;
 
 // 기능
 // 1. 유효성 검사 해야함
+// 2. 본문 뿌려주기
