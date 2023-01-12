@@ -49,7 +49,156 @@ const City = ({
     getNowWeather
   );
 
+  // PostModal로 보내는 지역 이름
   const WeatherName = getWeatherData?.name;
+
+
+  const CityNameChange = (val) => {
+    switch (val) {
+      case "Jeonju":
+        return "전라북도";
+        break;
+      case "Seoul":
+        return "서울/경기";
+        break;
+      case "Cheonan":
+        return "충청남도";
+        break;
+      case "Cheongju-si":
+        return "충청북도";
+        break;
+      case "Gwangju":
+        return "전라남도";
+        break;
+      case "Wŏnju":
+        return "강원도";
+        break;
+      case "Daegu":
+        return "경상북도";
+        break;
+      case "Busan":
+        return "경상남도";
+        break;
+      case "Jeju City":
+        return "제주도";
+        break;
+    }
+  };
+
+  //날씨 이미지 변경
+  const WeatherImageChange = (val) => {
+    switch (val) {
+      case "01d":
+        return <WeatherImage source={해} />;
+        break;
+      case "02d":
+        return <WeatherImage source={구름_해} />;
+        break;
+      case "03d":
+        return <WeatherImage source={구름} />;
+        break;
+      case "04d":
+        return <WeatherImage source={구름구름} />;
+        break;
+      case "09d":
+        return <WeatherImage source={구름구름비} />;
+        break;
+      case "10d":
+        return <WeatherImage source={해비} />;
+        break;
+      case "11d":
+        return <WeatherImage source={번개} />;
+        break;
+      case "13d":
+        return <WeatherImage source={눈} />;
+        break;
+      case "50d":
+        return <WeatherImage source={안개} />;
+        break;
+      //밤
+      case "01n":
+        return <WeatherImage source={달} />;
+        break;
+      case "02n":
+        return <WeatherImage source={구름} />;
+        break;
+      case "03n":
+        return <WeatherImage source={구름} />;
+        break;
+      case "04n":
+        return <WeatherImage source={구름구름} />;
+        break;
+      case "09n":
+        return <WeatherImage source={구름구름비} />;
+        break;
+      case "10n":
+        return <WeatherImage source={구름구름비} />;
+        break;
+      case "11n":
+        return <WeatherImage source={번개} />;
+        break;
+      case "13n":
+        return <WeatherImage source={눈} />;
+        break;
+      case "50n":
+        return <WeatherImage source={안개} />;
+        break;
+    }
+  };
+
+  const userPosts = userPostList.filter((post) => post.cityId === WeatherId);
+
+  //온도위에 날씨 텍스트
+  const WeatherChange = (val) => {
+    switch (val) {
+      case "Thunderstorm":
+        return "뇌우";
+        break;
+      case "Drizzle":
+        return "이슬비";
+        break;
+      case "Rain":
+        return "비";
+        break;
+      case "Snow":
+        return "눈";
+        break;
+      case "Mist":
+        return "흐릿한";
+        break;
+      case "Smoke":
+        return "연기";
+        break;
+      case "Haze":
+        return "실안개";
+        break;
+      case "Fog":
+        return "안개";
+        break;
+      case "Sand":
+        return "모래";
+        break;
+      case "Dust":
+        return "먼지";
+        break;
+      case "Ash":
+        return "재";
+        break;
+      case "Squall":
+        return "돌풍";
+        break;
+      case "Tornado":
+        return "폭풍";
+        break;
+      case "Clear":
+        return "맑음";
+        break;
+      case "Clouds":
+        return "구름";
+        break;
+    }
+  };
+
 
   useEffect(() => {
     setOptions({
@@ -71,6 +220,7 @@ const City = ({
     const q = query(
       collection(dbService, "list"),
       orderBy("createdAt", "desc")
+
     );
     onSnapshot(q, (snapshot) => {
       const UserPosts = snapshot.docs.map((doc) => {
@@ -137,6 +287,7 @@ const City = ({
           <Text>글쓰기</Text>
         </CityWriteBtn>
         <PostModal
+          cityName={CityNameChange(WeatherName)}
           cityId={WeatherId}
           isOpenModal={isOpenModal}
           setIsOpenModal={setIsOpenModal}
@@ -148,7 +299,7 @@ const City = ({
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}
           keyExtractor={(item) => item.id}
-          data={userPostList}
+          data={userPosts}
           renderItem={({ item }) => {
             return <CityFlatList userPost={item} />;
           }}

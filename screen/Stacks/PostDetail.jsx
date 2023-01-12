@@ -36,20 +36,24 @@ import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
 
-const PostDetail = ({ route }) => {
+const PostDetail = ({ navigation: { goBack }, route }) => {
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
   const userId = user.uid;
-
   const PostID = route.params.postId;
-  // console.log();
+
+  const cityName = route.params.cityName;
+
+  // 댓글 수정
+  // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
+
 
   const isDark = useColorScheme() === "dark";
 
+
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
@@ -59,6 +63,7 @@ const PostDetail = ({ route }) => {
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
+
   useEffect(() => {
     // 댓글
     const q = query(
@@ -101,6 +106,7 @@ const PostDetail = ({ route }) => {
     comment: text,
     isEdit: false,
     createdAt: new Date(),
+    cityName,
   };
 
   // 댓글 추가 알람창
@@ -145,6 +151,7 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
   // 댓글 수정 / 토글 수정알림창
   const updateCommentListAlert = (id) => {
     Alert.alert(
@@ -166,6 +173,29 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
+  // 본문 삭제 알림창
+  const deletePostAlert = (id) => {
+    Alert.alert(
+      "삭제",
+      "정말로 삭제하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "삭제",
+          onPress: () => {
+            deletePost(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+
   const updateToggleCommentListAlert = (id) => {
     Alert.alert(
       "수정",
@@ -191,6 +221,12 @@ const PostDetail = ({ route }) => {
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
+  };
+
+  // 본문 삭제
+  const deletePost = async (id) => {
+    await deleteDoc(doc(dbService, "list", id));
+    goBack();
   };
 
   // delete commentList
@@ -221,38 +257,40 @@ const PostDetail = ({ route }) => {
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
-          <DetailContentWrapView>
-            <WeatherView>
-              <Text>{}</Text>
-            </WeatherView>
-            <TitleView>
-              <Text>{DetailList[0]?.title}</Text>
-            </TitleView>
-            <NickNameView>
-              <Text>{DetailList[0]?.username}</Text>
-            </NickNameView>
-            <ContentView>
-              <ContentText>{DetailList[0]?.content}</ContentText>
-            </ContentView>
-            <ModifyWrap>
-              <ModifyBtn>
-                <Text>수정 하기</Text>
-                <AntDesign name="edit" size={24} color="black" />
-              </ModifyBtn>
 
-              <PostModal
-                detailPost={DetailList}
-                screenName={screenName}
-                isOpenModal={isOpenModal}
-                setIsOpenModal={setIsOpenModal}
-              />
+          {DetailList.map((list) => (
+            <DetailContentWrapView key={list.id}>
+              <WeatherView>
+                <Text>해당 지역 날씨</Text>
+              </WeatherView>
+              <TitleView>
+                <Text>{list.title}</Text>
+              </TitleView>
+              <NickNameView>
+                <Text>{list.userName}</Text>
+              </NickNameView>
+              <ContentView>
+                <ContentText>{list.content}</ContentText>
+              </ContentView>
+              <ModifyWrap>
+                <ModifyBtn onPress={() => setIsOpenModal(true)}>
+                  <Text>수정 하기</Text>
+                  <AntDesign name="edit" size={24} color="black" />
+                </ModifyBtn>
+                <PostModal
+                  detailPost={list}
+                  isOpenModal={isOpenModal}
+                  setIsOpenModal={setIsOpenModal}
+                />
 
-              <ModifyBtn>
-                <Text>삭제 하기</Text>
-                <FontAwesome name="trash-o" size={24} color="black" />
-              </ModifyBtn>
-            </ModifyWrap>
-          </DetailContentWrapView>
+                <ModifyBtn onPress={() => deletePostAlert(list.id)}>
+                  <Text>삭제 하기</Text>
+                  <FontAwesome name="trash-o" size={24} color="black" />
+                </ModifyBtn>
+              </ModifyWrap>
+            </DetailContentWrapView>
+          ))}
+
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
