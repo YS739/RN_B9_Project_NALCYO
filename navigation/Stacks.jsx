@@ -15,6 +15,7 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
   return (
     <NativeStack.Navigator
       screenOptions={{
+        title: "",
         headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         headerTitleAlign: "center",
         headerLeft: (color) => (
