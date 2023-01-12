@@ -27,12 +27,10 @@ const City = ({
 
   const { data: getWeatherData, isLoading: isLoadingWD } = useQuery(["getWeather", WeatherId], getNowWeather);
 
-  // PostModal로 보내는 지역 이름
-  const WeatherName = getWeatherData?.name;
-
   const userPosts = userPostList.filter((post) => post.cityId === WeatherId);
 
-  //온도위에 날씨 텍스트
+  // PostModal로 보내는 지역 이름
+  const WeatherName = getWeatherData?.name;
 
   useEffect(() => {
     setOptions({
