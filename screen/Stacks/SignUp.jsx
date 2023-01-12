@@ -50,13 +50,17 @@ const SignUp = ({ navigation: { navigate } }) => {
         console.log("회원가입 성공!");
         updateProfile(authService.currentUser, {
           displayName: nickName,
-        }).then(() => {
-          alert("회원가입 성공!");
-          setEmail("");
-          setNickName("");
-          setPw("");
-          navigate("Tabs", { screen: "Home" });
-        });
+        })
+          .then(() => {
+            alert("회원가입 성공!");
+            setEmail("");
+            setNickName("");
+            setPw("");
+            navigate("Tabs", { screen: "Home" });
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
       })
       .catch((err) => {
         alert(err.message);
@@ -122,6 +126,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
+            onSubmitEditing={handleRegister}
             style={{
               width: 280,
               margin: 10,
@@ -147,6 +152,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             ref={pwRef}
             value={pw}
             onChangeText={(text) => setPw(text)}
+            onSubmitEditing={handleRegister}
             returnKeyType="send"
             style={{
               width: 280,

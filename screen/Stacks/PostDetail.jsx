@@ -12,39 +12,32 @@ import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
 
-const PostDetail = ({ route }) => {
+const PostDetail = ({ navigation: { goBack }, route }) => {
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
   const userId = user.uid;
-
   const PostID = route.params.postId;
-  // console.log("PostID=", PostID);
+
+  const cityName = route.params.cityName;
+
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
 
+  const isDark = useColorScheme() === "dark";
+
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const screenName = "Detail";
 
   // firebase 컬렉션 commet의 예시 자료 comment nickName 불러오기
   const [commentList, setCommentList] = useState([]);
-  const isDark = useColorScheme() === "dark";
-  // useEffect(() => {
-  // 특정 댓글 get
-  // const getComment = async () => {
-  //   const snapshot = await getDoc(doc(dbService, "Comment"));
-  //   setComment(snapshot.data().comment);
-  //   setNickName(snapshot.data().nickName);
-  // };
-  // getComment();
 
   const DetailcommentList = commentList.filter((el) => el.PostId === PostID);
-  // console.log("DetailcommentList:", DetailcommentList);
+
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
-  // console.log("list=", DetailList);
+
   useEffect(() => {
     // 댓글
     const q = query(collection(dbService, "Comment"), orderBy("createdAt", "desc"));
@@ -81,6 +74,7 @@ const PostDetail = ({ route }) => {
     comment: text,
     isEdit: false,
     createdAt: new Date(),
+    cityName,
   };
 
   // 댓글 추가 알람창
@@ -125,6 +119,7 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
   // 댓글 수정 / 토글 수정알림창
   const updateCommentListAlert = (id) => {
     Alert.alert(
@@ -146,6 +141,29 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
+  // 본문 삭제 알림창
+  const deletePostAlert = (id) => {
+    Alert.alert(
+      "삭제",
+      "정말로 삭제하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "삭제",
+          onPress: () => {
+            deletePost(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+
   const updateToggleCommentListAlert = (id) => {
     Alert.alert(
       "수정",
@@ -171,6 +189,12 @@ const PostDetail = ({ route }) => {
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
+  };
+
+  // 본문 삭제
+  const deletePost = async (id) => {
+    await deleteDoc(doc(dbService, "list", id));
+    goBack();
   };
 
   // delete commentList
@@ -199,33 +223,36 @@ const PostDetail = ({ route }) => {
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
-          <DetailContentWrapView>
-            <WeatherView>
-              <Text>해당 지역 날씨</Text>
-            </WeatherView>
-            <TitleView>
-              <Text>{DetailList[0]?.title}</Text>
-            </TitleView>
-            <NickNameView>
-              <Text>닉네임</Text>
-            </NickNameView>
-            <ContentView>
-              <ContentText>{DetailList[0]?.content}</ContentText>
-            </ContentView>
-            <ModifyWrap>
-              <ModifyBtn>
-                <Text>수정 하기</Text>
-                <AntDesign name="edit" size={24} color="black" />
-              </ModifyBtn>
 
-              <PostModal detailPost={DetailList} screenName={screenName} isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
+          {DetailList.map((list) => (
+            <DetailContentWrapView key={list.id}>
+              <WeatherView>
+                <Text>해당 지역 날씨</Text>
+              </WeatherView>
+              <TitleView>
+                <Text>{list.title}</Text>
+              </TitleView>
+              <NickNameView>
+                <Text>{list.userName}</Text>
+              </NickNameView>
+              <ContentView>
+                <ContentText>{list.content}</ContentText>
+              </ContentView>
+              <ModifyWrap>
+                <ModifyBtn onPress={() => setIsOpenModal(true)}>
+                  <Text>수정 하기</Text>
+                  <AntDesign name="edit" size={24} color="black" />
+                </ModifyBtn>
+                <PostModal detailPost={list} isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
 
-              <ModifyBtn>
-                <Text>삭제 하기</Text>
-                <FontAwesome name="trash-o" size={24} color="black" />
-              </ModifyBtn>
-            </ModifyWrap>
-          </DetailContentWrapView>
+                <ModifyBtn onPress={() => deletePostAlert(list.id)}>
+                  <Text>삭제 하기</Text>
+                  <FontAwesome name="trash-o" size={24} color="black" />
+                </ModifyBtn>
+              </ModifyWrap>
+            </DetailContentWrapView>
+          ))}
+
           {/* 댓글 area */}
           <CommentWrapView style={styles.shadow}>
             <CommentAddView>
@@ -242,25 +269,29 @@ const PostDetail = ({ route }) => {
                 <ConmmentContentView key={el.id}>
                   <EditCommentTextInput value={editText} onChangeText={setEditText} onSubmitEditing={() => updateCommentListAlert(el.id)}></EditCommentTextInput>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity onPress={() => updateCommentListAlert(el.id)}>
+                    <CommentContentUpdateIconBtn onPress={() => updateCommentListAlert(el.id)}>
                       <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => deleteCommentListAlert(el.id)}>
+                    </CommentContentUpdateIconBtn>
+                    <CommentContentDeleteIconBtn onPress={() => deleteCommentListAlert(el.id)}>
                       <FontAwesome name="trash-o" size={24} color="black" />
-                    </TouchableOpacity>
+                    </CommentContentDeleteIconBtn>
                   </CommentContentIconBtnView>
                 </ConmmentContentView>
               ) : (
                 <ConmmentContentView key={el.id}>
-                  <Text>{el?.nickName}</Text>
-                  <Text>{el?.comment}</Text>
+                  <ConmmentContentNicknameTextView>
+                    <ConmmentContentNicknameText>{el?.nickName}</ConmmentContentNicknameText>
+                  </ConmmentContentNicknameTextView>
+                  <ConmmentContentConmmentTextView>
+                    <Text>{el?.comment}</Text>
+                  </ConmmentContentConmmentTextView>
                   <CommentContentIconBtnView>
-                    <TouchableOpacity onPress={() => updateToggleCommentListAlert(el.id)}>
+                    <CommentContentUpdateIconBtn onPress={() => updateToggleCommentListAlert(el.id)}>
                       <AntDesign name="edit" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => deleteCommentListAlert(el.id)}>
+                    </CommentContentUpdateIconBtn>
+                    <CommentContentDeleteIconBtn onPress={() => deleteCommentListAlert(el.id)}>
                       <FontAwesome name="trash-o" size={24} color="black" />
-                    </TouchableOpacity>
+                    </CommentContentDeleteIconBtn>
                   </CommentContentIconBtnView>
                 </ConmmentContentView>
               );
@@ -295,7 +326,6 @@ const styles = StyleSheet.create({
 
 const LayoutSafeAreaView = styled.SafeAreaView`
   width: 100%;
-  /* background-color: #97d2ec; */
 `;
 
 const DetailSafeAreaView = styled.SafeAreaView`
@@ -309,7 +339,6 @@ const DetailContentWrapView = styled.View`
   align-items: center;
   height: ${SCREEN_HEIGHT / 2 + "px"};
   margin-top: 15px;
-  /* border: 1px solid black; */
   border-radius: 20px;
   background-color: #fff;
 `;
@@ -321,6 +350,8 @@ const WeatherView = styled.View`
   width: 45%;
   border-radius: 30px;
   margin-top: 10px;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
 `;
 
 const TitleView = styled.View`
@@ -329,19 +360,21 @@ const TitleView = styled.View`
   height: 6.5%;
   width: 50%;
   border-radius: 30px;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
 `;
 
 const NickNameView = styled.View`
   justify-content: center;
   align-items: flex-end;
-  height: 3%;
-  width: 100%;
+  height: 5%;
+  width: 350px;
   margin-right: 40px;
   margin-bottom: 20px;
 `;
 
 const ContentView = styled.View`
-  height: 60%;
+  height: 58%;
   width: 90%;
   border: 1px solid #ece0ed;
   border-radius: 30px;
@@ -361,6 +394,8 @@ const ModifyWrap = styled.View`
 const ModifyBtn = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  width: 80px;
+  justify-content: space-between;
 `;
 
 const CommentWrapView = styled.View`
@@ -416,7 +451,10 @@ const CommentContentIconBtnView = styled.View`
   justify-content: center;
   margin-right: 15px;
 `;
-
+const CommentContentDeleteIconBtn = styled.TouchableOpacity`
+  margin-left: 7px;
+`;
+const CommentContentUpdateIconBtn = styled.TouchableOpacity``;
 const CommentScrollView = styled.ScrollView``;
 
 const EditCommentTextInput = styled.TextInput`
@@ -427,11 +465,23 @@ const EditCommentTextInput = styled.TextInput`
   background-color: #ccc6ff;
   text-indent: 5px;
 `;
-
-// style
-// 2.댓글 양쪽 마진값
-// 3.댓글 버튼 2개 마진값
-// 4.본문 수정하기 삭제하기 마진값
+const ConmmentContentNicknameTextView = styled.View`
+  height: 30px;
+  width: 80px;
+  align-items: center;
+  justify-content: center;
+`;
+const ConmmentContentNicknameText = styled.Text`
+  margin-left: 5px;
+  width: 50px;
+`;
+const ConmmentContentConmmentTextView = styled.View`
+  height: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  width: 196px;
+`;
 
 // 기능
 // 1. 유효성 검사 해야함
+// 2. 본문 뿌려주기

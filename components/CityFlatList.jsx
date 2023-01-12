@@ -11,12 +11,11 @@ const CityFlatList = ({ userPost }) => {
   const userNickName = user.displayName;
 
   const postId = userPost.id;
-  // console.log("userPost=", userPost.id);
+  const cityName = userPost.cityName;
   return (
-    <CityContentsBtn onPress={() => navigation.navigate("PostDetail", { postId })}>
+    <CityContentsBtn onPress={() => navigation.navigate("PostDetail", { postId, cityName })}>
       <MyPostCategoryView>
-        <Text>{userNickName}</Text>
-        {/* TODO: 기온은 category가 같은 api의 기온..? */}
+        <Text>{cityName}</Text>
       </MyPostCategoryView>
       <MyPostContentsView>
         <Text numberOfLines={1} ellipsizeMode="tail">

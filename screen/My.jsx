@@ -181,10 +181,16 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
           >
             {userCommentList.map((co) => (
               <MyCommentsBoxBtn
-                onPress={() => navigate("Stacks", { screen: "PostDetail" })}
+                key={co.id}
+                onPress={() =>
+                  navigate("Stacks", {
+                    screen: "PostDetail",
+                    params: { postId: co.PostId },
+                  })
+                }
               >
                 <MyCommentsCategoryView>
-                  <Text>지역...</Text>
+                  <Text>{co.cityName}</Text>
                 </MyCommentsCategoryView>
                 <MyCommentsContentsView>
                   <Text numberOfLines={1} ellipsizeMode="tail">
