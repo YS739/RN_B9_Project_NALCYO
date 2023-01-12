@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
     width: 280,
     height: 40,
     borderRadius: 30,
-    // padding: 20,
     margin: 10,
     backgroundColor: "white",
     display: "flex",

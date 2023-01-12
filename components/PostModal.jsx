@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Keyboard, TouchableWithoutFeedback, Text } from "react-native";
+import { Modal, Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";

@@ -23,7 +23,6 @@ import {
   where,
   onSnapshot,
   orderBy,
-  getDocs,
 } from "@firebase/firestore";
 import MyPostList from "../components/MyPostList";
 

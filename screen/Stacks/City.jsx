@@ -177,16 +177,6 @@ const WeatherWrap = styled.View`
   flex-direction: column;
 `;
 
-//날씨 사진
-// const WeatherImage = styled.Image`
-//   width: 150px;
-//   height: 150px;
-//   bottom: 45px;
-//   left: 50px;
-//   margin: 35px;
-//   border-radius: 30px;
-// `;
-
 const CityWriteBtn = styled.TouchableOpacity`
   background-color: white;
   margin-top: 15px;
