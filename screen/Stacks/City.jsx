@@ -49,6 +49,8 @@ const City = ({
     getNowWeather
   );
 
+  const userPosts = userPostList.filter((post) => post.cityId === WeatherId);
+
   // PostModal로 보내는 지역 이름
   const WeatherName = getWeatherData?.name;
 
