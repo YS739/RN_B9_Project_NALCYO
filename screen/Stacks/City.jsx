@@ -207,7 +207,11 @@ const City = ({
           style={{ marginLeft: 15 }}
           onPress={() => navigate("Tabs", { screen: "Home" })}
         >
-          <Ionicons name="chevron-back" size={24} color="black" />
+          <Ionicons
+            name="chevron-back"
+            size={24}
+            color={isDark ? "white" : "black"}
+          />
         </TouchableOpacity>
       ),
     });
@@ -228,7 +232,7 @@ const City = ({
       });
       setUserPostList(UserPosts);
     });
-  }, []);
+  }, [isDark]);
 
   if (isLoadingWD) {
     return (
