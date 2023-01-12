@@ -2,13 +2,9 @@ import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth } from "firebase/auth";
 
 const CityFlatList = ({ userPost }) => {
   const navigation = useNavigation();
-  const auth = getAuth();
-  const user = auth.currentUser;
-  const userNickName = user.displayName;
 
   const postId = userPost.id;
   const cityName = userPost.cityName;

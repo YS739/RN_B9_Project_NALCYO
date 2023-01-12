@@ -70,7 +70,6 @@ const PostModal = ({ isOpenModal, setIsOpenModal, cityId, cityName, detailPost }
                 <AntDesign name="close" size={24} color="black" />
               </ModalCloseBtn>
             </ModalAddCloseView>
-
             <ModalCityNameText>{cityName}</ModalCityNameText>
 
             <ModalTitleTextInput autoFocus defaultValue={detailPost ? detailPost?.title : ""} onChangeText={(title) => (detailPost ? setEditTitle(title) : setPostTitle(title))} placeholder="제목을 입력해주세요." />
