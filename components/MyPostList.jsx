@@ -31,9 +31,8 @@ const MyPostList = ({ userPost }) => {
 export default MyPostList;
 
 // 내가 쓴 글
-
 const MyPostBoxBtn = styled.TouchableOpacity`
-  width: 270px;
+  width: 290px;
   border: 1px solid #97d2ec;
   border-radius: 10px;
   align-items: center;

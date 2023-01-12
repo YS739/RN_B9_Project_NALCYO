@@ -27,7 +27,7 @@ export default CityFlatList;
 
 const CityContentsBtn = styled.TouchableOpacity`
   height: 40px;
-  width: 325px;
+  width: 355px;
   margin: 5px;
   padding-left: 30px;
   background-color: white;
@@ -38,7 +38,6 @@ const CityContentsBtn = styled.TouchableOpacity`
 `;
 const MyPostCategoryView = styled.View`
   width: 30%;
-  margin-left: 10px;
 `;
 
 const MyPostContentsView = styled.View`

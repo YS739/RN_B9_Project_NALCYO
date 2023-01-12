@@ -12,6 +12,8 @@ const PostModal = ({
   cityId,
   cityName,
   detailPost,
+  weather,
+  temp,
 }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
@@ -34,6 +36,8 @@ const PostModal = ({
       time: new Date().toISOString(),
       cityName,
       cityId,
+      temp,
+      weather,
     });
 
     // 포스트가 등록되면 모달이 닫히고 input, 카테고리 선택 초기화
@@ -50,6 +54,7 @@ const PostModal = ({
       content: editContent,
     });
     setIsOpenModal(false);
+    alert("수정 완료!");
   };
 
   return (
@@ -82,25 +87,28 @@ const PostModal = ({
               </ModalCloseBtn>
             </ModalAddCloseView>
             <ModalCityNameText>{cityName}</ModalCityNameText>
-
-            <ModalTitleTextInput
-              autoFocus
-              defaultValue={detailPost ? detailPost?.title : ""}
-              onChangeText={(title) =>
-                detailPost ? setEditTitle(title) : setPostTitle(title)
-              }
-              placeholder="제목을 입력해주세요."
-            />
-            <ModalContentTexInput
-              defaultValue={detailPost ? detailPost?.content : ""}
-              onChangeText={(content) =>
-                detailPost ? setEditContent(content) : setPostContent(content)
-              }
-              textAlignVertical="top"
-              multiline
-              maxLength={300}
-              placeholder="내용을 입력해주세요."
-            />
+            <ModalTitleInputBox>
+              <ModalTitleTextInput
+                autoFocus
+                defaultValue={detailPost ? detailPost?.title : ""}
+                onChangeText={(title) =>
+                  detailPost ? setEditTitle(title) : setPostTitle(title)
+                }
+                placeholder="제목을 입력해주세요."
+              />
+            </ModalTitleInputBox>
+            <ModalContentInputBox>
+              <ModalContentTexInput
+                defaultValue={detailPost ? detailPost?.content : ""}
+                onChangeText={(content) =>
+                  detailPost ? setEditContent(content) : setPostContent(content)
+                }
+                textAlignVertical="top"
+                multiline
+                maxLength={300}
+                placeholder="내용을 입력해주세요."
+              />
+            </ModalContentInputBox>
           </ModalWrapView>
         </ModalContainerView>
       </TouchableWithoutFeedback>
@@ -156,8 +164,8 @@ const ModalCloseBtn = styled.TouchableOpacity`
   left: 150px;
 `;
 
-const ModalTitleTextInput = styled.TextInput`
-  width: 70%;
+const ModalTitleInputBox = styled.View`
+  width: 80%;
   height: 50px;
   background-color: #fae9e9;
   border: 1px solid #fae9e9;
@@ -167,7 +175,21 @@ const ModalTitleTextInput = styled.TextInput`
   margin: 10px 0;
 `;
 
-const ModalContentTexInput = styled(ModalTitleTextInput)`
+const ModalTitleTextInput = styled.TextInput`
+  margin-left: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+const ModalContentInputBox = styled(ModalTitleInputBox)`
   height: 50%;
   background-color: #fffcf1;
+`;
+
+const ModalContentTexInput = styled.TextInput`
+  width: 90%;
+  height: 100%;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
 `;

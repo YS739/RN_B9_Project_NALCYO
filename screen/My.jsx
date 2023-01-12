@@ -57,9 +57,6 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
           />
         </TouchableOpacity>
       ),
-      // FIXME: city 등 다른 screen에서 my page로 왔을 때 뒤로가기 누르면 main으로 감
-      // stacks에서 my screen 버튼 눌렀을 때 from 등으로 위치를 넘겨야 하나?
-      // reset으로..?
       headerRight: () => (
         <TouchableOpacity style={{ marginRight: 15 }} onPress={logout}>
           <Text style={{ color: isDark ? "white" : "black" }}>로그아웃</Text>
@@ -132,28 +129,24 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <MySafeAreaView>
         <MyNameWrapView>
-          <Image
-            source={{
-              uri: "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png",
-              width: 60,
-              height: 60,
-            }}
-          ></Image>
+          <MyLogoImage source={require("../assets/myicon.jpg")} />
           <View>
             {pressEditBtn ? (
               <MyNameTextInput
                 onSubmitEditing={() => editNickName(editName)}
                 onChangeText={(text) => setEditName(text)}
                 defaultValue={userNickName}
+                maxLength={5}
+                autoFocus
               />
             ) : (
               <MyNameText>{userNickName}</MyNameText>
             )}
           </View>
 
-          <TouchableOpacity onPress={() => setPressEditBtn(true)}>
+          <MyEditBtn onPress={() => setPressEditBtn(true)}>
             <AntDesign name="edit" size={24} color="black" />
-          </TouchableOpacity>
+          </MyEditBtn>
         </MyNameWrapView>
         <MyPostTitleText style={{ color: isDark ? "white" : "black" }}>
           내가 쓴 글
@@ -218,13 +211,20 @@ const MySafeAreaView = styled.SafeAreaView`
 `;
 
 // 닉네임
+const MyLogoImage = styled.Image`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 20px;
+`;
+
 const MyNameWrapView = styled.View`
-  width: 100%;
-  height: 90px;
+  width: 80%;
+  height: 60px;
   border-radius: 20px;
   background-color: white;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   margin: 10px 0;
 `;
@@ -240,6 +240,12 @@ const MyNameTextInput = styled.TextInput`
 
 const MyNameText = styled.Text`
   font-size: 16px;
+  font-weight: 800;
+`;
+
+const MyEditBtn = styled.TouchableOpacity`
+  position: absolute;
+  right: 15px;
 `;
 
 // 내가 쓴 글
@@ -250,7 +256,7 @@ const MyPostTitleText = styled.Text`
 
 const MyPostView = styled.View`
   width: ${SCREEN_WIDTH * 0.9 + "px"};
-  height: ${SCREEN_HEIGHT / 4 + "px"};
+  height: ${SCREEN_HEIGHT / 3.6 + "px"};
   padding: 0 20px;
   margin: 10px 0;
   justify-content: center;
@@ -261,7 +267,7 @@ const MyPostView = styled.View`
 `;
 
 const MyPostBoxBtn = styled.TouchableOpacity`
-  width: 270px;
+  width: 290px;
   border: 1px solid #97d2ec;
   border-radius: 10px;
   align-items: center;
