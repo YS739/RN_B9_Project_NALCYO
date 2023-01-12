@@ -5,6 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
+import { getAuth } from "firebase/auth";
 
 const PostModal = ({
   isOpenModal,
@@ -18,12 +19,18 @@ const PostModal = ({
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
 
+  // 닉네임 불러오기
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userNickName = user.displayName;
+
   // 본문 등록하기
   const addPost = async () => {
     await addDoc(collection(dbService, "list"), {
       title: postTitle,
       content: postContent,
       userId: authService.currentUser?.uid,
+      userName: userNickName,
       createdAt: new Date(),
       cityName,
       cityId,

@@ -153,6 +153,8 @@ const City = ({
     }
   };
 
+  const userPosts = userPostList.filter((post) => post.cityId === WeatherId);
+
   //온도위에 날씨 텍스트
   const WeatherChange = (val) => {
     switch (val) {
@@ -219,8 +221,8 @@ const City = ({
     // 내가 쓴 글 불러오기
     const q = query(
       collection(dbService, "list"),
-      orderBy("createdAt", "desc"),
-      where("cityId", "==", WeatherId)
+      orderBy("createdAt", "desc")
+      // where("cityId", "==", WeatherId)
     );
     onSnapshot(q, (snapshot) => {
       const UserPosts = snapshot.docs.map((doc) => {
@@ -284,7 +286,7 @@ const City = ({
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ width: "90%" }}
           keyExtractor={(item) => item.id}
-          data={userPostList}
+          data={userPosts}
           renderItem={({ item }) => {
             return <CityFlatList userPost={item} />;
           }}
