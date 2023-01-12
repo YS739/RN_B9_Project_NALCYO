@@ -33,7 +33,7 @@ const PostModal = ({
       userId: authService.currentUser?.uid,
       userName: userNickName,
       createdAt: new Date(),
-      time: new Date().toISOString(),
+      time: new Date().toLocaleString(),
       cityName,
       cityId,
       temp,
