@@ -187,8 +187,8 @@ export default Login;
 
 const styles = StyleSheet.create({
   Logo: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
   },
 
   container: {
