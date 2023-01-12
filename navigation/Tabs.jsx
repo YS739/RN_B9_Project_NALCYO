@@ -20,7 +20,7 @@ const Tabs = () => {
         tabBarLabelPosition: "beside-icon",
         headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         tabBarStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
-        tabBarActiveTintColor: isDark ? "yellow" : "blue",
+        tabBarActiveTintColor: isDark ? "#97d2ec" : "#202020",
         tabBarInactiveTintColor: "white",
       }}
     >

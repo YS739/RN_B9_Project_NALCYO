@@ -327,15 +327,15 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                   </CommentContentIconBtnView>
                 </CommentContentView>
               ) : (
-                <ConmmentContentView key={el.id}>
-                  <ConmmentContentNicknameTextView>
-                    <ConmmentContentNicknameText>
+                <CommentContentView key={el.id}>
+                  <CommentContentNicknameTextView>
+                    <CommentContentNicknameText>
                       {el?.nickName}
-                    </ConmmentContentNicknameText>
-                  </ConmmentContentNicknameTextView>
-                  <ConmmentContentConmmentTextView>
+                    </CommentContentNicknameText>
+                  </CommentContentNicknameTextView>
+                  <CommentContentConmmentTextView>
                     <Text>{el?.comment}</Text>
-                  </ConmmentContentConmmentTextView>
+                  </CommentContentConmmentTextView>
                   <CommentContentIconBtnView>
                     <CommentContentUpdateIconBtn
                       onPress={() => updateToggleCommentListAlert(el.id)}
@@ -348,7 +348,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                       <FontAwesome name="trash-o" size={24} color="black" />
                     </CommentContentDeleteIconBtn>
                   </CommentContentIconBtnView>
-                </ConmmentContentView>
+                </CommentContentView>
               );
             })}
           </CommentWrapView>
@@ -524,20 +524,20 @@ const EditCommentTextInput = styled.TextInput`
   width: 80%;
   height: 130%;
   border-radius: 20px;
-  background-color: #ccc6ff;
+  background-color: #fffcf1;
   text-indent: 5px;
 `;
-const ConmmentContentNicknameTextView = styled.View`
+const CommentContentNicknameTextView = styled.View`
   height: 30px;
   width: 80px;
   align-items: center;
   justify-content: center;
 `;
-const ConmmentContentNicknameText = styled.Text`
+const CommentContentNicknameText = styled.Text`
   margin-left: 5px;
   width: 50px;
 `;
-const ConmmentContentConmmentTextView = styled.View`
+const CommentContentConmmentTextView = styled.View`
   height: 30px;
   align-items: flex-start;
   justify-content: center;
