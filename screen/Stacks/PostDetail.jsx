@@ -249,7 +249,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                     list.time.slice(2, 11) +
                     "  " +
                     "[" +
-                    list.time.slice(12, 18) +
+                    list.time.slice(12, 20) +
                     "]"}
                 </AllText>
               </NickNameView>

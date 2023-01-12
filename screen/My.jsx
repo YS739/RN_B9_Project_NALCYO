@@ -127,10 +127,10 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <MySafeAreaView>
-        <MyNameWrapView>
-          <MyLogoImage source={require("../assets/myicon.jpg")} />
-          <View>
-            {pressEditBtn ? (
+        {pressEditBtn ? (
+          <MyNameWrapView>
+            <MyLogoImage source={require("../assets/myicon.jpg")} />
+            <View>
               <MyNameTextInput
                 onSubmitEditing={() => editNickName(editName)}
                 onChangeText={(text) => setEditName(text)}
@@ -138,15 +138,25 @@ const My = ({ navigation: { navigate, setOptions, goBack } }) => {
                 maxLength={5}
                 autoFocus
               />
-            ) : (
-              <MyNameText>{userNickName}</MyNameText>
-            )}
-          </View>
+            </View>
 
-          <MyEditBtn onPress={() => setPressEditBtn(true)}>
-            <AntDesign name="edit" size={24} color="black" />
-          </MyEditBtn>
-        </MyNameWrapView>
+            <MyEditBtn onPress={() => editNickName(editName)}>
+              <AntDesign name="edit" size={24} color="black" />
+            </MyEditBtn>
+          </MyNameWrapView>
+        ) : (
+          <MyNameWrapView>
+            <MyLogoImage source={require("../assets/myicon.jpg")} />
+            <View>
+              <MyNameText>{userNickName}</MyNameText>
+            </View>
+
+            <MyEditBtn onPress={() => setPressEditBtn(true)}>
+              <AntDesign name="edit" size={24} color="black" />
+            </MyEditBtn>
+          </MyNameWrapView>
+        )}
+
         <MyPostTitleText style={{ color: isDark ? "white" : "black" }}>
           내가 쓴 글
         </MyPostTitleText>
