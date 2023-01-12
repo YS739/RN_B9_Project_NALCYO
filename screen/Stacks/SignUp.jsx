@@ -96,7 +96,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             fontFamily: "NanumPenScript-Regular",
           }}
         >
-          회원가입{" "}
+          회원가입
         </Text>
         <View>
           <Text
@@ -111,6 +111,7 @@ const SignUp = ({ navigation: { navigate } }) => {
           <TextInput
             placeholder="Nickname"
             value={nickName}
+            maxLength={5}
             onChangeText={(text) => setNickName(text)}
             style={{
               width: 280,
