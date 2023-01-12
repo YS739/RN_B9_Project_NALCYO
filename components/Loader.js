@@ -16,6 +16,7 @@ const Loader = (props) => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 3000,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
