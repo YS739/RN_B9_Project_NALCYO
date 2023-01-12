@@ -51,8 +51,10 @@ const City = ({
 
   const userPosts = userPostList.filter((post) => post.cityId === WeatherId);
 
-  // PostModal로 보내는 지역 이름
-  const WeatherName = getWeatherData?.name;
+  // PostModal로 보내는 data
+  const cityName = getWeatherData?.name;
+  const temp = Math.round(getWeatherData?.main?.temp);
+  const weather = WeatherChange(getWeatherData?.weather[0]?.main);
 
   useEffect(() => {
     setOptions({
@@ -140,8 +142,10 @@ const City = ({
           <Text>글쓰기</Text>
         </CityWriteBtn>
         <PostModal
-          cityName={CityNameChange(WeatherName)}
+          cityName={CityNameChange(cityName)}
           cityId={WeatherId}
+          temp={temp}
+          weather={weather}
           isOpenModal={isOpenModal}
           setIsOpenModal={setIsOpenModal}
         />
