@@ -1,16 +1,6 @@
 import { useState, useRef } from "react";
 import styled from "@emotion/native";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  useColorScheme,
-} from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, SafeAreaView, Keyboard, TouchableWithoutFeedback, useColorScheme } from "react-native";
 import { authService } from "../../common/firebase";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { emailRegex, pwRegex } from "../../common/util";
@@ -69,7 +59,7 @@ const SignUp = ({ navigation: { navigate } }) => {
         });
       })
       .catch((err) => {
-        console.log(err.message);
+        alert(err.message);
       });
   };
 
@@ -169,11 +159,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             }}
           />
 
-          <TouchableOpacity
-            color="#f194ff"
-            onPress={handleRegister}
-            style={styles.login_button}
-          >
+          <TouchableOpacity color="#f194ff" onPress={handleRegister} style={styles.login_button}>
             <Text style={styles.text}>이메일로 회원가입하기</Text>
           </TouchableOpacity>
         </View>

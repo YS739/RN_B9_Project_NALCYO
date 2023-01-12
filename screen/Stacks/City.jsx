@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, useColorScheme } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, ActivityIndicator, FlatList, useColorScheme } from "react-native";
 import styled from "@emotion/native";
 import CityFlatList from "../../components/CityFlatList";
 import PostModal from "../../components/PostModal";
@@ -33,13 +33,13 @@ const City = ({
     setOptions({
       headerLeft: () => (
         <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => navigate("Tabs", { screen: "Home" })}>
-          <Ionicons name="chevron-back" size={24} color="black" />
+          <Ionicons name="chevron-back" size={24} color={isDark ? "white" : "black"} />
         </TouchableOpacity>
       ),
     });
 
     // 내가 쓴 글 불러오기
-    const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"));
+    const q = query(collection(dbService, "list"), orderBy("createdAt", "desc"), where("cityId", "==", WeatherId));
     onSnapshot(q, (snapshot) => {
       const UserPosts = snapshot.docs.map((doc) => {
         const newUserPost = {
@@ -71,14 +71,29 @@ const City = ({
       >
         <WeatherContainer style={{ shadowColor: isDark ? "#5F6F94" : "black" }}>
           <WeatherWrap>
-            {WeatherImageChange(getWeatherData?.weather[0]?.icon)}
-            <WeatherMainText>{WeatherChange(getWeatherData?.weather[0]?.main)}</WeatherMainText>
-            <WeatherTemperatureText>
-              {Math.round(getWeatherData?.main?.temp)}
-              <Text style={{ fontSize: 30, color: "gray" }}>℃</Text>
-            </WeatherTemperatureText>
+            <CityView>
+              <CityimgText>{WeatherImageChange(getWeatherData?.weather[0]?.icon)}</CityimgText>
+            </CityView>
+
+            <TextView>
+              <CityText>{CityNameChange(getWeatherData?.name)}</CityText>
+              <TempBox>
+                <TempText>
+                  <TempText
+                    style={{
+                      color: getWeatherData?.main?.temp > 0 ? "red" : "blue",
+                    }}
+                  >
+                    {Math.round(getWeatherData?.main?.temp)}
+                  </TempText>
+                  <SubTempText>℃</SubTempText>
+                </TempText>
+                <TempText>
+                  <WeatherText>{WeatherChange(getWeatherData?.weather[0]?.main)}</WeatherText>
+                </TempText>
+              </TempBox>
+            </TextView>
           </WeatherWrap>
-          <WeatherCityText>{CityNameChange(getWeatherData?.name)}</WeatherCityText>
         </WeatherContainer>
 
         {/* 글쓰기버튼 */}
