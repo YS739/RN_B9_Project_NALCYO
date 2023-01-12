@@ -48,9 +48,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   // 댓글 수정
   // updateDoc(doc(dbService, "폴더명(collection)", "파일명(doc.id)"), { text: "변경할 값" })
 
-
   const isDark = useColorScheme() === "dark";
-
 
   // Post 수정 모달
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -63,6 +61,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
+  // let D = DetailList[0].time.slice(0, 10);
 
   useEffect(() => {
     // 댓글
@@ -109,27 +108,6 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
     cityName,
   };
 
-  // 댓글 추가 알람창
-  const addCommentListAlert = () => {
-    Alert.alert(
-      "추가",
-      "정말로 추가하시겠습니까?",
-      [
-        { text: "취소", onPress: () => {}, style: "cancel" },
-        {
-          text: "추가",
-          onPress: () => {
-            addCommentList();
-          },
-          style: "destructive",
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () => {},
-      }
-    );
-  };
   // 댓글 삭제 알림창
   const deleteCommentListAlert = (id) => {
     Alert.alert(
@@ -264,17 +242,30 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                 <Text>해당 지역 날씨</Text>
               </WeatherView>
               <TitleView>
-                <Text>{list.title}</Text>
+                <TitleText>{list.title}</TitleText>
               </TitleView>
               <NickNameView>
-                <Text>{list.userName}</Text>
+                <AllText>{" 작성자 : " + list.userName}</AllText>
+                <AllText>
+                  {"작성일 : " +
+                    list.time.slice(2, 4) +
+                    "." +
+                    list.time.slice(5, 7) +
+                    "." +
+                    list.time.slice(8, 10) +
+                    "  " +
+                    "[" +
+                    list.time.slice(12, 16) +
+                    "]"}
+                </AllText>
               </NickNameView>
+
               <ContentView>
                 <ContentText>{list.content}</ContentText>
               </ContentView>
               <ModifyWrap>
                 <ModifyBtn onPress={() => setIsOpenModal(true)}>
-                  <Text>수정 하기</Text>
+                  <AllText>수정 하기</AllText>
                   <AntDesign name="edit" size={24} color="black" />
                 </ModifyBtn>
                 <PostModal
@@ -284,7 +275,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                 />
 
                 <ModifyBtn onPress={() => deletePostAlert(list.id)}>
-                  <Text>삭제 하기</Text>
+                  <AllText>삭제 하기</AllText>
                   <FontAwesome name="trash-o" size={24} color="black" />
                 </ModifyBtn>
               </ModifyWrap>
@@ -296,13 +287,23 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
             <CommentAddView>
               <CommentAddTextInputView>
                 <CommentAddTextInput
-                  onSubmitEditing={() => addCommentListAlert()}
+                  onSubmitEditing={() => addCommentList()}
                   onChangeText={setText}
                   value={text}
                 ></CommentAddTextInput>
               </CommentAddTextInputView>
-              <CommentAddBtn onPress={() => addCommentListAlert()}>
-                <Text>댓글 달기</Text>
+              <CommentAddBtn
+                onPress={() => {
+                  if (text.length === 0) {
+                    return alert("댓글을 입력해 주세요!");
+                  } else if (text.length > 21) {
+                    return alert("댓글 입력 글자수를 초과 하였습니다.");
+                  } else {
+                    return addCommentList();
+                  }
+                }}
+              >
+                <AllText>댓글 달기</AllText>
               </CommentAddBtn>
             </CommentAddView>
 
@@ -415,22 +416,27 @@ const TitleView = styled.View`
   align-items: center;
   height: 6.5%;
   width: 50%;
+  margin-bottom: 5px;
   border-radius: 30px;
   border-bottom-width: 1px;
   border-bottom-color: black;
 `;
+const TitleText = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+`;
 
 const NickNameView = styled.View`
-  justify-content: center;
-  align-items: flex-end;
-  height: 5%;
-  width: 350px;
-  margin-right: 40px;
-  margin-bottom: 20px;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  height: 30px;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const ContentView = styled.View`
-  height: 58%;
+  height: 59%;
   width: 90%;
   border: 1px solid #ece0ed;
   border-radius: 30px;
@@ -438,6 +444,7 @@ const ContentView = styled.View`
 
 const ContentText = styled.Text`
   margin: 20px;
+  font-size: 16px;
 `;
 
 const ModifyWrap = styled.View`
@@ -538,6 +545,6 @@ const ConmmentContentConmmentTextView = styled.View`
   width: 196px;
 `;
 
-// 기능
-// 1. 유효성 검사 해야함
-// 2. 본문 뿌려주기
+const AllText = styled.Text`
+  font-size: 16px;
+`;
