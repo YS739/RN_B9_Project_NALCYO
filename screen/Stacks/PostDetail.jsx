@@ -61,8 +61,7 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
   const [list, setList] = useState([]);
 
   const DetailList = list.filter((el) => el.id == PostID);
-  // let D = DetailList[0].time.slice(0, 10);
-
+  // console.log("날씨 온도 =", DetailList[0].weather, DetailList[0].temp, "°C");
   useEffect(() => {
     // 댓글
     const q = query(
@@ -239,7 +238,14 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
           {DetailList.map((list) => (
             <DetailContentWrapView key={list.id}>
               <WeatherView>
-                <Text>해당 지역 날씨</Text>
+                <WeatherText>{list.weather}</WeatherText>
+                <WeatherText
+                  style={{
+                    color: list.temp > 0 ? "red" : "blue",
+                  }}
+                >
+                  {list.temp + "°C"}
+                </WeatherText>
               </WeatherView>
               <TitleView>
                 <TitleText>{list.title}</TitleText>
@@ -401,25 +407,26 @@ const DetailContentWrapView = styled.View`
 `;
 
 const WeatherView = styled.View`
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  height: 15%;
+  flex-direction: row;
+  height: 35px;
   width: 45%;
   border-radius: 30px;
   margin-top: 10px;
   border-bottom-width: 1px;
-  border-bottom-color: black;
+  border-bottom-color: #97d2ec;
 `;
 
 const TitleView = styled.View`
   justify-content: center;
   align-items: center;
   height: 6.5%;
-  width: 50%;
+  width: 120px;
   margin-bottom: 5px;
   border-radius: 30px;
   border-bottom-width: 1px;
-  border-bottom-color: black;
+  border-bottom-color: #97d2ec;
 `;
 const TitleText = styled.Text`
   font-size: 20px;
@@ -436,9 +443,9 @@ const NickNameView = styled.View`
 `;
 
 const ContentView = styled.View`
-  height: 59%;
+  height: 64%;
   width: 90%;
-  border: 1px solid #ece0ed;
+  border: 1px solid #97d2ec;
   border-radius: 30px;
 `;
 
@@ -547,4 +554,9 @@ const ConmmentContentConmmentTextView = styled.View`
 
 const AllText = styled.Text`
   font-size: 16px;
+`;
+
+const WeatherText = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
 `;
