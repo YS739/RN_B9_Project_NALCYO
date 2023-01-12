@@ -186,8 +186,8 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
       }
     );
   };
-  // 댓글 수정 완료 알림창
 
+  // 댓글 수정 완료 알림창
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
@@ -226,7 +226,6 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
       <DetailSafeAreaView>
         <CommentScrollView showsVerticalScrollIndicator={false}>
           {/* Detail content */}
-
           {DetailList.map((list) => (
             <DetailContentWrapView key={list.id}>
               <WeatherView>
@@ -257,22 +256,26 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
               <ContentView>
                 <ContentText>{list.content}</ContentText>
               </ContentView>
-              <ModifyWrap>
-                <ModifyBtn onPress={() => setIsOpenModal(true)}>
-                  <AllText>수정 하기</AllText>
-                  <AntDesign name="edit" size={24} color="black" />
-                </ModifyBtn>
-                <PostModal
-                  detailPost={list}
-                  isOpenModal={isOpenModal}
-                  setIsOpenModal={setIsOpenModal}
-                />
+              {list.userId === userId ? (
+                <ModifyWrap>
+                  <ModifyBtn onPress={() => setIsOpenModal(true)}>
+                    <AllText>수정 하기</AllText>
+                    <AntDesign name="edit" size={24} color="black" />
+                  </ModifyBtn>
+                  <PostModal
+                    detailPost={list}
+                    isOpenModal={isOpenModal}
+                    setIsOpenModal={setIsOpenModal}
+                  />
 
-                <ModifyBtn onPress={() => deletePostAlert(list.id)}>
-                  <AllText>삭제 하기</AllText>
-                  <FontAwesome name="trash-o" size={24} color="black" />
-                </ModifyBtn>
-              </ModifyWrap>
+                  <ModifyBtn onPress={() => deletePostAlert(list.id)}>
+                    <AllText>삭제 하기</AllText>
+                    <FontAwesome name="trash-o" size={24} color="black" />
+                  </ModifyBtn>
+                </ModifyWrap>
+              ) : (
+                <View />
+              )}
             </DetailContentWrapView>
           ))}
 
@@ -305,8 +308,8 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
               return el.isEdit ? (
                 <CommentContentView key={el.id}>
                   <EditCommentTextInput
-                    value={editText}
-                    onChangeText={setEditText}
+                    defaultValue={el.comment}
+                    onChangeText={(text) => setEditText(text)}
                     onSubmitEditing={() => updateCommentListAlert(el.id)}
                   ></EditCommentTextInput>
                   <CommentContentIconBtnView>
@@ -332,18 +335,22 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                   <CommentContentConmmentTextView>
                     <Text>{el?.comment}</Text>
                   </CommentContentConmmentTextView>
-                  <CommentContentIconBtnView>
-                    <CommentContentUpdateIconBtn
-                      onPress={() => updateToggleCommentListAlert(el.id)}
-                    >
-                      <AntDesign name="edit" size={24} color="black" />
-                    </CommentContentUpdateIconBtn>
-                    <CommentContentDeleteIconBtn
-                      onPress={() => deleteCommentListAlert(el.id)}
-                    >
-                      <FontAwesome name="trash-o" size={24} color="black" />
-                    </CommentContentDeleteIconBtn>
-                  </CommentContentIconBtnView>
+                  {el.userId === userId ? (
+                    <CommentContentIconBtnView>
+                      <CommentContentUpdateIconBtn
+                        onPress={() => updateToggleCommentListAlert(el.id)}
+                      >
+                        <AntDesign name="edit" size={24} color="black" />
+                      </CommentContentUpdateIconBtn>
+                      <CommentContentDeleteIconBtn
+                        onPress={() => deleteCommentListAlert(el.id)}
+                      >
+                        <FontAwesome name="trash-o" size={24} color="black" />
+                      </CommentContentDeleteIconBtn>
+                    </CommentContentIconBtnView>
+                  ) : (
+                    <View />
+                  )}
                 </CommentContentView>
               );
             })}
@@ -516,8 +523,8 @@ const CommentContentUpdateIconBtn = styled.TouchableOpacity``;
 const CommentScrollView = styled.ScrollView``;
 
 const EditCommentTextInput = styled.TextInput`
-  margin-left: -5px;
-  width: 80%;
+  margin-left: 10px;
+  width: 61%;
   height: 130%;
   border-radius: 20px;
   background-color: #fffcf1;
