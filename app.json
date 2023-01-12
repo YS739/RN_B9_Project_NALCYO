@@ -12,9 +12,12 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/f4408cb2-3eea-47eb-b13d-505e3f202a88"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -26,6 +29,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f4408cb2-3eea-47eb-b13d-505e3f202a88"
+      }
+    },
+    "owner": "ys739",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
