@@ -45,6 +45,7 @@ const City = ({
   },
 }) => {
   const isDark = useColorScheme() === "dark";
+  console.log("dd", isDark);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userPostList, setUserPostList] = useState([]);
@@ -207,7 +208,11 @@ const City = ({
           style={{ marginLeft: 15 }}
           onPress={() => navigate("Tabs", { screen: "Home" })}
         >
-          <Ionicons name="chevron-back" size={24} color="black" />
+          <Ionicons
+            name="chevron-back"
+            size={28}
+            color={isDark ? "white" : "black"}
+          />
         </TouchableOpacity>
       ),
     });
@@ -228,7 +233,7 @@ const City = ({
       });
       setUserPostList(UserPosts);
     });
-  }, []);
+  }, [isDark]);
 
   if (isLoadingWD) {
     return (

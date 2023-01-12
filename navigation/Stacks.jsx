@@ -17,16 +17,16 @@ const Stacks = ({ navigation: { goBack, navigate } }) => {
       screenOptions={{
         headerStyle: { backgroundColor: isDark ? "#202020" : "#97d2ec" },
         headerTitleAlign: "center",
-        headerLeft: (color) => (
+        headerLeft: () => (
           <TouchableOpacity onPress={() => goBack()}>
             <Ionicons
               name="chevron-back"
-              size={24}
+              size={28}
               color={isDark ? "white" : "black"}
             />
           </TouchableOpacity>
         ),
-        headerRight: ({ color }) => (
+        headerRight: () => (
           <TouchableOpacity onPress={() => navigate("Tabs", { screen: "My" })}>
             <Ionicons
               name="ios-person-circle-outline"
