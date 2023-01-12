@@ -123,6 +123,7 @@ const Login = ({ navigation: { navigate } }) => {
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
+            onSubmitEditing={handleLogin}
             textContentType="emailAddress"
             style={{
               width: 280,
@@ -149,6 +150,7 @@ const Login = ({ navigation: { navigate } }) => {
             placeholder="Password"
             ref={pwRef}
             value={pw}
+            onSubmitEditing={handleLogin}
             onChangeText={(text) => setPw(text)}
             textContentType="password"
             returnKeyType="send"

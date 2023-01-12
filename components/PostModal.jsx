@@ -70,7 +70,7 @@ const PostModal = ({
                   // 제목이나 내용이 입력되지 않으면 버튼 비활성화
                   disabled={
                     detailPost
-                      ? !editTitle || !editContent
+                      ? !editTitle && !editContent
                       : !postTitle || !postContent
                   }
                   title={detailPost ? "수정하기" : "등록하기"}

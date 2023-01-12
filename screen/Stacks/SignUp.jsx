@@ -132,6 +132,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             ref={emailRef}
             value={email}
             onChangeText={(text) => setEmail(text)}
+            onSubmitEditing={handleRegister}
             style={{
               width: 280,
               margin: 10,
@@ -157,6 +158,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             ref={pwRef}
             value={pw}
             onChangeText={(text) => setPw(text)}
+            onSubmitEditing={handleRegister}
             returnKeyType="send"
             style={{
               width: 280,
