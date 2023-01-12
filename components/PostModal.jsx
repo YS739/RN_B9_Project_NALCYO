@@ -4,7 +4,6 @@ import styled from "@emotion/native";
 import { AntDesign } from "@expo/vector-icons";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../common/firebase";
-import DropDownPicker from "react-native-dropdown-picker";
 import { getAuth } from "firebase/auth";
 
 const PostModal = ({
@@ -74,11 +73,8 @@ const PostModal = ({
                       : !postTitle || !postContent
                   }
                   title={detailPost ? "수정하기" : "등록하기"}
-                >
-                  {/* <ModalAddBtnText>
-                    {detailPost ? "수정하기" : "등록하기"}
-                  </ModalAddBtnText> */}
-                </ModalAddPostBtn>
+                  color="black"
+                ></ModalAddPostBtn>
               </ModalAddPostView>
               <ModalCloseBtn onPress={() => setIsOpenModal(false)}>
                 <AntDesign name="close" size={24} color="black" />
@@ -89,7 +85,6 @@ const PostModal = ({
             <ModalTitleTextInput
               autoFocus
               defaultValue={detailPost ? detailPost?.title : ""}
-              // value={postTitle}
               onChangeText={(title) =>
                 detailPost ? setEditTitle(title) : setPostTitle(title)
               }
@@ -97,7 +92,6 @@ const PostModal = ({
             />
             <ModalContentTexInput
               defaultValue={detailPost ? detailPost?.content : ""}
-              // value={postContent}
               onChangeText={(content) =>
                 detailPost ? setEditContent(content) : setPostContent(content)
               }
@@ -154,11 +148,6 @@ const ModalAddPostBtn = styled.Button``;
 const ModalCityNameText = styled.Text`
   font-size: 20px;
   font-weight: 800;
-`;
-
-const ModalAddBtnText = styled.Text`
-  font-size: 16px;
-  color: black;
 `;
 
 const ModalCloseBtn = styled.TouchableOpacity`
