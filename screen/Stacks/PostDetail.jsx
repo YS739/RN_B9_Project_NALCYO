@@ -246,14 +246,10 @@ const PostDetail = ({ navigation: { goBack }, route }) => {
                 <AllText>{" 작성자 : " + list.userName}</AllText>
                 <AllText>
                   {"작성일 : " +
-                    list.time.slice(2, 4) +
-                    "." +
-                    list.time.slice(5, 7) +
-                    "." +
-                    list.time.slice(8, 10) +
+                    list.time.slice(2, 11) +
                     "  " +
                     "[" +
-                    list.time.slice(12, 16) +
+                    list.time.slice(12, 18) +
                     "]"}
                 </AllText>
               </NickNameView>
