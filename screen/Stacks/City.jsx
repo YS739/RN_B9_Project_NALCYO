@@ -247,7 +247,7 @@ const City = ({
           flex: 1,
         }}
       >
-        <WeatherContainer>
+        <WeatherContainer style={{ shadowColor: isDark ? "#5F6F94" : "black" }}>
           <WeatherWrap>
             <CityView>
               <CityimgText>
@@ -314,7 +314,7 @@ const WeatherContainer = styled.TouchableOpacity`
   background-color: white;
   border-radius: 30px;
   padding: 10px;
-  box-shadow: 5px 5px 2px black;
+  box-shadow: 5px 5px 2px;
 `;
 
 const WeatherWrap = styled.View`
