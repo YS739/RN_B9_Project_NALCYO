@@ -232,7 +232,7 @@ const City = ({
       });
       setUserPostList(UserPosts);
     });
-  }, [isDark]);
+  }, [isDark]); // 의존성배열 디펜더시 어레이 useEffect 안에서 외부의 변수를 가져올떄는 디펜더시 어레이에 꼭넣어주여야 됨/!!!
 
   if (isLoadingWD) {
     return (
