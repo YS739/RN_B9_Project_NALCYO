@@ -36,7 +36,7 @@ import { getAuth } from "firebase/auth";
 
 // 로그인한 유저 아이디 / 닉네임
 
-const PostDetail = ({ route }) => {
+const PostDetail = ({ navigation: { goBack }, route }) => {
   const auth = getAuth();
   const user = auth.currentUser;
   const userNickName = user.displayName;
@@ -179,6 +179,29 @@ const PostDetail = ({ route }) => {
       }
     );
   };
+
+  // 본문 삭제 알림창
+  const deletePostAlert = (id) => {
+    Alert.alert(
+      "삭제",
+      "정말로 삭제하시겠습니까?",
+      [
+        { text: "취소", onPress: () => {}, style: "cancel" },
+        {
+          text: "삭제",
+          onPress: () => {
+            deletePost(id);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      }
+    );
+  };
+
   const updateToggleCommentListAlert = (id) => {
     Alert.alert(
       "수정",
@@ -204,6 +227,12 @@ const PostDetail = ({ route }) => {
   const addCommentList = async () => {
     await addDoc(collection(dbService, "Comment"), newComment);
     setText("");
+  };
+
+  // 본문 삭제
+  const deletePost = async (id) => {
+    await deleteDoc(doc(dbService, "list", id));
+    goBack();
   };
 
   // delete commentList
@@ -259,7 +288,7 @@ const PostDetail = ({ route }) => {
                   setIsOpenModal={setIsOpenModal}
                 />
 
-                <ModifyBtn>
+                <ModifyBtn onPress={() => deletePostAlert(list.id)}>
                   <Text>삭제 하기</Text>
                   <FontAwesome name="trash-o" size={24} color="black" />
                 </ModifyBtn>
