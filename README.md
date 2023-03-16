@@ -22,7 +22,7 @@
 
 <br/>
 
-[⭐ 팀 노션](https://worried-partridge-a1d.notion.site/a9ef1882f78e42008ca2c247a81719ea) | [📺 시연 영상](https://www.youtube.com/watch?v=lbwN4GF6XMM)  
+[⭐ 팀 노션](https://worried-partridge-a1d.notion.site/9781eb5d41154a9d8d10fa4c9815db57) | [📺 시연 영상](https://www.youtube.com/watch?v=lbwN4GF6XMM)  
 
 <br/>
 
