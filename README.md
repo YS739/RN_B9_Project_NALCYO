@@ -22,12 +22,12 @@
 
 <br/>
 
-[⭐ 팀 노션](https://worried-partridge-a1d.notion.site/a9ef1882f78e42008ca2c247a81719ea) | [📺 시연영상](https://www.youtube.com/watch?v=lbwN4GF6XMM)  
+[⭐ 팀 노션](https://worried-partridge-a1d.notion.site/a9ef1882f78e42008ca2c247a81719ea) | [📺 시연 영상](https://www.youtube.com/watch?v=lbwN4GF6XMM)  
 
 <br/>
 
 
-## 🍀주요 기능
+<h2>🍀주요 기능</h2>
 <table>
     <tr>
       <td align="center">Main</td>
@@ -72,7 +72,11 @@
 - 닉네임 수정
 - 내가 쓴 글 및 내가 작성한 댓글 확인
 
-    
+</br>
+
+<h2>🔧 기술 스택</h2>
+
+### ReactNative / Firebase / ReactQuery / styled components
 
 </br>
 
